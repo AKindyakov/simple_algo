@@ -40,9 +40,12 @@ public:
     LinkedList(){};
     ~LinkedList(){};
     
+    T* begin(); 
+    T* end();
+    
 private:
-    LinkedListNode<T>* start;
-    LinkedListNode<T>* end;
+    LinkedListNode<T>* m_start;
+    static LinkedListNode<T>* m_end;
 };
 
 template<class T>
