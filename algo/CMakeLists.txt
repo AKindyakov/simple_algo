@@ -9,7 +9,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/algo )
 SET ( LIB_ALGO_SRC_DIR ${CMAKE_SOURCE_DIR}/algo )
 
 SET ( libalgo_SRCS
-        ${LIB_ALGO_SRC_DIR}/ListContainer/LinkedList.cpp
+        ${LIB_ALGO_SRC_DIR}/EwklidAlgoGcd/main.c
     )
 
 SET ( libalgo_HDRS
