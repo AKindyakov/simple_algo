@@ -25,14 +25,14 @@ int main ( int _argNum, char** _args )
     //std::cout << "List element " << " -> " << *(doubleList.getBeginNode().next->next->item) << "\n";
     //doubleList.pop_front();
     
-    //double it = 0;
-    //while(1)
-    //{
-    //    it = it + 1;
-    //    doubleList.push_front(it);
-    //    std::cout << "List element " << " -> " << *(doubleList.getBeginNode().item) << "\n";
-    //    doubleList.pop_front();
-    //}
+    double it = 0;
+    while(1)
+    {
+        it += 1;
+        doubleList.push_front(it);
+        std::cout << "List element " << " -> " << *(doubleList.getBeginNode().item) << "\n";
+        doubleList.pop_front();
+    }
     return 0;
 }
 

@@ -27,37 +27,41 @@ public:
     void erase(const Node* begin, const Node* end); 
     void erase(const Node* ); 
     
-    Node getBeginNode()
-    {
-        return *start; 
-    }; 
+    Item getBegin() { return *start->item; }; 
+    Node getBeginNode() { return *start; }; 
  
 private:
     Node* start;
 };
 
-template<class Item> 
-class DublyNode
-{
-public:
-    DublyNode(){};
-    ~DublyNode(){};
-    
-    DublyNode* next;
-    Item* item;
-};
-
-template<class T>
+template<class Item>
 class DublyLinkedList
 {
 public:
+    class Node
+    {
+    public:
+        Node(){};
+        ~Node(){};
+            
+        Node* next;
+        Node* prev;
+        Item* item;
+    };
+    
     DublyLinkedList(){};
     ~DublyLinkedList(){};
     
-    DublyNode<T>* getNode(); 
+    Item getFront() { return *start->item }; 
+    Item getBack() { return *end->item }; 
+    
+    Node* getBeginNode();
+    Node* getEndNode();    
+    
 private:
-    DublyNode<T>* start;
-    DublyNode<T>* end;
+    Node* start;
+    Node* end;
+
 };
 
 template<class Item> 
