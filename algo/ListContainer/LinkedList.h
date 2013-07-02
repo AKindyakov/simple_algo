@@ -52,8 +52,8 @@ public:
     DublyLinkedList(){};
     ~DublyLinkedList(){};
     
-    Item getFront() { return *start->item }; 
-    Item getBack() { return *end->item }; 
+    Item getFront() { return *start->item; }; 
+    Item getBack() { return *end->item; }; 
     
     Node* getBeginNode();
     Node* getEndNode();    
@@ -99,29 +99,32 @@ LinkedList<T>::LinkedList(int n)
     }
 }
 
-template<class T>
-void LinkedList<T>::push_front(const T& elem)
+template<class Item>
+void LinkedList<Item>::push_front(const Item& elem)
 {
-    start = new Node(new T(elem), start);
+    start->item = new Item(elem);
+    start = new Node(NULL, start);
 }
 
-template<class T>
-void LinkedList<T>::push_front(T* const elem)
+template<class Item>
+void LinkedList<Item>::push_front(Item* const elem)
 {
-    start = new Node(elem, start);
+    start->item = elem;
+    start = new Node(NULL, start);
 }
 
-template<class T>
-void LinkedList<T>::pop_front()
+template<class Item>
+void LinkedList<Item>::pop_front()
 {
     Node* erasingElem = start;
     start = start->next;
-    delete erasingElem->item; 
     delete erasingElem; 
+    delete start->item; 
+    start->item = 0; // are needed ? 
 }
 
-template<class T>
-LinkedList<T>::~LinkedList()
+template<class Item>
+LinkedList<Item>::~LinkedList()
 {
     while (start->next != NULL)
     {
