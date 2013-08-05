@@ -1,5 +1,6 @@
 #include <cstdlib>
 
+<<<<<<< HEAD
 class IListNode 
 {
 public:
@@ -20,77 +21,100 @@ public:
 };
 
 template<class T>
+=======
+template<class Item>
+>>>>>>> fd4d6fc2f94041734ce38097906639db55477966
 class LinkedList
 {
 public:
+    
+    struct Node
+    {
+        Node();
+        Node(Item* const, Node* const );
+        Node(const Node& cp);
+        
+        virtual ~Node();
+        Node* next;
+        Item* item;
+    };
+    
     LinkedList();
     LinkedList(int size);
     virtual ~LinkedList();
    
-    void push_front(T); 
-    void push_front(T*); 
+    void push_front(const Item& ); 
+    void push_front(Item* const); 
     void pop_front(); 
     
-    void erase(LinkedListNode<T>* begin, LinkedListNode<T>* end); 
+    void erase(const Node* begin, const Node* end); 
+    void erase(const Node* ); 
     
-    T* getBegin()
-    {
-        return start; 
-    }; 
-    
+    Item getBegin() { return *start->item; }; 
+    Node getBeginNode() { return *start; }; 
+ 
 private:
-    LinkedListNode<T>* start;
+    Node* start;
 };
 
-template<class Item> 
-class DublyLinkedListNode : public IListNode 
-{
-public:
-    DublyLinkedListNode(){};
-    ~DublyLinkedListNode(){};
-    
-    DublyLinkedListNode* next;
-    Item* item;
-};
-
-
-template<class T>
+template<class Item>
 class DublyLinkedList
 {
 public:
+    class Node
+    {
+    public:
+        Node(){};
+        ~Node(){};
+            
+        Node* next;
+        Node* prev;
+        Item* item;
+    };
+    
     DublyLinkedList(){};
     ~DublyLinkedList(){};
     
-    DublyLinkedListNode<T>* getNode(); 
+    Item getFront() { return *start->item; }; 
+    Item getBack() { return *end->item; }; 
+    
+    Node* getBeginNode();
+    Node* getEndNode();    
+    
 private:
-    DublyLinkedListNode<T>* start;
-    DublyLinkedListNode<T>* end;
+    Node* start;
+    Node* end;
+
 };
 
 template<class Item> 
-LinkedListNode<Item>::LinkedListNode()
+LinkedList<Item>::Node::Node()
     : item(NULL), next(NULL) 
 {}
 
 template<class Item> 
-LinkedListNode<Item>::LinkedListNode(Item* _pItem, LinkedListNode<Item>* _pNode)
+LinkedList<Item>::Node::Node( Item* const _pItem, 
+                              Node* const _pNode )
     : item(_pItem), next(_pNode) 
 {}
 
 template<class Item> 
-LinkedListNode<Item>::~LinkedListNode()
-{
-    
-}
+LinkedList<Item>::Node::Node(const Node& cp)
+    : item(cp.item), next(cp.next)
+{}
+
+template<class Item> 
+LinkedList<Item>::Node::~Node()
+{}
 
 template<class T>
 LinkedList<T>::LinkedList()
-    : start(new LinkedListNode<T>())
+    : start(new Node())
 {}
 
 template<class T>
 LinkedList<T>::LinkedList(int n)
-    : start(new LinkedListNode<T>())
+    : start(new Node())
 {
     for (int i=0; i<n; ++i)
     {
@@ -98,29 +122,32 @@ LinkedList<T>::LinkedList(int n)
     }
 }
 
-template<class T>
-void LinkedList<T>::push_front(T elem)
+template<class Item>
+void LinkedList<Item>::push_front(const Item& elem)
 {
-    start = new LinkedListNode<T>(new T(elem), start);
+    start->item = new Item(elem);
+    start = new Node(NULL, start);
 }
 
-template<class T>
-void LinkedList<T>::push_front(T* elem)
+template<class Item>
+void LinkedList<Item>::push_front(Item* const elem)
 {
-    start = new LinkedListNode<T>(elem, start);
+    start->item = elem;
+    start = new Node(NULL, start);
 }
 
-template<class T>
-void LinkedList<T>::pop_front()
+template<class Item>
+void LinkedList<Item>::pop_front()
 {
-    LinkedListNode<T>* erasingElem = start;
+    Node* erasingElem = start;
     start = start->next;
-    delete erasingElem->item; 
     delete erasingElem; 
+    delete start->item; 
+    start->item = 0; // are needed ? 
 }
 
-template<class T>
-LinkedList<T>::~LinkedList()
+template<class Item>
+LinkedList<Item>::~LinkedList()
 {
     while (start->next != NULL)
     {

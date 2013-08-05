@@ -9,8 +9,12 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/algo )
 SET ( LIB_ALGO_SRC_DIR ${CMAKE_SOURCE_DIR}/algo )
 
 SET ( libalgo_SRCS
+<<<<<<< HEAD
         ${LIB_ALGO_SRC_DIR}/ListContainer/LinkedList.cpp
         ${LIB_ALGO_SRC_DIR}/ListContainer/dublyLinkedList.cpp
+=======
+        ${LIB_ALGO_SRC_DIR}/EwklidAlgoGcd/main.c
+>>>>>>> fd4d6fc2f94041734ce38097906639db55477966
     )
 
 SET ( libalgo_HDRS
