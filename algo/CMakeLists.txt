@@ -10,11 +10,13 @@ SET ( LIB_ALGO_SRC_DIR ${CMAKE_SOURCE_DIR}/algo )
 
 SET ( libalgo_SRCS
         ${LIB_ALGO_SRC_DIR}/ListContainer/LinkedList.cpp
+        ${LIB_ALGO_SRC_DIR}/ListContainer/dublyLinkedList.cpp
     )
 
 SET ( libalgo_HDRS
         ${LIB_ALGO_SRC_DIR}/LibAlgoCommon.h
         ${LIB_ALGO_SRC_DIR}/ListContainer/LinkedList.h
+        ${LIB_ALGO_SRC_DIR}/ListContainer/dublyLinkedList.h
     )
 
 ADD_LIBRARY( libalgo STATIC ${libalgo_SRCS}  ${libalgo_HDRS} )

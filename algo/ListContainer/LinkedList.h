@@ -7,7 +7,6 @@ public:
     virtual ~IListNode(){};
 };
 
-
 template<class Item> 
 class LinkedListNode : public IListNode 
 {
