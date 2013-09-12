@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../../algo/LibAlgoCommon.h
+ListContainer/LinkedList.h
+../../algo/ListContainer/LinkedList.h
+
+../../algo/ListContainer/LinkedList.h
+cstdlib
+-
+
+/home/alexander/source/simple_algo/tests/LinkedListTest/src/ListContainerTest.cpp
+
+/home/alexander/source/simple_algo/tests/LinkedListTest/src/main.cpp
+iostream
+-
+LibAlgoCommon.h
+/home/alexander/source/simple_algo/tests/LinkedListTest/src/LibAlgoCommon.h
+

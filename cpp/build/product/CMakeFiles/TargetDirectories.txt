@@ -1,0 +1,2 @@
+/home/alexander/source/simple_algo/build/product/algo/CMakeFiles/libalgo.dir
+/home/alexander/source/simple_algo/build/product/tests/LinkedListTest/CMakeFiles/listContainerTest.dir

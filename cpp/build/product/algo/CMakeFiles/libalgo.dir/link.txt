@@ -1,0 +1,2 @@
+/usr/bin/ar cr liblibalgo.a  CMakeFiles/libalgo.dir/ListContainer/LinkedList.cpp.o CMakeFiles/libalgo.dir/ListContainer/dublyLinkedList.cpp.o
+/usr/bin/ranlib liblibalgo.a
