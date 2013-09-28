@@ -1,3 +1,6 @@
 *.swp
 build/product
+*.out
+*.o
+*.swo
 
