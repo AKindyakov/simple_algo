@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo
+CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo/cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/build/product
+CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/cpp/build/product
 
 # Include any dependencies generated for this target.
 include tests/LinkedListTest/CMakeFiles/listContainerTest.dir/depend.make
@@ -49,42 +49,19 @@ include tests/LinkedListTest/CMakeFiles/listContainerTest.dir/progress.make
 # Include the compile flags for this target's objects.
 include tests/LinkedListTest/CMakeFiles/listContainerTest.dir/flags.make
 
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/flags.make
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o: ../../tests/LinkedListTest/src/ListContainerTest.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/alexander/source/simple_algo/build/product/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o"
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/listContainerTest.dir/src/ListContainerTest.o -c /home/alexander/source/simple_algo/tests/LinkedListTest/src/ListContainerTest.cpp
-
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/listContainerTest.dir/src/ListContainerTest.i"
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/alexander/source/simple_algo/tests/LinkedListTest/src/ListContainerTest.cpp > CMakeFiles/listContainerTest.dir/src/ListContainerTest.i
-
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/listContainerTest.dir/src/ListContainerTest.s"
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/alexander/source/simple_algo/tests/LinkedListTest/src/ListContainerTest.cpp -o CMakeFiles/listContainerTest.dir/src/ListContainerTest.s
-
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.requires:
-.PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.requires
-
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.provides: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.requires
-	$(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.provides.build
-.PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.provides
-
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.provides.build: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o
-
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/flags.make
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o: ../../tests/LinkedListTest/src/main.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/alexander/source/simple_algo/build/product/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o"
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/listContainerTest.dir/src/main.o -c /home/alexander/source/simple_algo/tests/LinkedListTest/src/main.cpp
+	cd /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/listContainerTest.dir/src/main.o -c /home/alexander/source/simple_algo/cpp/tests/LinkedListTest/src/main.cpp
 
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/listContainerTest.dir/src/main.i"
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/alexander/source/simple_algo/tests/LinkedListTest/src/main.cpp > CMakeFiles/listContainerTest.dir/src/main.i
+	cd /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/alexander/source/simple_algo/cpp/tests/LinkedListTest/src/main.cpp > CMakeFiles/listContainerTest.dir/src/main.i
 
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/listContainerTest.dir/src/main.s"
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/alexander/source/simple_algo/tests/LinkedListTest/src/main.cpp -o CMakeFiles/listContainerTest.dir/src/main.s
+	cd /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/alexander/source/simple_algo/cpp/tests/LinkedListTest/src/main.cpp -o CMakeFiles/listContainerTest.dir/src/main.s
 
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o.requires:
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o.requires
@@ -97,33 +74,30 @@ tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o.provides.build:
 
 # Object files for target listContainerTest
 listContainerTest_OBJECTS = \
-"CMakeFiles/listContainerTest.dir/src/ListContainerTest.o" \
 "CMakeFiles/listContainerTest.dir/src/main.o"
 
 # External object files for target listContainerTest
 listContainerTest_EXTERNAL_OBJECTS =
 
-bin/listContainerTest: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o
 bin/listContainerTest: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o
 bin/listContainerTest: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make
-bin/listContainerTest: algo/liblibalgo.a
+bin/listContainerTest: src/liblibalgo.a
 bin/listContainerTest: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable ../../bin/listContainerTest"
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/listContainerTest.dir/link.txt --verbose=$(VERBOSE)
+	cd /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/listContainerTest.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build: bin/listContainerTest
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build
 
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/requires: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o.requires
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/requires: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o.requires
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/requires
 
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/clean:
-	cd /home/alexander/source/simple_algo/build/product/tests/LinkedListTest && $(CMAKE_COMMAND) -P CMakeFiles/listContainerTest.dir/cmake_clean.cmake
+	cd /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest && $(CMAKE_COMMAND) -P CMakeFiles/listContainerTest.dir/cmake_clean.cmake
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/clean
 
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/depend:
-	cd /home/alexander/source/simple_algo/build/product && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/alexander/source/simple_algo /home/alexander/source/simple_algo/tests/LinkedListTest /home/alexander/source/simple_algo/build/product /home/alexander/source/simple_algo/build/product/tests/LinkedListTest /home/alexander/source/simple_algo/build/product/tests/LinkedListTest/CMakeFiles/listContainerTest.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/alexander/source/simple_algo/cpp /home/alexander/source/simple_algo/cpp/tests/LinkedListTest /home/alexander/source/simple_algo/cpp/build/product /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest/CMakeFiles/listContainerTest.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/depend
 

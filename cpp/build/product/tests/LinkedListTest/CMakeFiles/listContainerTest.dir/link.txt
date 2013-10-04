@@ -1,1 +1,1 @@
-/usr/bin/c++       CMakeFiles/listContainerTest.dir/src/ListContainerTest.o CMakeFiles/listContainerTest.dir/src/main.o  -o ../../bin/listContainerTest  -L/home/alexander/source/simple_algo/algo -rdynamic ../../algo/liblibalgo.a -Wl,-rpath,/home/alexander/source/simple_algo/algo 
+/usr/bin/c++       CMakeFiles/listContainerTest.dir/src/main.o  -o ../../bin/listContainerTest -rdynamic ../../src/liblibalgo.a 

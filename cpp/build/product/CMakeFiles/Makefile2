@@ -47,59 +47,59 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo
+CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo/cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/build/product
+CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/cpp/build/product
 
 #=============================================================================
-# Directory level rules for directory algo
+# Directory level rules for directory src
 
 # Convenience name for "all" pass in the directory.
-algo/all: algo/CMakeFiles/libalgo.dir/all
-.PHONY : algo/all
+src/all: src/CMakeFiles/libalgo.dir/all
+.PHONY : src/all
 
 # Convenience name for "clean" pass in the directory.
-algo/clean: algo/CMakeFiles/libalgo.dir/clean
-.PHONY : algo/clean
+src/clean: src/CMakeFiles/libalgo.dir/clean
+.PHONY : src/clean
 
 # Convenience name for "preinstall" pass in the directory.
-algo/preinstall:
-.PHONY : algo/preinstall
+src/preinstall:
+.PHONY : src/preinstall
 
 #=============================================================================
-# Target rules for target algo/CMakeFiles/libalgo.dir
+# Target rules for target src/CMakeFiles/libalgo.dir
 
 # All Build rule for target.
-algo/CMakeFiles/libalgo.dir/all:
-	$(MAKE) -f algo/CMakeFiles/libalgo.dir/build.make algo/CMakeFiles/libalgo.dir/depend
-	$(MAKE) -f algo/CMakeFiles/libalgo.dir/build.make algo/CMakeFiles/libalgo.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/alexander/source/simple_algo/build/product/CMakeFiles  1 2
+src/CMakeFiles/libalgo.dir/all:
+	$(MAKE) -f src/CMakeFiles/libalgo.dir/build.make src/CMakeFiles/libalgo.dir/depend
+	$(MAKE) -f src/CMakeFiles/libalgo.dir/build.make src/CMakeFiles/libalgo.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles  1
 	@echo "Built target libalgo"
-.PHONY : algo/CMakeFiles/libalgo.dir/all
+.PHONY : src/CMakeFiles/libalgo.dir/all
 
 # Include target in all.
-all: algo/CMakeFiles/libalgo.dir/all
+all: src/CMakeFiles/libalgo.dir/all
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-algo/CMakeFiles/libalgo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 algo/CMakeFiles/libalgo.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles 0
-.PHONY : algo/CMakeFiles/libalgo.dir/rule
+src/CMakeFiles/libalgo.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/libalgo.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles 0
+.PHONY : src/CMakeFiles/libalgo.dir/rule
 
 # Convenience name for target.
-libalgo: algo/CMakeFiles/libalgo.dir/rule
+libalgo: src/CMakeFiles/libalgo.dir/rule
 .PHONY : libalgo
 
 # clean rule for target.
-algo/CMakeFiles/libalgo.dir/clean:
-	$(MAKE) -f algo/CMakeFiles/libalgo.dir/build.make algo/CMakeFiles/libalgo.dir/clean
-.PHONY : algo/CMakeFiles/libalgo.dir/clean
+src/CMakeFiles/libalgo.dir/clean:
+	$(MAKE) -f src/CMakeFiles/libalgo.dir/build.make src/CMakeFiles/libalgo.dir/clean
+.PHONY : src/CMakeFiles/libalgo.dir/clean
 
 # clean rule for target.
-clean: algo/CMakeFiles/libalgo.dir/clean
+clean: src/CMakeFiles/libalgo.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -121,10 +121,10 @@ tests/LinkedListTest/preinstall:
 # Target rules for target tests/LinkedListTest/CMakeFiles/listContainerTest.dir
 
 # All Build rule for target.
-tests/LinkedListTest/CMakeFiles/listContainerTest.dir/all: algo/CMakeFiles/libalgo.dir/all
+tests/LinkedListTest/CMakeFiles/listContainerTest.dir/all: src/CMakeFiles/libalgo.dir/all
 	$(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/depend
 	$(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/alexander/source/simple_algo/build/product/CMakeFiles  3 4
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles  2
 	@echo "Built target listContainerTest"
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/all
 
@@ -134,9 +134,9 @@ all: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/all
 
 # Build rule for subdir invocation for target.
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles 0
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/rule
 
 # Convenience name for target.

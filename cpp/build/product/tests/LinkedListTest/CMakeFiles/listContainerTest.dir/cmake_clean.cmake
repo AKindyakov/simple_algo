@@ -1,5 +1,4 @@
 FILE(REMOVE_RECURSE
-  "CMakeFiles/listContainerTest.dir/src/ListContainerTest.o"
   "CMakeFiles/listContainerTest.dir/src/main.o"
   "../../bin/listContainerTest.pdb"
   "../../bin/listContainerTest"

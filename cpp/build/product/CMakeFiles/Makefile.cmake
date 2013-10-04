@@ -8,10 +8,10 @@ SET(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 SET(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "../../CMakeLists.txt"
-  "../../algo/CMakeLists.txt"
   "CMakeFiles/2.8.10.1/CMakeCCompiler.cmake"
   "CMakeFiles/2.8.10.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/2.8.10.1/CMakeSystem.cmake"
+  "../../src/CMakeLists.txt"
   "../../tests/LinkedListTest/CMakeLists.txt"
   "/usr/share/cmake-2.8/Modules/CMakeCCompiler.cmake.in"
   "/usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c"
@@ -56,12 +56,12 @@ SET(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 SET(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
-  "algo/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/CMakeFiles/CMakeDirectoryInformation.cmake"
   "tests/LinkedListTest/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 SET(CMAKE_DEPEND_INFO_FILES
-  "algo/CMakeFiles/libalgo.dir/DependInfo.cmake"
+  "src/CMakeFiles/libalgo.dir/DependInfo.cmake"
   "tests/LinkedListTest/CMakeFiles/listContainerTest.dir/DependInfo.cmake"
   )

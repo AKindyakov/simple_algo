@@ -4,24 +4,19 @@ PROJECT( libalgo CXX )
 
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/algo )
+SET ( LIB_ALGO_SRC_DIR ${CMAKE_SOURCE_DIR}/src )
 
-SET ( LIB_ALGO_SRC_DIR ${CMAKE_SOURCE_DIR}/algo )
+INCLUDE_DIRECTORIES(${LIB_ALGO_SRC_DIR}/ListContainer)
 
 SET ( libalgo_SRCS
-<<<<<<< HEAD
-        ${LIB_ALGO_SRC_DIR}/ListContainer/LinkedList.cpp
         ${LIB_ALGO_SRC_DIR}/ListContainer/dublyLinkedList.cpp
-=======
-        ${LIB_ALGO_SRC_DIR}/EwklidAlgoGcd/main.c
->>>>>>> fd4d6fc2f94041734ce38097906639db55477966
     )
 
 SET ( libalgo_HDRS
-        ${LIB_ALGO_SRC_DIR}/LibAlgoCommon.h
         ${LIB_ALGO_SRC_DIR}/ListContainer/LinkedList.h
         ${LIB_ALGO_SRC_DIR}/ListContainer/dublyLinkedList.h
     )
+
 
 ADD_LIBRARY( libalgo STATIC ${libalgo_SRCS}  ${libalgo_HDRS} )
 

@@ -6,19 +6,13 @@
 
 #IncludeRegexTransform: 
 
-../../algo/LibAlgoCommon.h
-ListContainer/LinkedList.h
-../../algo/ListContainer/LinkedList.h
-
-../../algo/ListContainer/LinkedList.h
+../../src/ListContainer/LinkedList.h
 cstdlib
 -
 
-/home/alexander/source/simple_algo/tests/LinkedListTest/src/ListContainerTest.cpp
-
-/home/alexander/source/simple_algo/tests/LinkedListTest/src/main.cpp
+/home/alexander/source/simple_algo/cpp/tests/LinkedListTest/src/main.cpp
 iostream
 -
-LibAlgoCommon.h
-/home/alexander/source/simple_algo/tests/LinkedListTest/src/LibAlgoCommon.h
+LinkedList.h
+/home/alexander/source/simple_algo/cpp/tests/LinkedListTest/src/LinkedList.h
 

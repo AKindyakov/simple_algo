@@ -1,29 +1,6 @@
 #include <cstdlib>
 
-<<<<<<< HEAD
-class IListNode 
-{
-public:
-    IListNode(){};
-    virtual ~IListNode(){};
-};
-
-template<class Item> 
-class LinkedListNode : public IListNode 
-{
-public:
-    LinkedListNode();
-    LinkedListNode(Item*, LinkedListNode<Item>*);
-    virtual ~LinkedListNode();
-    
-    LinkedListNode* next;
-    Item* item;
-};
-
-template<class T>
-=======
 template<class Item>
->>>>>>> fd4d6fc2f94041734ce38097906639db55477966
 class LinkedList
 {
 public:

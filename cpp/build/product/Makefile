@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo
+CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo/cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/build/product
+CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/cpp/build/product
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles /home/alexander/source/simple_algo/build/product/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -108,7 +108,7 @@ libalgo: cmake_check_build_system
 
 # fast build rule for target.
 libalgo/fast:
-	$(MAKE) -f algo/CMakeFiles/libalgo.dir/build.make algo/CMakeFiles/libalgo.dir/build
+	$(MAKE) -f src/CMakeFiles/libalgo.dir/build.make src/CMakeFiles/libalgo.dir/build
 .PHONY : libalgo/fast
 
 #=============================================================================

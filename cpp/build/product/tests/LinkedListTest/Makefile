@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo
+CMAKE_SOURCE_DIR = /home/alexander/source/simple_algo/cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/build/product
+CMAKE_BINARY_DIR = /home/alexander/source/simple_algo/cpp/build/product
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/alexander/source/simple_algo/build/product && $(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles /home/alexander/source/simple_algo/build/product/tests/LinkedListTest/CMakeFiles/progress.marks
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/build/product/CMakeFiles 0
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles /home/alexander/source/simple_algo/cpp/build/product/tests/LinkedListTest/CMakeFiles/progress.marks
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/source/simple_algo/cpp/build/product/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/clean
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/preinstall
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/preinstall
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/alexander/source/simple_algo/build/product && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/rule:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/rule
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f CMakeFiles/Makefile2 tests/LinkedListTest/CMakeFiles/listContainerTest.dir/rule
 .PHONY : tests/LinkedListTest/CMakeFiles/listContainerTest.dir/rule
 
 # Convenience name for target.
@@ -109,37 +109,22 @@ listContainerTest: tests/LinkedListTest/CMakeFiles/listContainerTest.dir/rule
 
 # fast build rule for target.
 listContainerTest/fast:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build
 .PHONY : listContainerTest/fast
 
 # target to build an object file
-src/ListContainerTest.o:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.o
-.PHONY : src/ListContainerTest.o
-
-# target to preprocess a source file
-src/ListContainerTest.i:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.i
-.PHONY : src/ListContainerTest.i
-
-# target to generate assembly for a file
-src/ListContainerTest.s:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/ListContainerTest.s
-.PHONY : src/ListContainerTest.s
-
-# target to build an object file
 src/main.o:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.o
 .PHONY : src/main.o
 
 # target to preprocess a source file
 src/main.i:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.i
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.i
 .PHONY : src/main.i
 
 # target to generate assembly for a file
 src/main.s:
-	cd /home/alexander/source/simple_algo/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.s
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(MAKE) -f tests/LinkedListTest/CMakeFiles/listContainerTest.dir/build.make tests/LinkedListTest/CMakeFiles/listContainerTest.dir/src/main.s
 .PHONY : src/main.s
 
 # Help Target
@@ -151,9 +136,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... listContainerTest"
 	@echo "... rebuild_cache"
-	@echo "... src/ListContainerTest.o"
-	@echo "... src/ListContainerTest.i"
-	@echo "... src/ListContainerTest.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -168,6 +150,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/alexander/source/simple_algo/build/product && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/alexander/source/simple_algo/cpp/build/product && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

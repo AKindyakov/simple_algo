@@ -1,5 +1,5 @@
 #include <iostream>
-#include "LibAlgoCommon.h"
+#include "LinkedList.h"
 
 int main ( int _argNum, char** _args )
 {

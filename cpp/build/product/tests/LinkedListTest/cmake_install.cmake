@@ -1,4 +1,4 @@
-# Install script for directory: /home/alexander/source/simple_algo/tests/LinkedListTest
+# Install script for directory: /home/alexander/source/simple_algo/cpp/tests/LinkedListTest
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
