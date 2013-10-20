@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <climits>
 
 using std::list;
 using std::vector;
@@ -11,15 +12,14 @@ using std::string;
 const int CHAR_LIMIT = 26; // only 26 character in English alphabet
 const char ASCII_a = 'a';
 
-class SufTreeNode;
+class SuffTreeNode;
 
-class SufTreeEdge {
+class SuffTreeEdge {
 public:
-    SufTreeEdge();
+    SuffTreeEdge(){};
     
-private:
-    SufTreeNode* from;
-    SufTreeNode* to;
+    SuffTreeNode* from;
+    SuffTreeNode* to;
     
     int startPos;
     int endPos;
@@ -27,73 +27,170 @@ private:
     char firstCh;
 };
 
-class SufTreeNode {
+class SuffTreeNode {
 public:
-    SufTreeNode();
-private:
-    SufTreeEdge edges[CHAR_LIMIT];
-    SufTreeEdge parrent;
-    SufTreeNode* suffLink;
+    SuffTreeNode();
+    
+    SuffTreeEdge edges[CHAR_LIMIT];
+    SuffTreeEdge parrent;
+    SuffTreeNode* suffLink;
 };
 
-class SufTreePosition {
+class SuffTreePosition {
 public:
-    SufTreeEdge edge;   
+    SuffTreeEdge edge;   
     int offset;
 };
 
-class SufTree {
+class SuffTree {
 public:
-    SufTree();
-    virtual ~SufTree();
+    SuffTree();
+    virtual ~SuffTree();
     void add(char ch);
     void add(const string& str);
+    void destroyNode( SuffTreeNode* node );
     
 private:
     SuffTreeNode* root;
-    SuffTreeNode* joker; //!< wtf !? - FIXME!
+    SuffTreeNode* blank; //!< wtf !? - FIXME!
     string str;
     
-    SufTreePosition curr;
-    SufTreePosition getSuffix( const SuffTreePosition& pos );
+    SuffTreePosition curr;
+    SuffTreeNode* splitEdge( SuffTreePosition pos );
+    SuffTreePosition getSuffix( const SuffTreePosition& pos );
 };
 
-SufTreeNode::SuffTreeNode() {
+SuffTreeNode::SuffTreeNode() {
     for( int n=0; n < CHAR_LIMIT; ++n ) {
         edges[n].from = this;
         edges[n].to = NULL;
         edges[n].startPos = -1; 
         edges[n].endPos = 0;
-        edges[n].first = i + ASCII_a;
+        edges[n].firstCh = n + ASCII_a;
     }
 }
 
-SufTree::SufTree() {
+SuffTree::~SuffTree() {
+    delete blank;
+    destroyNode( root );
+}
 
-    root = new SufTreeNode;
-    joker = new SufTreeNode;
-    joker->suffLink = NULL;  
-    joker->edges[0].to = joker;
-    joker->parrent = joker->edges[0];
+SuffTree::SuffTree() {
+
+    root = new SuffTreeNode;
+    blank = new SuffTreeNode;
+    blank->suffLink    = NULL;  
+    blank->edges[0].to = blank;
+    blank->parrent     = blank->edges[0];
     for( int i=1; i<CHAR_LIMIT; ++i) {
-        joker->edges[i].to = root;
+        blank->edges[i].to = root;
     }
     
-    root->parrent = joker->edges[1];
-    root->suffLink = joker;
-    cur.edge =  joker->edges[1];
-    cur.offset = 0;
+    root->parrent  = blank->edges[1];
+    root->suffLink = blank;
+    
+    curr.edge   =  blank->edges[1];
+    curr.offset = 0;
 }
 
+void SuffTree::add( char ch ) {
+    char chIt = ch - ASCII_a;
+    if( curr.edge.endPos == curr.offset ) {
+        if(curr.edge.to->edges[chIt].to == NULL ) {
+            curr.edge.to->edges[chIt].to = new SuffTreeNode;
+            curr.edge.to->edges[chIt].firstCh  = ch;
+            curr.edge.to->edges[chIt].startPos = str.size();
+            curr.edge.to->edges[chIt].endPos   = INT_MAX;
+            
+            if( curr.edge.from == blank) {
+                str.push_back(ch);
+                return;
+            }
+            curr = getSuffix(curr);
+        }
+        curr.edge = curr.edge.to->edges[chIt];
+        curr.offset = curr.edge.startPos + 1;
+    }
+    else {
+        if( str.at( curr.offset ) == ch ) {
+            ++curr.offset;
+        }
+        else {
+            SuffTreeNode* newNode = splitEdge(curr);
+            curr.edge = newNode->parrent;
+            add(ch);
+            return;
+        }
+    }
+    str.push_back(ch);
+}
+
+SuffTreePosition SuffTree::getSuffix( const SuffTreePosition& pos ) {
+    SuffTreeNode* curr = pos.edge.from->suffLink;
+    if( curr == NULL ) {
+        // root
+        return pos;
+    }
+    int currOffset = pos.edge.startPos;
+    SuffTreePosition res;
+    
+    // go down by tree, one iteration is down by one edge
+    SuffTreeEdge currEdge = curr->edges[ str.at(currOffset) ];
+    while( currOffset < pos.offset ) {
+        currEdge = curr->edges[ str.at(currOffset) ];
+        currOffset += currEdge.endPos - currEdge.startPos;
+        curr = currEdge.to;
+    }
+    
+    res.edge = currEdge;
+    res.offset = pos.offset - currOffset + currEdge.endPos - currEdge.startPos + currEdge.startPos;
+    return res;
+}
+
+SuffTreeNode* SuffTree::splitEdge( SuffTreePosition pos ) {
+    if( pos.edge.endPos == pos.offset ) {
+        // Это означает что делить и не надо, наша вершина это лист... просто возвращаем
+        // указатель на него
+        return pos.edge.to;
+    }
+    SuffTreeNode* newNode = new SuffTreeNode;
+    SuffTreeEdge  newEdge;
+    
+    newEdge.startPos = pos.offset;
+    newEdge.endPos   = pos.edge.endPos;
+    newEdge.firstCh  = str.at(pos.offset);
+    newEdge.from     = newNode;
+    newEdge.to       = pos.edge.to;
+    
+    newNode->edges[str.at(pos.offset)] = newEdge;
+    
+    pos.edge.endPos = pos.offset;
+    pos.edge.to = newNode;
+    newNode->parrent = pos.edge;
+    pos.edge.from->edges[pos.edge.firstCh] = pos.edge;
+
+    newNode->suffLink = splitEdge(getSuffix(pos));
+    return newNode;
+}
+
+void SuffTree::destroyNode( SuffTreeNode* node ) {
+    if( node != NULL ) {
+        for( int t = 0; t < CHAR_LIMIT; ++t ) {
+            destroyNode( node->edges[t].to );
+        }
+        delete node;
+    }
+}
 
 int main( int argN, char** argS ) {
     int inNum = 0;
-    std::cin >> inNum;
-    std::cin.ignore();
-    std::vector<std::string> inString;
     
-    for( int in = 0; in < inNum; ++in ) {
-        inString.push_back(getLongLine(std::cin));
+    SuffTree tree;
+    
+    char ch = std::cin.get();
+    while ( ch != '\n' ) {
+        tree.add(ch);
+        ch = std::cin.get();
     }
     return 0;
 }
