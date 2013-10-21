@@ -1,6 +1,6 @@
 
 all: clear create_dir print
-	g++ selfTree.cpp -o product/solve
+	g++ test.cpp tree.cpp -o product/solve
 
 clear:
 	@rm product -r -f
