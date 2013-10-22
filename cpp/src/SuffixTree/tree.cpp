@@ -19,10 +19,11 @@ void SuffTreeNode::showMe( const string& str, int lvl, std::ostream& os ) {
 }
 
 void SuffTreeEdge::showMe( const string& str, int lvl, std::ostream& os ) {
+    int len = endPos;
     if( endPos == INT_MAX ) {
-        endPos = str.size();
+        len = str.size();
     }
-    int len = endPos - startPos;
+    len -= startPos;
     os << string(lvl*4, ' ') << "| " 
        << str.substr(startPos, len) << '\n';
     if( to != NULL ) {
@@ -47,7 +48,7 @@ SuffTree::SuffTree()
 }
 
 void SuffTree::add( char ch ) {
-    /**/ std::cout << "ch : " << ch << '\n';
+    //**/ std::cout << "ch : " << ch << '\n';
     cursors.push_back( SuffTreeCursor(blank->firstEdge(), 0));
     for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
             cIt != cursors.end(); ++cIt ) { 
@@ -56,8 +57,14 @@ void SuffTree::add( char ch ) {
             cursors.erase(delIt);
         }
     }
+    /**/ std::cout << "--------------------------------------------------------------------\n";
+    /**/ for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
+    /**/         cIt != cursors.end(); ++cIt ) { 
+    /**/     std::cout << cIt->edge << ' ' << cIt->cursor << '\n';
+    /**/ }
+    
     str.push_back(ch);
-    showMe(std::cout);
+    /**/ showMe(std::cout);
 }
 
 bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
@@ -74,23 +81,23 @@ bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
         else {
             //**/ std::cout << "\twas found: " << ch << '\n';
             cursor->edge = &find->second;
-            cursor->cursor = 0;
+            cursor->cursor = 1;
             return false;
         }
     }
     else {
         //**/ std::cout << "\tat : " << cursor->cursor << '\t'
         //**/           << str.size() << '\n';
-        /**/ std::cout << '\t' 
-        /**/           << str.at(cursor->edge->startPos+cursor->cursor) 
-        /**/           << ch << '\n';
+        //**/ std::cout << "\tCompare: " 
+        //**/           << str.at(cursor->edge->startPos+cursor->cursor) 
+        //**/           << " - " << ch << '\n';
         if( str.at(cursor->edge->startPos + cursor->cursor) == ch ) {
             ++cursor->cursor;
-            /**/ std::cout << "+: " << cursor->cursor << '\n'; 
+            //**/ std::cout << "+: " << cursor->cursor << '\n'; 
             return false;
         }
         else {
-            /**/ std::cout << "1: " << cursor->cursor << '\n'; 
+            //**/ std::cout << "cursor " << cursor->cursor << '\n'; 
             SuffTreeNode* nNode = new SuffTreeNode;
             
             nNode->addEdge( ch, NULL, str.size(), INT_MAX );
@@ -102,8 +109,7 @@ bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
             
             nNode->parrent = cursor->edge;
             cursor->edge->to = nNode;
-            cursor->edge->endPos = cursor->edge->startPos + cursor->cursor - 1;
-            /**/ std::cout << "2: " << cursor->cursor << '\n'; 
+            cursor->edge->endPos = cursor->edge->startPos + cursor->cursor;
             //cursor->edge->endPos = cursor->edge->startPos + 1;
             return true;
         }
