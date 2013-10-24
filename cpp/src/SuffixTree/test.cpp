@@ -10,7 +10,13 @@ int main( int argN, char** argS ) {
             tree.add(ch);
             ch = std::cin.get();
         }
-        tree.showMe(std::cout);
+        SuffTree tree1;
+        ch = std::cin.get();
+        while( ch != '\n' ) {
+            tree1.add(ch);
+            ch = std::cin.get();
+        }
+        //tree.showMe(std::cout);
     }
     catch(const std::exception& e) {
         std::cerr << "Std error "

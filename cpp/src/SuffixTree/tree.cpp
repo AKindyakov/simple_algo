@@ -10,6 +10,9 @@
 SuffTreeNode::SuffTreeNode() {
 }
 
+SuffTreeNode::~SuffTreeNode() {
+}
+
 void SuffTreeNode::showMe( const string& str, int lvl, std::ostream& os ) {
     //os << string(lvl*4, ' ') << "-";
     for( EdgeContainer::iterator it = edges.begin();
@@ -29,6 +32,12 @@ void SuffTreeEdge::showMe( const string& str, int lvl, std::ostream& os ) {
     if( to != NULL ) {
         to->showMe(str, lvl+1, os);
         os << '\n';
+    }
+}
+
+SuffTreeEdge::~SuffTreeEdge() {
+    if( to != NULL ) {
+        delete to;
     }
 }
 
@@ -57,14 +66,12 @@ void SuffTree::add( char ch ) {
             cursors.erase(delIt);
         }
     }
-    /**/ std::cout << "--------------------------------------------------------------------\n";
-    /**/ for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
-    /**/         cIt != cursors.end(); ++cIt ) { 
-    /**/     std::cout << cIt->edge << ' ' << cIt->cursor << '\n';
-    /**/ }
-    
+    //**/ for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
+    //**/         cIt != cursors.end(); ++cIt ) { 
+    //**/     std::cout << cIt->edge << ' ' << cIt->cursor << '\n';
+    //**/ }
     str.push_back(ch);
-    /**/ showMe(std::cout);
+    //**/ showMe(std::cout);
 }
 
 bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
@@ -110,37 +117,30 @@ bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
             nNode->parrent = cursor->edge;
             cursor->edge->to = nNode;
             cursor->edge->endPos = cursor->edge->startPos + cursor->cursor;
-            //cursor->edge->endPos = cursor->edge->startPos + 1;
             return true;
         }
     }
 }
 
-SuffTreeNode* SuffTree::splitEdge( SuffTreeCursor pos ) {
-    /*if( pos.edge.endPos == pos.offset ) {
-        // Это означает что делить и не надо, наша вершина это лист... просто возвращаем
-        // указатель на него
-        return pos.edge.to;
+bool SuffTree::compareNode( SuffTreeNode* node, const SuffTreeNode& cNode) {
+    for( EdgeContainer::iterator nIt = node->beginEdge(); 
+            nIt != node->emptyEdge(); ++nIt ) {
+        EdgeContainer::const_iterator fd = cNode.findEdge( nIt->first );
+        if( fd == cNode.emptyEdge() ) {
+            node->killEdge(nIt);   
+        }
+        else {
+            compareNode( &nIt->second.to, fd->second.to );
+        }
     }
-    SuffTreeNode* newNode = new SuffTreeNode;
-    SuffTreeEdge  newEdge;
-    
-    newEdge.startPos = pos.offset;
-    newEdge.endPos   = pos.edge.endPos;
-    newEdge.firstCh  = str.at(pos.offset);
-    newEdge.from     = newNode;
-    newEdge.to       = pos.edge.to;
-    
-    newNode->edges[str.at(pos.offset)] = newEdge;
-    
-    pos.edge.endPos = pos.offset;
-    pos.edge.to = newNode;
-    newNode->parrent = pos.edge;
-    pos.edge.from->edges[pos.edge.firstCh] = pos.edge;
+}
 
-    newNode->suffLink = splitEdge(getSuffix(pos));
-    return newNode; */
-    return new SuffTreeNode;
+void SuffTree::eraseNotCommon( const SuffTree& tr ) {
+    compareNode( root, *tr.root );
+}
+
+string SuffTree::getGreatSustring() {
+    return string();
 }
 
 void SuffTree::showMe( std::ostream& os ) {
