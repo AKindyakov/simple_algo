@@ -25,6 +25,8 @@ public:
     int startPos;
     int endPos;
     
+    int count;
+    
     // Do you realy need it ?
     // char firstCh;
 };
@@ -69,14 +71,20 @@ public:
     virtual ~SuffTree();
     
     void add(char ch);
+    void endString();
+    
+    std::string getGreatSubstring();
     void showMe( std::ostream& os );
     
 private:
     SuffTreeNode*  blank;
     SuffTreeNode*  root;
     string         str;
+    
+    int strCount;
+    
     list<SuffTreeCursor> cursors;
-    SuffTreeNode*  splitEdge( SuffTreeCursor pos );
+    
     bool trackTheCursor(char ch, SuffTreeCursor* cursor );
 };
 

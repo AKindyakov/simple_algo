@@ -10,6 +10,7 @@ int main( int argN, char** argS ) {
             tree.add(ch);
             ch = std::cin.get();
         }
+        tree.endString();
         tree.showMe(std::cout);
     }
     catch(const std::exception& e) {

@@ -11,7 +11,6 @@ SuffTreeNode::SuffTreeNode() {
 }
 
 void SuffTreeNode::showMe( const string& str, int lvl, std::ostream& os ) {
-    //os << string(lvl*4, ' ') << "-";
     for( EdgeContainer::iterator it = edges.begin();
             it != edges.end(); ++it ) {
         it->second.showMe(str, lvl+1, os);
@@ -28,7 +27,7 @@ void SuffTreeEdge::showMe( const string& str, int lvl, std::ostream& os ) {
        << str.substr(startPos, len) << '\n';
     if( to != NULL ) {
         to->showMe(str, lvl+1, os);
-        os << '\n';
+        //os << "|\n";
     }
 }
 
@@ -42,8 +41,9 @@ SuffTree::~SuffTree() {
 
 SuffTree::SuffTree()
     :   blank( new SuffTreeNode ),
-        root( new SuffTreeNode )    {
-    blank->addEdge('a', root, 0, 0);
+        root( new SuffTreeNode ),
+        strCount( 0 ) {
+    blank->addEdge(0, root, 0, 0);
     root->parrent = blank->firstEdge();
 }
 
@@ -57,14 +57,14 @@ void SuffTree::add( char ch ) {
             cursors.erase(delIt);
         }
     }
-    /**/ std::cout << "--------------------------------------------------------------------\n";
-    /**/ for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
-    /**/         cIt != cursors.end(); ++cIt ) { 
-    /**/     std::cout << cIt->edge << ' ' << cIt->cursor << '\n';
-    /**/ }
+    //**/ std::cout << "--------------------------------------------------------------------\n";
+    //**/ for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
+    //**/         cIt != cursors.end(); ++cIt ) { 
+    //**/     std::cout << cIt->edge << ' ' << cIt->cursor << '\n';
+    //**/ }
     
     str.push_back(ch);
-    /**/ showMe(std::cout);
+    //**/ showMe(std::cout);
 }
 
 bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
@@ -75,12 +75,15 @@ bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
         EdgeContainer::iterator find = cursor->edge->to->findEdge(ch);
         if( find == cursor->edge->to->emptyEdge() ) {
             //**/ std::cout << "\tadd\n";
-            cursor->edge->to->addEdge( ch, NULL, str.size(), INT_MAX ); 
+            if( strCount == 0 ) {
+                cursor->edge->to->addEdge( ch, NULL, str.size(), INT_MAX ); 
+            }
             return true;
         }
         else {
             //**/ std::cout << "\twas found: " << ch << '\n';
             cursor->edge = &find->second;
+            cursor->edge->count = strCount + 1;
             cursor->cursor = 1;
             return false;
         }
@@ -110,40 +113,31 @@ bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
             nNode->parrent = cursor->edge;
             cursor->edge->to = nNode;
             cursor->edge->endPos = cursor->edge->startPos + cursor->cursor;
-            //cursor->edge->endPos = cursor->edge->startPos + 1;
             return true;
         }
     }
 }
 
-SuffTreeNode* SuffTree::splitEdge( SuffTreeCursor pos ) {
-    /*if( pos.edge.endPos == pos.offset ) {
-        // Это означает что делить и не надо, наша вершина это лист... просто возвращаем
-        // указатель на него
-        return pos.edge.to;
+void SuffTree::endString() {
+    ++strCount;
+    for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
+            cIt != cursors.end(); ++cIt ) { 
+        if( cIt->cursor != cIt->edge->startPos-cIt->edge->endPos ) {
+            SuffTreeNode* nNode = new SuffTreeNode;
+            nNode->addEdge( str.at(cIt->edge->startPos + cIt->cursor), 
+                            cIt->edge->to, 
+                            cIt->edge->startPos + cIt->cursor,
+                            cIt->edge->endPos );
+            nNode->parrent = cIt->edge;
+        }
+        
     }
-    SuffTreeNode* newNode = new SuffTreeNode;
-    SuffTreeEdge  newEdge;
-    
-    newEdge.startPos = pos.offset;
-    newEdge.endPos   = pos.edge.endPos;
-    newEdge.firstCh  = str.at(pos.offset);
-    newEdge.from     = newNode;
-    newEdge.to       = pos.edge.to;
-    
-    newNode->edges[str.at(pos.offset)] = newEdge;
-    
-    pos.edge.endPos = pos.offset;
-    pos.edge.to = newNode;
-    newNode->parrent = pos.edge;
-    pos.edge.from->edges[pos.edge.firstCh] = pos.edge;
-
-    newNode->suffLink = splitEdge(getSuffix(pos));
-    return newNode; */
-    return new SuffTreeNode;
+    cursors.clear();
 }
 
+std::string SuffTree::getGreatSubstring() {
+    return std::string("Cowards die in shame");
+}
 void SuffTree::showMe( std::ostream& os ) {
-    os << "Print tree:\n";
     blank->showMe(str, 0, os);
 }
