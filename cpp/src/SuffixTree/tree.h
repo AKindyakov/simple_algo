@@ -12,23 +12,29 @@ class SuffTreeNode;
 
 class SuffTreeEdge {
 public:
-    SuffTreeEdge()
-        :   from(NULL), to(NULL), startPos(-1), endPos(-1) {}
+    SuffTreeEdge();
     
-    SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end )
-        :   from(_from), to(_to), startPos(start), endPos(end) {}
+    SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end );
     
     ~SuffTreeEdge();
     
     void showMe(const string& str, int lvl, std::ostream& os);
+    //SuffTreeEdge& operator=(const SuffTreeEdge& e) {
+    //    from = e.from;
+    //    to = e.to;
+    // / 
+    //    startPos = e.startPos;
+    //    endPos  = e.endPos;
+    //    counter = e.counter;
+    //    return *this;
+    //}
+    
     SuffTreeNode* from;
     SuffTreeNode* to;
     
     int startPos;
     int endPos;
-    
-    // Do you realy need it ?
-    // char firstCh;
+    int counter;
 };
 
 typedef std::map<char, SuffTreeEdge> EdgeContainer;
@@ -52,7 +58,6 @@ public:
     EdgeContainer::const_iterator emptyEdge()const {
         return edges.end();
     }
-    
 
     // del me !!
     SuffTreeEdge* firstEdge() {
@@ -86,6 +91,7 @@ public:
     virtual ~SuffTree();
     
     void add(char ch);
+    void endString();
     
     void eraseNotCommon( const SuffTree& tr );
     std::string getGreatSustring();
@@ -97,7 +103,8 @@ private:
     SuffTreeNode*  root;
     string         str;
     list<SuffTreeCursor> cursors;
-    SuffTreeNode*  splitEdge( SuffTreeCursor pos );
+    int strCount;
+    
     bool trackTheCursor(char ch, SuffTreeCursor* cursor );
     bool compareNode( SuffTreeNode* node, const SuffTreeNode& cNode);
 };
