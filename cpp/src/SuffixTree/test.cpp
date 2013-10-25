@@ -10,11 +10,7 @@ int main( int argN, char** argS ) {
             tree.add(ch);
             ch = std::cin.get();
         }
-        std::cout << "\nBefore end operation\n";
         tree.showMe(std::cout);
-//        tree.endString();
-//        std::cout << "\nAfter end operation\n";
-//        tree.showMe(std::cout);
     }
     catch(const std::exception& e) {
         std::cerr << "Std error "

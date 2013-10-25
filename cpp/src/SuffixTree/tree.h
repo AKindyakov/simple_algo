@@ -12,29 +12,21 @@ class SuffTreeNode;
 
 class SuffTreeEdge {
 public:
-    SuffTreeEdge();
+    SuffTreeEdge()
+        :   from(NULL), to(NULL), startPos(-1), endPos(-1) {}
     
-    SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end );
-    
-    ~SuffTreeEdge();
+    SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end )
+        :   from(_from), to(_to), startPos(start), endPos(end) {}
     
     void showMe(const string& str, int lvl, std::ostream& os);
-    //SuffTreeEdge& operator=(const SuffTreeEdge& e) {
-    //    from = e.from;
-    //    to = e.to;
-    // / 
-    //    startPos = e.startPos;
-    //    endPos  = e.endPos;
-    //    counter = e.counter;
-    //    return *this;
-    //}
-    
     SuffTreeNode* from;
     SuffTreeNode* to;
     
     int startPos;
     int endPos;
-    int counter;
+    
+    // Do you realy need it ?
+    // char firstCh;
 };
 
 typedef std::map<char, SuffTreeEdge> EdgeContainer;
@@ -43,33 +35,19 @@ typedef std::pair<char, SuffTreeEdge> EdgeValue;
 class SuffTreeNode {
 public:
     SuffTreeNode();
-    ~SuffTreeNode();
     
     void addEdge( char ch, SuffTreeNode* to, int start, int end );
     
     EdgeContainer::iterator findEdge( char ch ) {
         return edges.find(ch);
     }
-    
-    EdgeContainer::const_iterator findEdge( char ch )const {
-        return edges.find(ch);
-    }
         
-    EdgeContainer::const_iterator emptyEdge()const {
+    EdgeContainer::const_iterator emptyEdge() {
         return edges.end();
     }
-
-    // del me !!
+    
     SuffTreeEdge* firstEdge() {
         return &edges.begin()->second;
-    }
-    
-    EdgeContainer::iterator beginEdge() {
-        return edges.begin();
-    }
-    
-    void killEdge(EdgeContainer::iterator it) {
-        edges.erase(it);
     }
     
     void showMe(const string& str, int lvl, std::ostream& os);
@@ -91,11 +69,6 @@ public:
     virtual ~SuffTree();
     
     void add(char ch);
-    void endString();
-    
-    void eraseNotCommon( const SuffTree& tr );
-    std::string getGreatSustring();
-    
     void showMe( std::ostream& os );
     
 private:
@@ -103,9 +76,7 @@ private:
     SuffTreeNode*  root;
     string         str;
     list<SuffTreeCursor> cursors;
-    int strCount;
-    
+    SuffTreeNode*  splitEdge( SuffTreeCursor pos );
     bool trackTheCursor(char ch, SuffTreeCursor* cursor );
-    bool compareNode( SuffTreeNode* node, const SuffTreeNode& cNode);
 };
 
