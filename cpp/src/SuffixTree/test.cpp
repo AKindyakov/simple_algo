@@ -14,13 +14,13 @@ int main( int argN, char** argS ) {
         SuffTree tree;
         char ch = std::cin.get();
         while( ch != '\n' ) {
-            //std::cout << ch << '\n';
+            std::cout << ch << '\n';
             tree.add(ch);
             ch = std::cin.get();
         }
+        /**/ tree.showMe(std::cout);
         tree.endString();
         tree.finishTree();
-        std::cout << samples << " end finsh\n";
         
         while( --samples ) {
             ch = std::cin.get();
@@ -29,8 +29,8 @@ int main( int argN, char** argS ) {
                 ch = std::cin.get();
             }
             tree.endString();
-            //**/ tree.showMe(std::cout);
-            std::cout << "Great: [" << tree.getGreatSubstring() << "]\n";
+            /**/ tree.showMe(std::cout);
+            /**/ std::cout << "Great: [" << tree.getGreatSubstring() << "]\n";
         }
         //**/ tree.showMe(std::cout);
         std::cout << tree.getGreatSubstring() << '\n';

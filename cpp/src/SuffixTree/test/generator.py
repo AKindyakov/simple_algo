@@ -6,7 +6,7 @@ pop = ['a','b','c','d','f','g','h','i','j','l','k','m','n','o','p','q','r','s','
 
 for i in range(10):
     ss = ""
-    for k in range(100000):
+    for k in range(10000):
         s = random.choice(pop);
         ss += s
     fl.write(ss+'\n');
