@@ -10,25 +10,36 @@ using std::list;
 
 class SuffTreeNode;
 
+struct SubString {
+    int startPos;
+    int endPos;
+};
+
 class SuffTreeEdge {
 public:
     SuffTreeEdge()
-        :   from(NULL), to(NULL), startPos(-1), endPos(-1) {}
+        :   from(NULL), to(NULL), 
+            prevGuest(0) {
+        sub.startPos = -1;
+        sub.endPos = -1; 
+    }
     
     SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end )
-        :   from(_from), to(_to), startPos(start), endPos(end) {}
+        :   from(_from), to(_to),
+            prevGuest(0) {
+        sub.startPos = start;
+        sub.endPos = end; 
+    }
     
     void showMe(const string& str, int lvl, std::ostream& os);
+    
+    void finish(const string& str);
+    
     SuffTreeNode* from;
     SuffTreeNode* to;
     
-    int startPos;
-    int endPos;
-    
-    int count;
-    
-    // Do you realy need it ?
-    // char firstCh;
+    SubString sub;
+    int prevGuest;
 };
 
 typedef std::map<char, SuffTreeEdge> EdgeContainer;
@@ -40,9 +51,7 @@ public:
     
     void addEdge( char ch, SuffTreeNode* to, int start, int end );
     
-    EdgeContainer::iterator findEdge( char ch ) {
-        return edges.find(ch);
-    }
+    EdgeContainer::iterator findEdge( char ch );
         
     EdgeContainer::const_iterator emptyEdge() {
         return edges.end();
@@ -52,6 +61,12 @@ public:
         return &edges.begin()->second;
     }
     
+    EdgeContainer::iterator firstEdgeIt() {
+        return edges.begin();
+    }
+    
+    int  greatestSubstring( int lvl, list<SubString>* outSub );
+    void finish(const string& str);
     void showMe(const string& str, int lvl, std::ostream& os);
     
     EdgeContainer edges;
@@ -71,6 +86,9 @@ public:
     virtual ~SuffTree();
     
     void add(char ch);
+    void finishTree();
+    
+    void check(char ch);
     void endString();
     
     std::string getGreatSubstring();
@@ -86,5 +104,6 @@ private:
     list<SuffTreeCursor> cursors;
     
     bool trackTheCursor(char ch, SuffTreeCursor* cursor );
+    bool checkTrackTheCursor(char ch, SuffTreeCursor* cursor );
 };
 
