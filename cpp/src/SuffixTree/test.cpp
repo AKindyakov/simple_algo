@@ -2,23 +2,24 @@
 #include <exception>
 #include "tree.h"
 
+#include "../SimpleAlgoException/simpleException.h"
+
 int main( int argN, char** argS ) {
     try {
         int samples = 0;
         std::cin >> samples;
         std::cin.ignore();
         if( samples < 1 ) {
-            throw 1;
+            throw SimpleException("Unexpected algo list", __LINE__);
         }
         
         SuffTree tree;
         char ch = std::cin.get();
         while( ch != '\n' ) {
-            std::cout << ch << '\n';
             tree.add(ch);
             ch = std::cin.get();
         }
-        /**/ tree.showMe(std::cout);
+        //**/ tree.showMe(std::cout);
         tree.endString();
         tree.finishTree();
         
@@ -29,8 +30,8 @@ int main( int argN, char** argS ) {
                 ch = std::cin.get();
             }
             tree.endString();
-            /**/ tree.showMe(std::cout);
-            /**/ std::cout << "Great: [" << tree.getGreatSubstring() << "]\n";
+            //**/ tree.showMe(std::cout);
+            //**/ std::cout << "Great: [" << tree.getGreatSubstring() << "]\n";
         }
         //**/ tree.showMe(std::cout);
         std::cout << tree.getGreatSubstring() << '\n';

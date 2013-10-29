@@ -24,14 +24,14 @@ public:
         sub.endPos = -1; 
     }
     
-    SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end )
+    SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end, int count=0 )
         :   from(_from), to(_to),
-            prevGuest(0) {
+            prevGuest(count) {
         sub.startPos = start;
         sub.endPos = end; 
     }
     
-    void showMe(const string& str, int lvl, std::ostream& os);
+    void showMe(const string& str, int lvl, std::ostream& os)const;
     
     void finish(const string& str);
     
@@ -50,6 +50,7 @@ public:
     SuffTreeNode();
     
     void addEdge( char ch, SuffTreeNode* to, int start, int end );
+    void addEdge( char ch, SuffTreeNode* to, int start, int end, int strCount );
     
     EdgeContainer::iterator findEdge( char ch );
         
@@ -67,7 +68,7 @@ public:
     
     int  greatestSubstring( int lvl, list<SubString>* outSub );
     void finish(const string& str);
-    void showMe(const string& str, int lvl, std::ostream& os);
+    void showMe(const string& str, int lvl, std::ostream& os)const;
     
     EdgeContainer edges;
     SuffTreeEdge* parrent;
@@ -92,7 +93,7 @@ public:
     void endString();
     
     std::string getGreatSubstring();
-    void showMe( std::ostream& os );
+    void showMe( std::ostream& os )const;
     
 private:
     SuffTreeNode*  blank;
