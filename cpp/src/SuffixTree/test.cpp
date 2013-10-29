@@ -19,6 +19,7 @@ int main( int argN, char** argS ) {
             tree.add(ch);
             ch = std::cin.get();
         }
+        std::cout << "build compleete\n";
         //**/ tree.showMe(std::cout);
         tree.endString();
         tree.finishTree();
@@ -30,6 +31,7 @@ int main( int argN, char** argS ) {
                 ch = std::cin.get();
             }
             tree.endString();
+            std::cout << "check : " << samples << "\n";
             //**/ tree.showMe(std::cout);
             //**/ std::cout << "Great: [" << tree.getGreatSubstring() << "]\n";
         }

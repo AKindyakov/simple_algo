@@ -1,12 +1,13 @@
 #include <iostream>
 #include <string>
-#include <map>
+//#include <map>
 #include <list>
 
-using std::map;
 using std::string;
 using std::list;
 
+const int ABC_SIZE = 26;
+const int FIRST_ABC_CHAR = 'a';
 
 class SuffTreeNode;
 
@@ -42,41 +43,30 @@ public:
     int prevGuest;
 };
 
-typedef std::map<char, SuffTreeEdge> EdgeContainer;
-typedef std::pair<char, SuffTreeEdge> EdgeValue;
-
 class SuffTreeNode {
 public:
     SuffTreeNode();
     
-    void addEdge( char ch, SuffTreeNode* to, int start, int end );
     void addEdge( char ch, SuffTreeNode* to, int start, int end, int strCount );
     
-    EdgeContainer::iterator findEdge( char ch );
+    SuffTreeEdge* findEdge( char ch );
         
-    EdgeContainer::const_iterator emptyEdge() {
-        return edges.end();
-    }
-    
-    SuffTreeEdge* firstEdge() {
-        return &edges.begin()->second;
-    }
-    
-    EdgeContainer::iterator firstEdgeIt() {
-        return edges.begin();
+    SuffTreeEdge* firstEdgePt() {
+        return *edges;
     }
     
     int  greatestSubstring( int lvl, list<SubString>* outSub );
     void finish(const string& str);
     void showMe(const string& str, int lvl, std::ostream& os)const;
     
-    EdgeContainer edges;
+    SuffTreeEdge* edges[ ABC_SIZE ];
     SuffTreeEdge* parrent;
 };
 
 struct SuffTreeCursor {
     SuffTreeCursor ( SuffTreeEdge* _edge, int _cursor )
         :   edge(_edge), cursor(_cursor) {}
+    
     SuffTreeEdge* edge;
     int cursor;
 };
@@ -92,7 +82,7 @@ public:
     void check(char ch);
     void endString();
     
-    std::string getGreatSubstring();
+    std::string getGreatSubstring()const;
     void showMe( std::ostream& os )const;
     
 private:
