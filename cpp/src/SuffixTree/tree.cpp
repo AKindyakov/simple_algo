@@ -73,12 +73,25 @@ void SuffTreeEdge::showMe( const string& str, int lvl, std::ostream& os )const {
     }
 }
 
+int SuffTreeEdge::findSub( const string& modelStr, const string& str, int start, int end )const {
+    if(start == end) {
+        return start;
+    }
+    int edgeLen = std::min(sub.endPos-sub.startPos, end-start+1);
+    for( int cursor = 1; cursor < edgeLen; ++cursor ) {
+        if( modelStr.at(sub.startPos + cursor) != str.at(start + cursor) ) {
+            return start + cursor;
+        }
+    }
+    return to->findSub(modelStr, str, start+edgeLen, end);
+}
+
 void SuffTreeNode::addEdge( char ch, SuffTreeNode* to, int start, int end, int strCount ) {
     ch -= FIRST_ABC_CHAR;
     //if( ch >= ABC_SIZE ) {
     //    throw SimpleException("Wrong input character", __LINE__); 
     //}
-    edges[ ch ] = new SuffTreeEdge(this, to, start, end, strCount);
+    edges[ch] = new SuffTreeEdge(this, to, start, end, strCount);
 }
 
 SuffTreeEdge* SuffTreeNode::findEdge( char ch ) {
@@ -87,6 +100,14 @@ SuffTreeEdge* SuffTreeNode::findEdge( char ch ) {
     //    throw SimpleException("Wrong input character", __LINE__); 
     //}
     return edges[ch];
+}
+
+int SuffTreeNode::findSub( const string& modelStr, const string& str, int start, int end )const {
+    char ch = str.at(start) + FIRST_ABC_CHAR;
+    if( edges[ch] != NULL ) { 
+        return edges[ch]->findSub(modelStr, str, start, end);
+    }
+    return start;
 }
 
 void SuffTreeNode::finish( const string& str ) {
@@ -257,6 +278,10 @@ void SuffTree::endString() {
     }
     cursors.clear();
     ++strCount;
+}
+
+int SuffTree::findSub( const string& checkStr, int start, int end )const {
+    return root->findSub( str, checkStr, start, end );
 }
 
 std::string SuffTree::getGreatSubstring()const {

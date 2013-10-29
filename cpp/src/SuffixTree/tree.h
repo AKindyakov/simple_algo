@@ -33,6 +33,7 @@ public:
     }
     
     void showMe(const string& str, int lvl, std::ostream& os)const;
+    int findSub( const string& modelStr, const string& str, int start, int end )const;
     
     void finish(const string& str);
     
@@ -56,6 +57,7 @@ public:
     }
     
     int  greatestSubstring( int lvl, list<SubString>* outSub );
+    int findSub( const string& modelStr, const string& str, int start, int end )const;
     void finish(const string& str);
     void showMe(const string& str, int lvl, std::ostream& os)const;
     
@@ -82,6 +84,7 @@ public:
     void check(char ch);
     void endString();
     
+    int findSub(const string& lastStr, int start, int end)const;
     std::string getGreatSubstring()const;
     void showMe( std::ostream& os )const;
     

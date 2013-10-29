@@ -1,6 +1,7 @@
 #include <iostream>
 #include <exception>
 #include "tree.h"
+#include <vector>
 
 #include "../SimpleAlgoException/simpleException.h"
 
@@ -13,30 +14,50 @@ int main( int argN, char** argS ) {
             throw SimpleException("Unexpected algo list", __LINE__);
         }
         
-        SuffTree tree;
+        std::vector<SuffTree> tree(--samples);
         char ch = std::cin.get();
-        while( ch != '\n' ) {
-            tree.add(ch);
-            ch = std::cin.get();
-        }
-        std::cout << "build compleete\n";
-        //**/ tree.showMe(std::cout);
-        tree.endString();
-        tree.finishTree();
-        
-        while( --samples ) {
+        while( samples-- ) {
+            std::cout << samples << " create\n";
             ch = std::cin.get();
             while( ch != '\n' ) {
-                tree.check(ch);
+                tree[samples].add(ch);
                 ch = std::cin.get();
             }
-            tree.endString();
-            std::cout << "check : " << samples << "\n";
+            tree[samples].finishTree();
             //**/ tree.showMe(std::cout);
-            //**/ std::cout << "Great: [" << tree.getGreatSubstring() << "]\n";
+        }
+        /**/ std::cout << "Generate compleete\n";
+        
+        std::string lastStr;
+        ch = std::cin.get();
+        while( ch != '\n' ) {
+            lastStr.push_back(ch);
+            ch = std::cin.get();
+        }
+        size_t slen = lastStr.size();
+        int rstart=0, rend=0;
+        int maxLen = 0;
+        for( size_t st=0; st < slen; ++st ) {
+            if( slen-st < maxLen ) {
+                break;
+            }
+            int wrk_end=slen;
+            for( std::vector<SuffTree>::const_iterator it = tree.begin();
+                    it != tree.end(); ++it ) {
+                wrk_end = it->findSub(lastStr, st, wrk_end);
+                if( wrk_end - st < maxLen ) {
+                    break;
+                }
+            }
+            if( wrk_end - st > maxLen ) {
+                maxLen = wrk_end - st;
+                rstart = st;
+                rend   = wrk_end;
+            }
         }
         //**/ tree.showMe(std::cout);
-        std::cout << tree.getGreatSubstring() << '\n';
+        //std::cout << tree.getGreatSubstring() << '\n';
+        std::cout << lastStr.substr(rstart, rend-rstart);
     }
     catch(const std::exception& e) {
         std::cerr << "Std error "
