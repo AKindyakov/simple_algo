@@ -77,7 +77,8 @@ int SuffTreeEdge::findSub( const string& modelStr, const string& str, int start,
     if(start == end) {
         return start;
     }
-    int edgeLen = std::min(sub.endPos-sub.startPos, end-start+1);
+    int edgeLen = std::min(sub.endPos-sub.startPos, end-start);
+
     for( int cursor = 1; cursor < edgeLen; ++cursor ) {
         if( modelStr.at(sub.startPos + cursor) != str.at(start + cursor) ) {
             return start + cursor;
@@ -88,22 +89,25 @@ int SuffTreeEdge::findSub( const string& modelStr, const string& str, int start,
 
 void SuffTreeNode::addEdge( char ch, SuffTreeNode* to, int start, int end, int strCount ) {
     ch -= FIRST_ABC_CHAR;
-    //if( ch >= ABC_SIZE ) {
-    //    throw SimpleException("Wrong input character", __LINE__); 
-    //}
+    if( ch >= ABC_SIZE ) {
+        throw SimpleException("Wrong input character", __LINE__); 
+    }
     edges[ch] = new SuffTreeEdge(this, to, start, end, strCount);
 }
 
 SuffTreeEdge* SuffTreeNode::findEdge( char ch ) {
     ch -= FIRST_ABC_CHAR;
-    //if( ch >= ABC_SIZE ) {
-    //    throw SimpleException("Wrong input character", __LINE__); 
-    //}
+    if( ch >= ABC_SIZE ) {
+        throw SimpleException("Wrong input character", __LINE__); 
+    }
     return edges[ch];
 }
 
 int SuffTreeNode::findSub( const string& modelStr, const string& str, int start, int end )const {
-    char ch = str.at(start) + FIRST_ABC_CHAR;
+    if(start == end) {
+        return start;
+    }
+    char ch = str.at(start) - FIRST_ABC_CHAR;
     if( edges[ch] != NULL ) { 
         return edges[ch]->findSub(modelStr, str, start, end);
     }
@@ -131,7 +135,7 @@ SuffTree::SuffTree()
 }
 
 void SuffTree::add( char ch ) {
-    //**/ std::cout << "ch : " << ch << ' ' << blank->findEdge(FIRST_ABC_CHAR) << '\n';
+    //**/ std::cout << "add ch : " << ch << ' ' << '\n';
     cursors.push_back( SuffTreeCursor(blank->findEdge(FIRST_ABC_CHAR), 0));
     for( list<SuffTreeCursor>::iterator cIt = cursors.begin();
             cIt != cursors.end(); ++cIt ) { 
@@ -146,11 +150,12 @@ void SuffTree::add( char ch ) {
 bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
     // Will you take red or blue pill ?
     // At the end of way?
-    //**/ std::cout << "ch : " << ch << '\n';
-    if( cursor->edge->sub.endPos == cursor->cursor+cursor->edge->sub.startPos ) {
+    //**/ std::cout << "\tch : " << ch << '\n';
+    if( cursor->edge->sub.endPos == cursor->cursor + cursor->edge->sub.startPos ) {
         SuffTreeEdge* find = cursor->edge->to->findEdge(ch);
         if( find == NULL ) {
-            //**/ std::cout << "\tadd\n";
+            //**/ std::cout << "\tadd " << ch << "\n";
+            //**/ std::cout << "\t\t " << str.size() << "\n";
             cursor->edge->to->addEdge( ch, NULL, str.size(), INT_MAX, 0 ); 
         }
         else {
@@ -161,8 +166,10 @@ bool SuffTree::trackTheCursor(char ch, SuffTreeCursor* cursor ) {
         }
     }
     else {
-        //**/ std::cout << "\tat : " << cursor->cursor << '\t'
-        //**/           << str.size() << '\n';
+        //**/ std::cout << "\tcurs: : " << cursor->cursor
+        //**/           << " start:" << cursor->edge->sub.startPos
+        //**/           << "   end:" << cursor->edge->sub.endPos
+        //**/           << "  size:" << str.size() << '\n';
         //**/ std::cout << "\tCompare: " 
         //**/           << str.at(cursor->edge->sub.startPos+cursor->cursor) 
         //**/           << " - " << ch << '\n';
@@ -255,6 +262,7 @@ bool SuffTree::checkTrackTheCursor(char ch, SuffTreeCursor* cursor ) {
 }
 
 void SuffTree::finishTree() {
+    //**/ std::cout << "finishTree()\n";
     blank->finish(str);
 }
 
@@ -281,6 +289,7 @@ void SuffTree::endString() {
 }
 
 int SuffTree::findSub( const string& checkStr, int start, int end )const {
+    //**/ std::cout << checkStr.substr( start, end-start ) << '\n';
     return root->findSub( str, checkStr, start, end );
 }
 
@@ -298,5 +307,5 @@ std::string SuffTree::getGreatSubstring()const {
 }
 
 void SuffTree::showMe( std::ostream& os )const {
-    blank->showMe(str, 0, os);
+    root->showMe(str, 0, os);
 }
