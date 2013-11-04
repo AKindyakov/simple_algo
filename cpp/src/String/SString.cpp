@@ -1,16 +1,33 @@
+#include <cstring>
+
+#include "SString.h"
+
 SString::SString()
     : m_lenght(0),
       m_cstring(NULL) {}
 
-SString::SString( const SString& ) {
+SString::SString( const SString& sstr )
+    : m_lenght(sstr.lenght()) {
+    m_cstring = sstr.cstr();
 }
 
-SString::SString( const char* ) {}
-SString::SString( unsigned int n, char ch ) {}
+SString::SString( const char* cstr ) 
+    : m_lenght(strlen(cstr)) {
+    m_cstring = new char[m_lenght+1];
+    strcpy(m_cstring, cstr);
+}
+
+SString::SString( unsigned int n, char ch )
+    : m_lenght(n),
+      m_cstring(new char[m_lenght+1](ch)) {
+    
+}
 SString::SString( unsigned int n, const char* ) {}
 SString::SString( unsigned int n, const SString& ) {}
 
-SString::~SString () {}
+SString::~SString () {
+    delete [] m_cstring;
+}
 
 unsigned int SString::lenght()const {}
 unsigned int SString::maxsize()const {}
