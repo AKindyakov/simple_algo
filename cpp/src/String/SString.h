@@ -152,6 +152,7 @@ public:
 private:
     
     void unsafe_resize( unsigned int new_size );
+    void check_new_len( unsigned int new_size );
     unsigned int m_lenght;
     char*        m_cstring;
 };

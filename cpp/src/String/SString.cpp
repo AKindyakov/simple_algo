@@ -55,16 +55,23 @@ unsigned int SString::lenght()const {
 }
 
 unsigned int SString::maxsize()const {
-    return UINT_MAX;
+    return UINT_MAX-1;
 }
 
 void SString::unsafe_resize( unsigned int new_size ) {
+    check_new_len( new_size );
     void* np = realloc( static_cast<void*>(m_cstring), new_size+1 );
     if( np == NULL ) {
         throw std::bad_alloc();
     }
     m_cstring = static_cast<char*>(np);
     m_lenght = new_size;
+}
+
+void SString::check_new_len( unsigned int new_size ) {
+    if( new_size == UINT_MAX ) {
+        throw std::out_of_range("SString::resize error, too great new size");
+    }
 }
 
 void SString::resize( unsigned int n ) {
