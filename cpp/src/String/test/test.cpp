@@ -1,13 +1,12 @@
 #include <iostream>
-#include "../SString.h"
+#include "../ZeroTerminatedStr.h"
 
 int main( int argN, char** argS ) {
-    SString s1;
-    SString s2( "const char* cstr" );
-    SString s3( 277, '?' );
-
-    SString s4( s2 );
-    SString s5( s2, 1, 7 );
+    ZeroTerminatedStr s1;
+    ZeroTerminatedStr s2( "const char* cstr" );
+    ZeroTerminatedStr s3( s2.maxsize(), '?' );
+    ZeroTerminatedStr s4( s2 );
+    ZeroTerminatedStr s5( s2, 1, 7 );
     
     std::cout << "|" << s1.cstr() << "|\n";
     std::cout << "|" << s2.cstr() << "|\n";
@@ -28,11 +27,11 @@ int main( int argN, char** argS ) {
     s4.assign('4');
     s5.assign("assign|s5");
     
-    std::cout << "|" << s1.cstr() << "|\n";
-    std::cout << "|" << s2.cstr() << "|\n";
-    std::cout << "|" << s3.cstr() << "|\n";
-    std::cout << "|" << s4.cstr() << "|\n";
-    std::cout << "|" << s5.cstr() << "|\n";
+    std::cout << "|" << s1 << "|\n";
+    std::cout << "|" << s2 << "|\n";
+    std::cout << "|" << s3 << "|\n";
+    std::cout << "|" << s4 << "|\n";
+    std::cout << "|" << s5 << "|\n";
     
     s1.assign("s1");
     s2.assign("s2");

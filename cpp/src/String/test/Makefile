@@ -3,7 +3,7 @@ H_RULE="/***********************************************************************
 CC=g++
 
 all: hello_print
-	${CC} ../SString.cpp test.cpp -o stringTest.out
+	${CC} ../ZeroTerminatedStr.cpp test.cpp -o stringTest.out
 
 hello_print:
 	@echo ${H_RULE}
