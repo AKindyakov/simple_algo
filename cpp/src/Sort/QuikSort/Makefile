@@ -1,0 +1,11 @@
+
+
+all: clean prepare
+	g++ quicksort.cpp test.cpp -o product/solve 
+
+clean:
+	rm -r -f product
+
+prepare:
+	mkdir product
+	
