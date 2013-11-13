@@ -4,7 +4,7 @@ OUT_FILE=stringTest.out
 CC=g++
 
 all: hello_print
-	${CC} ../ZeroTerminatedStr.cpp test.cpp -o ${OUT_FILE}
+	${CC} ../SString.cpp test.cpp -o ${OUT_FILE}
 
 hello_print:
 	@echo ${H_RULE}

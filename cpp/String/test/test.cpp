@@ -1,12 +1,21 @@
 #include <iostream>
-#include "../ZeroTerminatedStr.h"
+#include "../SString.h"
 
 int main( int argN, char** argS ) {
-    ZeroTerminatedStr s1;
-    ZeroTerminatedStr s2( "const char* cstr" );
-    ZeroTerminatedStr s3( s2.maxsize(), '?' );
-    ZeroTerminatedStr s4( s2 );
-    ZeroTerminatedStr s5( s3, 1, 7 );
+    std::cout << "s1 creating:" << std::endl;
+    SString s1;
+
+    std::cout << "s2 creating:" << std::endl;
+    SString s2( "const char* cstr" );
+
+    std::cout << "s3 creating:" << std::endl;
+    SString s3( 256, '?' );
+
+    std::cout << "s4 creating:" << std::endl;
+    SString s4( s2 );
+
+    std::cout << "s5 creating:" << std::endl;
+    SString s5( s3, 1, 7 );
     
     std::cout << "Default constructor:      |" << s1.cstr() << "|\n";
     std::cout << "Copy cstring constructor: |" << s2.cstr() << "|\n";
@@ -42,7 +51,7 @@ int main( int argN, char** argS ) {
     s2.append(" ever");
     s3.append(" and");
     s4.append("...");
-    s5.append("\n\t\tBilbo Baggin");
+    s5.append("\n\t\tBilbo Baggins");
     
     std::cout << "+ |" << s1+" "+s2+" "+s2+" "+s3+" "+s4+s5 << "|\n";
     
