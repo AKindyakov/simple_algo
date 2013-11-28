@@ -148,12 +148,17 @@ public:
     friend bool operator>=( const char*,    const SString& );
     friend bool operator>=( const SString&, const char* );
     /** @} */
-
+    
+    typedef typename unsigned int size_type;
+    
+    static size_type min_alloc_size;
+    
 private:
     
     void unsafe_resize( unsigned int new_size );
     void check_new_len( unsigned int new_size );
     unsigned int m_lenght;
+    unsigned int m_allocated;
     char*        m_cstring;
 };
 

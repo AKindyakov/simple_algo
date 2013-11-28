@@ -6,9 +6,12 @@
 
 #include "SString.h"
 
+SString::size_type SString::min_alloc_size = 0xFF;
+
 SString::SString()
-        : m_lenght(0) {
-    m_cstring = static_cast< char* >(malloc(1));
+        : m_lenght(0),
+          m_allocated(255) {
+    m_cstring = static_cast< char* >( malloc(m_allocated) );
     if( m_cstring == NULL ) {
         throw std::bad_alloc();
     }
@@ -16,8 +19,10 @@ SString::SString()
 }
 
 SString::SString( const SString& sstr )
-    : m_lenght(sstr.lenght()) {
-    m_cstring = sstr.cstr();
+    : m_lenght( sstr.lenght() ),
+      m_allocated( sstr.lenght() + min_alloc_size ) {
+    m_cstring = static_cast<char*>( malloc(m_allocated) );
+    strcpy(m_cstring, sstr.cstr);
 }
 
 SString::SString( const char* cstr ) 
