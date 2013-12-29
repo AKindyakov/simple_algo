@@ -9,33 +9,46 @@
 SString::size_type SString::min_alloc_size = 0xFF;
 
 SString::SString()
-        : m_lenght(0),
-          m_allocated(255) {
+        : m_lenght(0)
+        , m_allocated(255) {
     m_cstring = static_cast< char* >( malloc(m_allocated) );
     if( m_cstring == NULL ) {
         throw std::bad_alloc();
     }
-    *m_cstring = 0;
+    *m_cstring = '\0';
 }
 
 SString::SString( const SString& sstr )
-    : m_lenght( sstr.lenght() ),
-      m_allocated( sstr.lenght() + min_alloc_size ) {
+        : m_lenght( sstr.lenght() )
+        , m_allocated( sstr.lenght() + min_alloc_size ) {
     m_cstring = static_cast<char*>( malloc(m_allocated) );
-    strcpy(m_cstring, sstr.cstr);
+    if( m_cstring == NULL ) {
+        throw std::bad_alloc();
+    }
+    strcpy(m_cstring, sstr.m_cstring);
 }
 
 SString::SString( const char* cstr ) 
-    : m_lenght(strlen(cstr)) {
-    m_cstring = static_cast<char*>( malloc(m_lenght+1) );
+        : m_lenght( strlen(cstr) )
+        , m_allocated( m_lenght + min_alloc_size ) {
+    m_cstring = static_cast<char*>( malloc(m_allocated) );
+    if( m_cstring == NULL ) {
+        throw std::bad_alloc();
+    }
     strcpy(m_cstring, cstr);
 }
 
 SString::SString( unsigned int n, char ch )
-        : m_lenght(n) {
-    m_cstring = static_cast<char*>( malloc(m_lenght+1) );
+        : m_lenght(n)
+        , m_allocated( n + min_alloc_size ) {
+    //TODO: wrap it to function
+    m_cstring = static_cast<char*>( malloc(m_allocated) );
+    if( m_cstring == NULL ) {
+        throw std::bad_alloc();
+    }
+    // end of wrap it
     memset(m_cstring, ch, n);
-    m_cstring[m_lenght] = 0;
+    m_cstring[n] = 0;
 }
 
 SString::SString( const SString& tstr, unsigned int start, unsigned int len ) {
@@ -47,7 +60,11 @@ SString::SString( const SString& tstr, unsigned int start, unsigned int len ) {
         len = tstr.m_lenght-start;
     }
     m_lenght = len;
-    m_cstring = static_cast<char*>( malloc(m_lenght+1) );
+    m_allocated = m_lenght + min_alloc_size;
+    m_cstring = static_cast<char*>( malloc(m_allocated) );
+    if( m_cstring == NULL ) {
+        throw std::bad_alloc();
+    }
     strncpy(m_cstring, spt, len);
 }
 
@@ -56,6 +73,10 @@ SString::~SString () {
 }
 
 unsigned int SString::lenght()const {
+    return m_lenght;
+}
+
+unsigned int SString::capacity()const {
     return m_lenght;
 }
 
@@ -116,10 +137,8 @@ char& SString::at( unsigned int p ) {
     return m_cstring[p];
 }
 
-char* SString::cstr()const {
-    char* str = static_cast<char*>( malloc(m_lenght+1) );
-    strcpy(str, m_cstring);
-    return str;
+const char* SString::cstr()const {
+    return static_cast<const char*>(m_cstring);
 }
 
 SString SString::substr( unsigned int start, unsigned int len )const {
@@ -155,9 +174,9 @@ char SString::pop_back() {
 }
 
 void SString::assign( const SString& ss ) {
-    free( static_cast<void*>(m_cstring) );
-    m_cstring = ss.cstr();
     m_lenght = ss.lenght();
+    this->unsafe_resize( m_lenght );
+    strcpy(m_cstring, ss.cstr());
 }
 
 void SString::assign( const char* cs ) {

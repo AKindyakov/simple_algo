@@ -21,6 +21,7 @@ public:
     * @brief Returns the length of the string, in terms of number of characters
     */
     unsigned int lenght()const;
+    unsigned int capacity()const;
     
     /**
     * @brief Returns the maximum length the string can reach
@@ -58,7 +59,7 @@ public:
     /**
     * @brief Returns a pointer to an array that contains a null-terminated sequence of characters
     */
-    char* cstr()const;
+    const char* cstr()const;
     /** @} */
     
     /**
@@ -149,7 +150,7 @@ public:
     friend bool operator>=( const SString&, const char* );
     /** @} */
     
-    typedef typename unsigned int size_type;
+    typedef unsigned int size_type;
     
     static size_type min_alloc_size;
     
