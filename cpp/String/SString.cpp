@@ -8,50 +8,49 @@
 
 SString::size_type SString::min_alloc_size = 0xFF;
 
+void SString::re_reserve(size_type new_size) {
+    if (new_size > maxsize()) {
+        new_size = maxsize();
+    }
+    if (new_size != m_allocated) {
+        char* newpt = new char[new_size];
+        m_allocated = new_size;
+        strcpy(newpt, m_cstring);
+        delete[] m_cstring;
+        m_cstring = newpt;
+    }
+}
+
 SString::SString()
         : m_lenght(0)
         , m_allocated(255) {
-    m_cstring = static_cast< char* >( malloc(m_allocated) );
-    if( m_cstring == NULL ) {
-        throw std::bad_alloc();
-    }
-    *m_cstring = '\0';
+    m_cstring = new char[m_allocated];
+    *m_cstring = 0;
 }
 
 SString::SString( const SString& sstr )
         : m_lenght( sstr.lenght() )
         , m_allocated( sstr.lenght() + min_alloc_size ) {
-    m_cstring = static_cast<char*>( malloc(m_allocated) );
-    if( m_cstring == NULL ) {
-        throw std::bad_alloc();
-    }
+    m_cstring = new char[m_allocated];
     strcpy(m_cstring, sstr.m_cstring);
 }
 
-SString::SString( const char* cstr ) 
+SString::SString( const char* cstr )
         : m_lenght( strlen(cstr) )
         , m_allocated( m_lenght + min_alloc_size ) {
-    m_cstring = static_cast<char*>( malloc(m_allocated) );
-    if( m_cstring == NULL ) {
-        throw std::bad_alloc();
-    }
+    m_cstring = new char[m_allocated];
     strcpy(m_cstring, cstr);
 }
 
-SString::SString( unsigned int n, char ch )
+SString::SString( size_type n, char ch )
         : m_lenght(n)
         , m_allocated( n + min_alloc_size ) {
-    //TODO: wrap it to function
-    m_cstring = static_cast<char*>( malloc(m_allocated) );
-    if( m_cstring == NULL ) {
-        throw std::bad_alloc();
-    }
-    // end of wrap it
+    m_cstring = new char[m_allocated];
     memset(m_cstring, ch, n);
     m_cstring[n] = 0;
 }
 
-SString::SString( const SString& tstr, unsigned int start, unsigned int len ) {
+SString::SString( const SString& tstr, size_type start, size_type len ) {
     if( start >= tstr.m_lenght ) {
         throw std::out_of_range("SString::substr error, start must low then lenght");
     }
@@ -61,76 +60,55 @@ SString::SString( const SString& tstr, unsigned int start, unsigned int len ) {
     }
     m_lenght = len;
     m_allocated = m_lenght + min_alloc_size;
-    m_cstring = static_cast<char*>( malloc(m_allocated) );
-    if( m_cstring == NULL ) {
-        throw std::bad_alloc();
-    }
+    m_cstring = new char[m_allocated];
     strncpy(m_cstring, spt, len);
 }
 
 SString::~SString () {
-    free( static_cast<void*>(m_cstring) );
+    delete[] m_cstring;
 }
 
-unsigned int SString::lenght()const {
+SString::size_type SString::lenght()const {
     return m_lenght;
 }
 
-unsigned int SString::capacity()const {
-    return m_lenght;
+SString::size_type SString::capacity()const {
+    return m_allocated;
 }
 
-unsigned int SString::maxsize()const {
+SString::size_type SString::maxsize()const {
     return UINT_MAX-1;
 }
 
-void SString::unsafe_resize( unsigned int new_size ) {
-    check_new_len( new_size );
-    void* np = realloc( static_cast<void*>(m_cstring), new_size+1 );
-    if( np == NULL ) {
-        throw std::bad_alloc();
-    }
-    m_cstring = static_cast<char*>(np);
-    m_lenght = new_size;
+void SString::resize( size_type n ) {
+    resize(n, 0);
 }
 
-void SString::check_new_len( unsigned int new_size ) {
-    if( new_size == UINT_MAX ) {
-        throw std::out_of_range("SString::resize error, too great new size");
+void SString::resize( size_type n, char ch ) {
+    if( n > m_allocated ) {
+        re_reserve(n + m_allocated);
     }
-}
-
-void SString::resize( unsigned int n ) {
-    unsigned int of = m_lenght;
-    this->unsafe_resize( n );
-    if( n > of ) {
-        memset( m_cstring+of, 0, n-of );
+    size_type of = m_lenght;
+    if( n+1 > m_lenght ) {
+        memset( m_cstring + m_lenght, ch, n - m_lenght );
     }
-    m_cstring[m_lenght] = 0;
-}
-
-void SString::resize( unsigned int n, char ch ) {
-    unsigned int of = m_lenght;
-    this->unsafe_resize( n );
-    if( n > of ) {
-        memset( m_cstring+of, ch, n-of );
-    }
+    m_lenght = n;
     m_cstring[m_lenght] = 0;
 }
 
 void SString::clear() {
-    this->resize(0);
+    resize(0);
 }
 
 bool SString::empty()const {
-    return m_lenght==0;
+    return m_lenght == 0;
 }
 
-const char& SString::at( unsigned int p )const {
-    return this->at(p);
+const char& SString::at( size_type p )const {
+    return at(p);
 }
 
-char& SString::at( unsigned int p ) {
+char& SString::at( size_type p ) {
     if( p >= m_lenght ) {
         throw std::out_of_range("SString::substr error, start must low then lenght");
     }
@@ -141,52 +119,52 @@ const char* SString::cstr()const {
     return static_cast<const char*>(m_cstring);
 }
 
-SString SString::substr( unsigned int start, unsigned int len )const {
+SString SString::substr( size_type start, size_type len )const {
     return SString( *this, start, len );
 }
 
 void SString::append( const SString& ss ) {
     char* of = &m_cstring[m_lenght];
-    unsigned int n = ss.m_lenght + m_lenght;
-    this->unsafe_resize( n );
+    size_type n = ss.m_lenght + m_lenght;
+    resize( n );
     strcpy( of, ss.m_cstring );
 }
 
 void SString::append( const char* cs ) {
     char* of = &m_cstring[m_lenght];
-    unsigned int n = strlen(cs) + m_lenght;
-    this->unsafe_resize( n );
+    size_type n = strlen(cs) + m_lenght;
+    resize( n );      // <- not optimal
     strcpy( of, cs );
 }
 
-void SString::append( unsigned int n, char ch ) {
-    this->resize( m_lenght+n, ch );
+void SString::append( size_type n, char ch ) {
+    resize( m_lenght+n, ch );
 }
 
 void SString::push_back ( char ch ) {
-    this->resize( m_lenght+1, ch );
+    resize( m_lenght+1, ch );
 }
 
 char SString::pop_back() {
     char ret = this->at(m_lenght-1);
-    this->resize( m_lenght-1 );
+    resize( m_lenght-1 );
     return ret;
 }
 
 void SString::assign( const SString& ss ) {
     m_lenght = ss.lenght();
-    this->unsafe_resize( m_lenght );
+    resize( m_lenght ); // <- not optimal
     strcpy(m_cstring, ss.cstr());
 }
 
 void SString::assign( const char* cs ) {
-    this->resize( strlen(cs) );
+    resize( strlen(cs) ); // <- not optimal
     strcpy( m_cstring, cs );
 }
 
 void SString::assign( char ch ) {
-    this->resize( 1 );
-    m_cstring[0] = ch;
+    clear();
+    push_back(ch);
 }
 
 int SString::compare( const SString& ss )const {
@@ -198,15 +176,15 @@ int SString::compare( const char* cs)const {
 }
 
 SString& SString::operator= ( const SString& ss ) {
-    this->assign( ss );
+    assign( ss );
 }
 
 SString& SString::operator= ( const char* cs ) {
-    this->assign( cs );
+    assign( cs );
 }
 
 SString& SString::operator= ( char ch ) {
-    this->assign( ch );
+    assign( ch );
 }
 
 SString operator+( const SString& ss1, const SString& ss2 ) {
