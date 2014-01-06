@@ -104,6 +104,10 @@ bool SString::empty()const {
     return m_lenght == 0;
 }
 
+SString::operator bool()const {
+    return m_lenght != 0;
+}
+
 const char& SString::at( size_type p )const {
     return at(p);
 }

@@ -152,6 +152,8 @@ public:
     friend bool operator>=( const SString&, const char* );
     /** @} */
 
+    operator bool()const;
+
 private:
     static size_type min_alloc_size;
 

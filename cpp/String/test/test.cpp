@@ -62,11 +62,19 @@ int main( int argN, char** argS ) {
 
     std::cout << "Memory reallocate test:\n";
     SString memss;
-    for (unsigned int i = 0; i < memss.maxsize(); ++i) {
+    unsigned int test_len = 9999;
+    for (unsigned int i = 0; i < 99999; ++i) {
         char ch = 'A' + i % ('z'-'A');
         std::cout << i << '\n';
         memss.append(1, ch);
     }
-    std::cout << memss.lenght() << std::endl;
+    std::cout << "Test with operator boll() ";
+    if (memss) {
+        std::cout << "are passed\n";
+        std::cout << memss.lenght() << std::endl;
+    }
+    else {
+        std::cout << "are failed\n";
+    }
     return 0;
 }
