@@ -68,7 +68,7 @@ int main( int argN, char** argS ) {
         std::cout << i << '\n';
         memss.append(1, ch);
     }
-    std::cout << "Test with operator boll() ";
+    std::cout << "Test with operator bool() ";
     if (memss) {
         std::cout << "are passed\n";
         std::cout << memss.lenght() << std::endl;

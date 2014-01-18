@@ -6,7 +6,7 @@
 
 #include "SString.h"
 
-SString::size_type SString::min_alloc_size = 0xFF;
+const SString::size_type SString::min_alloc_size = 0xFF;
 
 void SString::re_reserve(size_type new_size) {
     if (new_size > maxsize()) {
@@ -23,14 +23,14 @@ void SString::re_reserve(size_type new_size) {
 
 SString::SString()
         : m_lenght(0)
-        , m_allocated(255) {
+        , m_allocated(min_alloc_size) {
     m_cstring = new char[m_allocated];
     *m_cstring = 0;
 }
 
 SString::SString( const SString& sstr )
         : m_lenght( sstr.lenght() )
-        , m_allocated( sstr.lenght() + min_alloc_size ) {
+        , m_allocated( m_lenght + min_alloc_size ) {
     m_cstring = new char[m_allocated];
     strcpy(m_cstring, sstr.m_cstring);
 }
@@ -88,7 +88,6 @@ void SString::resize( size_type n, char ch ) {
     if( n > m_allocated ) {
         re_reserve(n + m_allocated);
     }
-    size_type of = m_lenght;
     if( n+1 > m_lenght ) {
         memset( m_cstring + m_lenght, ch, n - m_lenght );
     }
@@ -150,7 +149,7 @@ void SString::push_back ( char ch ) {
 }
 
 char SString::pop_back() {
-    char ret = this->at(m_lenght-1);
+    char ret = at(m_lenght-1);
     resize( m_lenght-1 );
     return ret;
 }
@@ -210,94 +209,94 @@ SString operator+( const SString& ss1, const char* cs2 ) {
 }
 
 SString& SString::operator+=( const SString& ss ) {
-    this->append(ss);
+    append(ss);
     return *this;
 }
 
 SString& SString::operator+=( const char* cs ) {
-    this->append(cs);
+    append(cs);
     return *this;
 }
 
 SString& SString::operator+=( char ch ) {
-    this->push_back(ch);
+    push_back(ch);
     return *this;
 }
 
-bool operator==( const SString& ss1, const SString& ss2 ) {
-    return 0 == strcmp( ss1.m_cstring, ss2.m_cstring );
+bool operator==(const SString& ss1, const SString& ss2) {
+    return 0 == ss1.compare(ss2);
 }
 
-bool operator==( const char* cs, const SString& ss ) {
-    return 0 == strcmp( cs, ss.m_cstring );
+bool operator==(const char* cs, const SString& ss) {
+    return 0 == ss.compare(cs);
 }
 
-bool operator==( const SString& ss, const char* cs ) {
-    return 0 == strcmp( cs, ss.m_cstring );
+bool operator==(const SString& ss, const char* cs) {
+    return 0 == ss.compare(cs);
 }
 
 bool operator!=( const SString& ss1, const SString& ss2 ) {
-    return 0 != strcmp( ss1.m_cstring, ss2.m_cstring );
+    return 0 != ss1.compare(ss2);
 }
 
 bool operator!=( const char* cs, const SString& ss ) {
-    return 0 != strcmp( cs, ss.m_cstring );
+    return 0 != ss.compare(cs);
 }
 
 bool operator!=( const SString& ss, const char* cs ) {
-    return 0 != strcmp( cs, ss.m_cstring );
+    return 0 != ss.compare(cs);
 }
 
 bool operator<( const SString& ss1, const SString& ss2 ) {
-    return 0 < strcmp( ss1.m_cstring, ss2.m_cstring );
+    return 0 < ss1.compare(ss2);
 }
 
 bool operator<( const char* cs, const SString& ss ) {
-    return 0 < strcmp( cs, ss.m_cstring );
+    return 0 < ss.compare(cs);
 }
 
 bool operator<( const SString& ss, const char* cs ) {
-    return 0 > strcmp( cs, ss.m_cstring );
+    return 0 > ss.compare(cs);
 }
 
 bool operator<=( const SString& ss1, const SString& ss2) {
-    return 0 <= strcmp( ss1.m_cstring, ss2.m_cstring );
+    return 0 <= ss1.compare(ss2);
 }
 
 bool operator<=( const char* cs, const SString& ss ) {
-    return 0 <= strcmp( cs, ss.m_cstring );
+    return 0 <= ss.compare(cs);
 }
 
 bool operator<=( const SString& ss, const char* cs ){
-    return 0 >= strcmp( cs, ss.m_cstring );
+    return 0 >= ss.compare(cs);
 }
 
 bool operator>( const SString& ss1, const SString& ss2 ) {
-    return 0 > strcmp( ss1.m_cstring, ss2.m_cstring );
+    return 0 > ss1.compare(ss2);
 }
 
 bool operator>( const char* cs, const SString& ss ) {
-    return 0 > strcmp( cs, ss.m_cstring );
+    return 0 > ss.compare(cs);
 }
 
 bool operator>( const SString& ss, const char* cs ) {
-    return 0 < strcmp( cs, ss.m_cstring );
+    return 0 < ss.compare(cs);
 }
 
 bool operator>=( const SString& ss1, const SString& ss2 ) {
-    return 0 >= strcmp( ss1.m_cstring, ss2.m_cstring );
+    return 0 >= ss1.compare(ss2);
 }
 
 bool operator>=( const char* cs, const SString& ss ) {
-    return 0 >= strcmp( cs, ss.m_cstring );
+    return 0 >= ss.compare(cs);
 }
 
 bool operator>=( const SString& ss, const char* cs ) {
-    return 0 <= strcmp( cs, ss.m_cstring );
+    return 0 <= ss.compare(cs);
 }
 
 std::ostream& operator<<( std::ostream& os, const SString& ss) {
-    os << ss.m_cstring;
+    os << ss.cstr();
     return os;
 }
 

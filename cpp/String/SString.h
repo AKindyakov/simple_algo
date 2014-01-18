@@ -111,51 +111,16 @@ public:
     SString& operator= ( const char* );
     SString& operator= ( char );
 
-    friend SString operator+( const SString&, const SString& );
-    friend SString operator+( const char*,    const SString& );
-    friend SString operator+( const SString&, const char* );
-
     SString& operator+=( const SString& );
     SString& operator+=( const char* );
     SString& operator+=( char );
     /** @} */
 
-    friend std::ostream& operator<<( std::ostream&, const SString& );
-    friend std::istream& operator>>( std::istream&, SString& );
-
-    /**
-    * @defgroup SString relational operators
-    * @{
-    */
-    friend bool operator==( const SString&, const SString& );
-    friend bool operator==( const char*,    const SString& );
-    friend bool operator==( const SString&, const char* );
-
-    friend bool operator!=( const SString&, const SString& );
-    friend bool operator!=( const char*,    const SString& );
-    friend bool operator!=( const SString&, const char* );
-
-    friend bool operator<( const SString&, const SString& );
-    friend bool operator<( const char*,    const SString& );
-    friend bool operator<( const SString&, const char* );
-
-    friend bool operator<=( const SString&, const SString& );
-    friend bool operator<=( const char*,    const SString& );
-    friend bool operator<=( const SString&, const char* );
-
-    friend bool operator>( const SString&, const SString& );
-    friend bool operator>( const char*,    const SString& );
-    friend bool operator>( const SString&, const char* );
-
-    friend bool operator>=( const SString&, const SString& );
-    friend bool operator>=( const char*,    const SString& );
-    friend bool operator>=( const SString&, const char* );
-    /** @} */
 
     operator bool()const;
 
 private:
-    static size_type min_alloc_size;
+    static const size_type min_alloc_size;
 
     void re_reserve(size_type new_size);
 
@@ -164,4 +129,34 @@ private:
     char*     m_cstring;
 };
 
+std::ostream& operator<<( std::ostream&, const SString& );
+std::istream& operator>>( std::istream&, SString& );
+
+SString operator+( const SString&, const SString& );
+SString operator+( const char*,    const SString& );
+SString operator+( const SString&, const char* );
+
+bool operator==( const SString&, const SString& );
+bool operator==( const char*,    const SString& );
+bool operator==( const SString&, const char* );
+
+bool operator!=( const SString&, const SString& );
+bool operator!=( const char*,    const SString& );
+bool operator!=( const SString&, const char* );
+
+bool operator<( const SString&, const SString& );
+bool operator<( const char*,    const SString& );
+bool operator<( const SString&, const char* );
+
+bool operator<=( const SString&, const SString& );
+bool operator<=( const char*,    const SString& );
+bool operator<=( const SString&, const char* );
+
+bool operator>( const SString&, const SString& );
+bool operator>( const char*,    const SString& );
+bool operator>( const SString&, const char* );
+
+bool operator>=( const SString&, const SString& );
+bool operator>=( const char*,    const SString& );
+bool operator>=( const SString&, const char* );
 
