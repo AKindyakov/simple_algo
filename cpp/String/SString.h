@@ -1,5 +1,6 @@
 #include <istream>
 #include <ostream>
+#include <cstddef>
 
 class SString {
 public:
@@ -33,12 +34,17 @@ public:
     /**
     * @brief Resizes the string to a length of n characters
     */
-    void resize( size_type n );
+    void resize(size_type n);
 
     /**
     * @brief Resizes the string to a length of n characters
     */
-    void resize( size_type n, char ch );
+    void resize(size_type n, char ch);
+
+    /**
+    * @brief Requests the container to reduce its capacity to fit its size
+    */
+    void shrink_to_fit();
 
     /**
     * @brief Erases the contents of the string, which becomes an empty string
@@ -52,17 +58,21 @@ public:
     bool empty()const;
 
     /**
-    * @defgroup SString element access
-    * @{
+    * @brief SString range protected element access
     */
-    const char& at( size_type )const;
-    char&       at( size_type );
+    const char& at(size_type)const;
+    char&       at(size_type);
+
+    /**
+    * @brief SString range unpotected element access
+    */
+    const char& operator[](size_type)const;
+    char&       operator[](size_type);
 
     /**
     * @brief Returns a pointer to an array that contains a null-terminated sequence of characters
     */
     const char* cstr()const;
-    /** @} */
 
     /**
     * @brief Returns a newly constructed string object with its value initialized to a copy of a
@@ -122,11 +132,11 @@ public:
 private:
     static const size_type min_alloc_size;
 
-    void re_reserve(size_type new_size);
+    void memrealloc(size_type new_size);
 
-    size_type m_lenght;
-    size_type m_allocated;
-    char*     m_cstring;
+    size_type m_lenght    = 0;
+    size_type m_allocated = 0;
+    char*     m_cstring   = nullptr;
 };
 
 std::ostream& operator<<( std::ostream&, const SString& );

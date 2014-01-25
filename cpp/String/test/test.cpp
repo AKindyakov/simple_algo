@@ -47,11 +47,11 @@ int main( int argN, char** argS ) {
     s4.assign("on");
     s5.assign("");
 
-    s1.append(" road");
+    s1.append(SString(" road"));
     s2.append(" ever");
     s3.append(" and");
     s4.append("...");
-    s5.append("\n\t\tBilbo Baggins");
+    s5.append("\n\t\t\tBilbo Baggins");
 
     std::cout << "+ |" << s1 + " " + s2 + " " + s2 + " " + s3 + " " + s4 + s5 << "|\n";
 
@@ -62,10 +62,9 @@ int main( int argN, char** argS ) {
 
     std::cout << "Memory reallocate test:\n";
     SString memss;
-    unsigned int test_len = 9999;
-    for (unsigned int i = 0; i < 99999; ++i) {
+    unsigned int test_len = 9999999;
+    for (unsigned int i = 0; i < 99999999; ++i) {
         char ch = 'A' + i % ('z'-'A');
-        std::cout << i << '\n';
         memss.append(1, ch);
     }
     std::cout << "Test with operator bool() ";

@@ -8,63 +8,35 @@
 
 const SString::size_type SString::min_alloc_size = 0xFF;
 
-void SString::re_reserve(size_type new_size) {
-    if (new_size > maxsize()) {
-        new_size = maxsize();
-    }
-    if (new_size != m_allocated) {
-        char* newpt = new char[new_size];
-        m_allocated = new_size;
-        strcpy(newpt, m_cstring);
-        delete[] m_cstring;
-        m_cstring = newpt;
-    }
+SString::SString() {
+    memrealloc(min_alloc_size);
 }
 
-SString::SString()
-        : m_lenght(0)
-        , m_allocated(min_alloc_size) {
-    m_cstring = new char[m_allocated];
-    *m_cstring = 0;
+SString::SString(const SString& sstr) {
+    assign(sstr);
 }
 
-SString::SString( const SString& sstr )
-        : m_lenght( sstr.lenght() )
-        , m_allocated( m_lenght + min_alloc_size ) {
-    m_cstring = new char[m_allocated];
-    strcpy(m_cstring, sstr.m_cstring);
+SString::SString(const char* cstr) {
+    assign(cstr);
 }
 
-SString::SString( const char* cstr )
-        : m_lenght( strlen(cstr) )
-        , m_allocated( m_lenght + min_alloc_size ) {
-    m_cstring = new char[m_allocated];
-    strcpy(m_cstring, cstr);
+SString::SString(size_type n, char ch) {
+    resize(0, ch);
 }
 
-SString::SString( size_type n, char ch )
-        : m_lenght(n)
-        , m_allocated( n + min_alloc_size ) {
-    m_cstring = new char[m_allocated];
-    memset(m_cstring, ch, n);
-    m_cstring[n] = 0;
-}
-
-SString::SString( const SString& tstr, size_type start, size_type len ) {
-    if( start >= tstr.m_lenght ) {
+SString::SString(const SString& tstr, size_type start, size_type len) {
+    if (start >= tstr.m_lenght) {
         throw std::out_of_range("SString::substr error, start must low then lenght");
     }
     const char* spt = tstr.m_cstring+start;
-    if( start + len > tstr.m_lenght ) {
+    if (start + len > tstr.m_lenght) {
         len = tstr.m_lenght-start;
     }
-    m_lenght = len;
-    m_allocated = m_lenght + min_alloc_size;
-    m_cstring = new char[m_allocated];
+    resize(len);
     strncpy(m_cstring, spt, len);
 }
 
-SString::~SString () {
+SString::~SString() {
     delete[] m_cstring;
 }
 
@@ -77,22 +49,44 @@ SString::size_type SString::capacity()const {
 }
 
 SString::size_type SString::maxsize()const {
-    return UINT_MAX-1;
+    return UINT_MAX - 1;
 }
 
-void SString::resize( size_type n ) {
+void SString::resize(size_type n) {
     resize(n, 0);
 }
 
-void SString::resize( size_type n, char ch ) {
-    if( n > m_allocated ) {
-        re_reserve(n + m_allocated);
+void SString::memrealloc(size_type new_alloc) {
+    if (new_alloc > maxsize()) {
+        new_alloc = maxsize();
     }
-    if( n+1 > m_lenght ) {
-        memset( m_cstring + m_lenght, ch, n - m_lenght );
+    if (new_alloc != m_allocated) {
+        m_allocated = new_alloc;
+        char* newpt = new char[m_allocated];
+        if (m_cstring != nullptr) {
+            strcpy(newpt, m_cstring);
+            delete[] m_cstring;
+        }
+        m_cstring = newpt;
     }
-    m_lenght = n;
+}
+
+void SString::resize(size_type new_size, char ch) {
+    if (new_size > maxsize()) {
+        new_size = maxsize();
+    }
+    if (new_size > m_allocated) {
+        memrealloc(m_allocated + new_size);
+    }
+    if (new_size > m_lenght) {
+        memset(m_cstring + m_lenght, ch, new_size - m_lenght);
+    }
+    m_lenght = new_size;
     m_cstring[m_lenght] = 0;
+}
+
+void SString::shrink_to_fit() {
+    memrealloc(m_lenght);
 }
 
 void SString::clear() {
@@ -107,118 +101,129 @@ SString::operator bool()const {
     return m_lenght != 0;
 }
 
-const char& SString::at( size_type p )const {
-    return at(p);
+const char& SString::at(size_type pos)const {
+    if (pos >= m_lenght) {
+        throw std::out_of_range("SString::at error");
+    }
+    return m_cstring[pos];
 }
 
-char& SString::at( size_type p ) {
-    if( p >= m_lenght ) {
-        throw std::out_of_range("SString::substr error, start must low then lenght");
+char& SString::at(size_type pos) {
+    if (pos >= m_lenght) {
+        throw std::out_of_range("SString::at error");
     }
-    return m_cstring[p];
+    return m_cstring[pos];
+}
+
+const char& SString::operator[](size_type pos)const {
+    return m_cstring[pos];
+}
+
+char& SString::operator[](size_type pos) {
+    return m_cstring[pos];
 }
 
 const char* SString::cstr()const {
     return static_cast<const char*>(m_cstring);
 }
 
-SString SString::substr( size_type start, size_type len )const {
-    return SString( *this, start, len );
+SString SString::substr(size_type start, size_type len)const {
+    return SString(*this, start, len);
 }
 
-void SString::append( const SString& ss ) {
-    char* of = &m_cstring[m_lenght];
+void SString::append(const SString& ss) {
+    char* startPt = &m_cstring[m_lenght];
     size_type n = ss.m_lenght + m_lenght;
-    resize( n );
-    strcpy( of, ss.m_cstring );
+    resize(n);
+    strcpy(startPt, ss.m_cstring);
 }
 
-void SString::append( const char* cs ) {
+void SString::append(const char* cs) {
     char* of = &m_cstring[m_lenght];
     size_type n = strlen(cs) + m_lenght;
-    resize( n );      // <- not optimal
-    strcpy( of, cs );
+    resize(n);      // <- not optimal
+    strcpy(of, cs);
 }
 
-void SString::append( size_type n, char ch ) {
-    resize( m_lenght+n, ch );
+void SString::append(size_type n, char ch) {
+    resize(m_lenght + n, ch);
 }
 
-void SString::push_back ( char ch ) {
-    resize( m_lenght+1, ch );
+void SString::push_back (char ch) {
+    resize(m_lenght + 1, ch);
 }
 
 char SString::pop_back() {
-    char ret = at(m_lenght-1);
-    resize( m_lenght-1 );
+    char ret = at(m_lenght - 1);
+    resize(m_lenght - 1);
     return ret;
 }
 
-void SString::assign( const SString& ss ) {
+void SString::assign(const SString& ss) {
     m_lenght = ss.lenght();
-    resize( m_lenght ); // <- not optimal
+    resize(m_lenght); // <- not optimal
     strcpy(m_cstring, ss.cstr());
 }
 
-void SString::assign( const char* cs ) {
-    resize( strlen(cs) ); // <- not optimal
-    strcpy( m_cstring, cs );
+void SString::assign(const char* cs) {
+    resize(strlen(cs)); // <- not optimal
+    strcpy(m_cstring, cs);
 }
 
-void SString::assign( char ch ) {
+void SString::assign(char ch) {
     clear();
     push_back(ch);
 }
 
-int SString::compare( const SString& ss )const {
+int SString::compare(const SString& ss)const {
     strcmp(m_cstring, ss.m_cstring);
 }
 
-int SString::compare( const char* cs)const {
+int SString::compare(const char* cs)const {
     strcmp(m_cstring, cs);
 }
 
-SString& SString::operator= ( const SString& ss ) {
-    assign( ss );
+SString& SString::operator= (const SString& ss) {
+    assign(ss);
 }
 
-SString& SString::operator= ( const char* cs ) {
-    assign( cs );
+SString& SString::operator= (const char* cs) {
+    assign(cs);
 }
 
-SString& SString::operator= ( char ch ) {
-    assign( ch );
+SString& SString::operator= (char ch) {
+    assign(ch);
 }
 
-SString operator+( const SString& ss1, const SString& ss2 ) {
+SString operator+(const SString& ss1, const SString& ss2) {
     SString rezSS(ss1);
     rezSS.append(ss2);
     return rezSS;
 }
 
-SString operator+( const char* cs1, const SString& ss2 ) {
+SString operator+(const char* cs1, const SString& ss2) {
     SString rezSS(cs1);
     rezSS.append(ss2);
     return rezSS;
 }
 
-SString operator+( const SString& ss1, const char* cs2 ) {
+SString operator+(const SString& ss1, const char* cs2) {
     SString rezSS(ss1);
     rezSS.append(cs2);
     return rezSS;
 }
 
-SString& SString::operator+=( const SString& ss ) {
+SString& SString::operator+=(const SString& ss) {
     append(ss);
     return *this;
 }
 
-SString& SString::operator+=( const char* cs ) {
+SString& SString::operator+=(const char* cs) {
     append(cs);
     return *this;
 }
 
-SString& SString::operator+=( char ch ) {
+SString& SString::operator+=(char ch) {
     push_back(ch);
     return *this;
 }
@@ -235,75 +240,75 @@ bool operator==(const SString& ss, const char* cs) {
     return 0 == ss.compare(cs);
 }
 
-bool operator!=( const SString& ss1, const SString& ss2 ) {
+bool operator!=(const SString& ss1, const SString& ss2) {
     return 0 != ss1.compare(ss2);
 }
 
-bool operator!=( const char* cs, const SString& ss ) {
+bool operator!=(const char* cs, const SString& ss) {
     return 0 != ss.compare(cs);
 }
 
-bool operator!=( const SString& ss, const char* cs ) {
+bool operator!=(const SString& ss, const char* cs) {
     return 0 != ss.compare(cs);
 }
 
-bool operator<( const SString& ss1, const SString& ss2 ) {
+bool operator<(const SString& ss1, const SString& ss2) {
     return 0 < ss1.compare(ss2);
 }
 
-bool operator<( const char* cs, const SString& ss ) {
+bool operator<(const char* cs, const SString& ss) {
     return 0 < ss.compare(cs);
 }
 
-bool operator<( const SString& ss, const char* cs ) {
+bool operator<(const SString& ss, const char* cs) {
     return 0 > ss.compare(cs);
 }
 
-bool operator<=( const SString& ss1, const SString& ss2) {
+bool operator<=(const SString& ss1, const SString& ss2) {
     return 0 <= ss1.compare(ss2);
 }
 
-bool operator<=( const char* cs, const SString& ss ) {
+bool operator<=(const char* cs, const SString& ss) {
     return 0 <= ss.compare(cs);
 }
 
-bool operator<=( const SString& ss, const char* cs ){
+bool operator<=(const SString& ss, const char* cs){
     return 0 >= ss.compare(cs);
 }
 
-bool operator>( const SString& ss1, const SString& ss2 ) {
+bool operator>(const SString& ss1, const SString& ss2) {
     return 0 > ss1.compare(ss2);
 }
 
-bool operator>( const char* cs, const SString& ss ) {
+bool operator>(const char* cs, const SString& ss) {
     return 0 > ss.compare(cs);
 }
 
-bool operator>( const SString& ss, const char* cs ) {
+bool operator>(const SString& ss, const char* cs) {
     return 0 < ss.compare(cs);
 }
 
-bool operator>=( const SString& ss1, const SString& ss2 ) {
+bool operator>=(const SString& ss1, const SString& ss2) {
     return 0 >= ss1.compare(ss2);
 }
 
-bool operator>=( const char* cs, const SString& ss ) {
+bool operator>=(const char* cs, const SString& ss) {
     return 0 >= ss.compare(cs);
 }
 
-bool operator>=( const SString& ss, const char* cs ) {
+bool operator>=(const SString& ss, const char* cs) {
     return 0 <= ss.compare(cs);
 }
 
-std::ostream& operator<<( std::ostream& os, const SString& ss) {
+std::ostream& operator<<(std::ostream& os, const SString& ss) {
     os << ss.cstr();
     return os;
 }
 
-std::istream& operator>>( std::istream& is, SString& ss) {
+std::istream& operator>>(std::istream& is, SString& ss) {
     ss.clear();
     char ch = is.get();
-    while( ch != ' ' && ch != '\n' && ch != EOF ) {
+    while(ch != ' ' && ch != '\n' && ch != EOF) {
         ss.push_back(ch);
         ch = is.get();
     }
