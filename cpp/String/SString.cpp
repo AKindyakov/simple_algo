@@ -21,7 +21,7 @@ SString::SString(const char* cstr) {
 }
 
 SString::SString(size_type n, char ch) {
-    resize(0, ch);
+    resize(n, ch);
 }
 
 SString::SString(const SString& tstr, size_type start, size_type len) {
@@ -132,17 +132,15 @@ SString SString::substr(size_type start, size_type len)const {
 }
 
 void SString::append(const SString& ss) {
-    char* startPt = &m_cstring[m_lenght];
-    size_type n = ss.m_lenght + m_lenght;
-    resize(n);
-    strcpy(startPt, ss.m_cstring);
+    char* oldStartPt = &m_cstring[m_lenght];
+    resize(ss.m_lenght + m_lenght);
+    strcpy(oldStartPt, ss.m_cstring);
 }
 
 void SString::append(const char* cs) {
-    char* of = &m_cstring[m_lenght];
-    size_type n = strlen(cs) + m_lenght;
-    resize(n);      // <- not optimal
-    strcpy(of, cs);
+    char* oldStartPt = &m_cstring[m_lenght];
+    resize(strlen(cs) + m_lenght);
+    strcpy(oldStartPt, cs);
 }
 
 void SString::append(size_type n, char ch) {
@@ -160,13 +158,12 @@ char SString::pop_back() {
 }
 
 void SString::assign(const SString& ss) {
-    m_lenght = ss.lenght();
-    resize(m_lenght); // <- not optimal
+    resize(ss.lenght());
     strcpy(m_cstring, ss.cstr());
 }
 
 void SString::assign(const char* cs) {
-    resize(strlen(cs)); // <- not optimal
+    resize(strlen(cs));
     strcpy(m_cstring, cs);
 }
 
