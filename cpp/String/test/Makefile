@@ -1,10 +1,12 @@
 MSG="String functionality test"
 H_RULE="/*****************************************************************************/"
-OUT_FILE=stringTest.out
 CC=g++
+CC_FLAGS=-std=c++11
+LIB=../SString.cpp
 
 all: hello_print
-	${CC} ../SString.cpp test.cpp -std=c++11 -o ${OUT_FILE}
+	${CC} ${CC_FLAGS} ${LIB} api_test.cpp    -o api_test
+	${CC} ${CC_FLAGS} ${LIB} append_test.cpp -o append_test
 
 hello_print:
 	@echo ${H_RULE}
@@ -14,4 +16,5 @@ hello_print:
 	@echo ${H_RULE}
 
 clean:
-	rm ${OUT_FILE} -f
+	rm api_test -f
+	rm append_test -f

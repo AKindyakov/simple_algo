@@ -75,7 +75,7 @@ void SString::resize(size_type new_size, char ch) {
     if (new_size > maxsize()) {
         new_size = maxsize();
     }
-    if (new_size > m_allocated) {
+    if (new_size > m_allocated or m_allocated == 0) {
         memrealloc(m_allocated + new_size);
     }
     if (new_size > m_lenght) {
@@ -132,19 +132,23 @@ SString SString::substr(size_type start, size_type len)const {
 }
 
 void SString::append(const SString& ss) {
-    char* oldStartPt = &m_cstring[m_lenght];
+    size_type old = m_lenght;
     resize(ss.m_lenght + m_lenght);
-    strcpy(oldStartPt, ss.m_cstring);
+    strcpy(m_cstring + old, ss.m_cstring);
 }
 
 void SString::append(const char* cs) {
-    char* oldStartPt = &m_cstring[m_lenght];
+    size_type old = m_lenght;
     resize(strlen(cs) + m_lenght);
-    strcpy(oldStartPt, cs);
+    strcpy(m_cstring + old, cs);
 }
 
 void SString::append(size_type n, char ch) {
     resize(m_lenght + n, ch);
+}
+
+void SString::append(char ch) {
+    resize(m_lenght + 1, ch);
 }
 
 void SString::push_back (char ch) {
@@ -180,15 +184,15 @@ int SString::compare(const char* cs)const {
     strcmp(m_cstring, cs);
 }
 
-SString& SString::operator= (const SString& ss) {
+SString& SString::operator=(const SString& ss) {
     assign(ss);
 }
 
-SString& SString::operator= (const char* cs) {
+SString& SString::operator=(const char* cs) {
     assign(cs);
 }
 
-SString& SString::operator= (char ch) {
+SString& SString::operator=(char ch) {
     assign(ch);
 }
 
@@ -207,6 +211,18 @@ SString operator+(const char* cs1, const SString& ss2) {
 SString operator+(const SString& ss1, const char* cs2) {
     SString rezSS(ss1);
     rezSS.append(cs2);
+    return rezSS;
+}
+
+SString operator+(const SString& ss, char ch) {
+    SString rezSS(ss);
+    rezSS.append(ch);
+    return rezSS;
+}
+
+SString operator+(char ch, const SString& ss) {
+    SString rezSS(1, ch);
+    rezSS.append(ss);
     return rezSS;
 }
 

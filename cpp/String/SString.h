@@ -12,10 +12,10 @@ public:
     * @{
     */
     SString();
-    SString( const SString& );
-    SString( const char* );
-    SString( size_type n, char ch );
-    SString( const SString&, size_type start, size_type len );
+    SString(const SString&);
+    SString(const char*);
+    SString(size_type n, char ch);
+    SString(const SString&, size_type start, size_type len);
     /** @} */
 
     virtual ~SString ();
@@ -78,23 +78,24 @@ public:
     * @brief Returns a newly constructed string object with its value initialized to a copy of a
     * substring of this object
     */
-    SString substr( size_type start, size_type len )const;
+    SString substr(size_type start, size_type len)const;
 
     /**
     * @defgroup SString Extends the string by appending additional characters at the end
     * @{
     */
-    void append( const SString& );
-    void append( const char* );
-    void append( size_type n, char ch );
-    void append( size_type n, const char* );
-    void append( size_type n, const SString& );
+    void append(const SString&);
+    void append(const char*);
+    void append(char ch);
+    void append(size_type n, char ch);
+    void append(size_type n, const char*);
+    void append(size_type n, const SString&);
     /** @} */
 
     /**
     * @brief resize string, add ch char to the end of string
     */
-    void push_back ( char ch );
+    void push_back(char ch);
 
     /**
     * @brief resize string, delete last element from the end of string
@@ -105,25 +106,25 @@ public:
     * @defgroup SString Assigns a new value to the string, replacing its current contents
     * @{
     */
-    void assign( const SString& );
-    void assign( const char* );
-    void assign( char );
+    void assign(const SString&);
+    void assign(const char*);
+    void assign(char);
     /** @} */
 
-    int compare( const SString& )const;
-    int compare( const char* )const;
+    int compare(const SString&)const;
+    int compare(const char*)const;
 
     /**
     * @defgroup SString modify operators
     * @{
     */
-    SString& operator= ( const SString& );
-    SString& operator= ( const char* );
-    SString& operator= ( char );
+    SString& operator=(const SString&);
+    SString& operator=(const char*);
+    SString& operator=(char);
 
-    SString& operator+=( const SString& );
-    SString& operator+=( const char* );
-    SString& operator+=( char );
+    SString& operator+=(const SString&);
+    SString& operator+=(const char*);
+    SString& operator+=(char);
     /** @} */
 
 
@@ -139,34 +140,36 @@ private:
     char*     m_cstring   = nullptr;
 };
 
-std::ostream& operator<<( std::ostream&, const SString& );
-std::istream& operator>>( std::istream&, SString& );
+std::ostream& operator<<(std::ostream&, const SString&);
+std::istream& operator>>(std::istream&, SString&);
 
-SString operator+( const SString&, const SString& );
-SString operator+( const char*,    const SString& );
-SString operator+( const SString&, const char* );
+SString operator+(const SString&, const SString&);
+SString operator+(const char*,    const SString&);
+SString operator+(const SString&, const char*);
+SString operator+(const SString&, char);
+SString operator+(char,           const SString&);
 
-bool operator==( const SString&, const SString& );
-bool operator==( const char*,    const SString& );
-bool operator==( const SString&, const char* );
+bool operator==(const SString&, const SString&);
+bool operator==(const char*,    const SString&);
+bool operator==(const SString&, const char*);
 
-bool operator!=( const SString&, const SString& );
-bool operator!=( const char*,    const SString& );
-bool operator!=( const SString&, const char* );
+bool operator!=(const SString&, const SString&);
+bool operator!=(const char*,    const SString&);
+bool operator!=(const SString&, const char*);
 
-bool operator<( const SString&, const SString& );
-bool operator<( const char*,    const SString& );
-bool operator<( const SString&, const char* );
+bool operator<(const SString&, const SString&);
+bool operator<(const char*,    const SString&);
+bool operator<(const SString&, const char*);
 
-bool operator<=( const SString&, const SString& );
-bool operator<=( const char*,    const SString& );
-bool operator<=( const SString&, const char* );
+bool operator<=(const SString&, const SString&);
+bool operator<=(const char*,    const SString&);
+bool operator<=(const SString&, const char*);
 
-bool operator>( const SString&, const SString& );
-bool operator>( const char*,    const SString& );
-bool operator>( const SString&, const char* );
+bool operator>(const SString&, const SString&);
+bool operator>(const char*,    const SString&);
+bool operator>(const SString&, const char*);
 
-bool operator>=( const SString&, const SString& );
-bool operator>=( const char*,    const SString& );
-bool operator>=( const SString&, const char* );
+bool operator>=(const SString&, const SString&);
+bool operator>=(const char*,    const SString&);
+bool operator>=(const SString&, const char*);
 
