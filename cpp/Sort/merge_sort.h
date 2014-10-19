@@ -14,4 +14,16 @@ merge_range(
     std::size_t secondEnd
 );
 
-void pure_merge_sort(Container& cnt);
+void
+pure_merge_sort(
+    Container& cnt,
+    std::size_t start = 0,
+    std::size_t end = 0xffffffff
+);
+
+void
+merge_sort(
+    Container& cnt,
+    std::size_t start = 0,
+    std::size_t end = 0xffffffff
+);

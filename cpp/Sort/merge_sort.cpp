@@ -1,4 +1,5 @@
 #include "merge_sort.h"
+#include "insertion_sort.h"
 
 #include <iostream>
 #include <vector>
@@ -24,27 +25,26 @@ void merge_range(
             break;
         } else if (siter == secondEnd) {
             cnt[inserter] = buf[fiter];
-            // std::cerr << "cnt[ " << inserter << " ] = " << buf[fiter] << '\n';
             ++fiter;
             ++inserter;
         } else if (cnt[siter] < buf[fiter]) {
-            // ++compareCounter;
             cnt[inserter] = cnt[siter];
-            // std::cerr << "cnt[ " << inserter << " ] = " << cnt[siter] << '\n';
             ++siter;
             ++inserter;
         } else {
-            // ++compareCounter;
             cnt[inserter] = buf[fiter];
-            // std::cerr << "cnt[ " << inserter << " ] = " << buf[fiter] << '\n';
             ++fiter;
             ++inserter;
         }
     }
-    // std::cerr << "compareCounter: " << compareCounter << '\n';
 }
 
-void pure_merge_sort(Container& cnt) {
+void
+pure_merge_sort(
+    Container& cnt,
+    std::size_t start,
+    std::size_t end
+) {
     size_t size = cnt.size();
     Container buf(size);
 
@@ -58,9 +58,6 @@ void pure_merge_sort(Container& cnt) {
             if (endSecond > size) {
                 endSecond = size;
             }
-            // std::cerr << " first : " <<  first  << '\n';
-            // std::cerr << " second: " << second << '\n';
-            // std::cerr << " end   : " << endSecond << '\n';
             merge_range(cnt, buf, first, second, second, endSecond);
             second += step;
             first += step;
@@ -70,11 +67,23 @@ void pure_merge_sort(Container& cnt) {
     }
 }
 
-void merge_sort(Container& cnt) {
+void
+merge_sort(
+    Container& cnt,
+    std::size_t start,
+    std::size_t end
+) {
     size_t size = cnt.size();
     Container buf(size);
-
-    size_t partSize = 1;
+    size_t partSize = 8;
+    for (size_t start = 0; start < size; ) {
+        auto end = start + partSize;
+        if (size < end) {
+            end = size;
+        }
+        insertion_sort(cnt, start, end);
+        start = end;
+    }
     while (partSize < size) {
         size_t step = 2 * partSize;
         size_t first = 0;
@@ -84,9 +93,6 @@ void merge_sort(Container& cnt) {
             if (endSecond > size) {
                 endSecond = size;
             }
-            // std::cerr << " first : " <<  first  << '\n';
-            // std::cerr << " second: " << second << '\n';
-            // std::cerr << " end   : " << endSecond << '\n';
             merge_range(cnt, buf, first, second, second, endSecond);
             second += step;
             first += step;
