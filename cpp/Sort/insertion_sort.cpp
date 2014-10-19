@@ -25,21 +25,19 @@ bin_search_place_for(
 ) {
     auto delta = (end - start)/2;
     auto ind = (end - start)/2;
-    while (delta > 1) {
-        delta = (delta + 1)/2;
-        std::cerr << "ind: " << ind << '\n';
-        std::cerr << "ddd: " << delta << '\n';
+    while (delta > 0 && !!ind) {
+        delta = delta > 1 ? delta>>1 : 1;
         if (cnt[start + ind] < cnt[inserted]) {
             ind += delta;
         } else if (cnt[inserted] < cnt[start + ind]) {
+            if (ind < 1 || !(cnt[inserted] < cnt[start + ind - 1])) {
+                delta = 0; // out
+            }
             ind -= delta;
         } else {
-            return ind;
+            delta = 0; // out
         }
     }
-    //if (cnt[start + ind] < cnt[inserted]) {
-    //    ind += 1;
-    //}
     return ind;
 }
 
