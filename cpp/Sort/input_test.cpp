@@ -18,9 +18,9 @@ int main( int argN, char** argS ) {
             for( int i = 0; i < sz; ++i ) {
                 arr[i] = atoi(argS[i+1]);
             }
-        }    
+        }
     }
-    
+
     if( arr == NULL ) {
         arr = new int[sz];
         for( int i = 0; i < sz; ++i ) {
@@ -34,9 +34,9 @@ int main( int argN, char** argS ) {
         std::cout << arr[i] << ' ';
     }
     std::cout << std::endl;
-    
+
     quicksort(arr, 0, sz-1);
-    
+
     std::cout << "After:\n";
     for( int i = 0; i < sz; ++i ) {
         std::cout << arr[i] << ' ';

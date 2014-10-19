@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <vector>
 
 using Container = std::vector<int>;
@@ -24,5 +25,5 @@ void
 insertion_sort(
     Container& cnt,
     std::size_t start = 0,
-    std::size_t end = 10000
+    std::size_t end = std::numeric_limits<unsigned>::max()
 );

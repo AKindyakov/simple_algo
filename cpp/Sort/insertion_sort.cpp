@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-std::size_t get_place_for(
+std::size_t
+get_place_for(
     const Container& cnt,
     std::size_t start,
     std::size_t end,
@@ -62,7 +63,7 @@ insertion_sort(
         end = cnt.size();
     }
     for (std::size_t scan = start; scan < end; ++scan) {
-        std::size_t place = bin_search_place_for(cnt, start, scan, scan);
+        auto place = bin_search_place_for(cnt, start, scan, scan);
         rotate_left(cnt, place, scan);
     }
 }
