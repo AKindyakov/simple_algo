@@ -28,3 +28,15 @@ merge_sort(
     std::size_t start = 0,
     std::size_t end = std::numeric_limits<unsigned>::max()
 );
+
+template<
+    typename TIterator,
+    typename TComparator
+>
+void
+merge_sort(
+    TIterator start,
+    TIterator end,
+    TComparator comparator
+) {
+}
