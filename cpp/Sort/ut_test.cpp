@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <functional>
 
 class utException: public std::exception {
 public:
@@ -25,20 +26,40 @@ private:
     std::string whatHappen;
 };
 
+template<>
+utException& utException::operator<< <Container>(const Container& cnt) {
+    std::ostringstream ostr;
+    ostr << "{";
+    for (const auto& t : cnt) {
+        ostr << t << ", ";
+    }
+    ostr << "}\n";
+    whatHappen.append(ostr.str());
+    return *this;
+}
+
 void merge_sequences_test() {
-    Container cnt{1, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container cnt     {1, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
     Container buf(cnt.size());
     merge_range(cnt, buf, 0, 6, 6, cnt.size());
-    if (cnt != Container{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}) {
-        throw utException("[merge 2 sequences test]") << "Wrong answer: ";
+    if (cnt != expected) {
+        throw utException("[merge 2 sequences test]")
+            << "Wrong answer: " << cnt
+            << "Expected: " << expected;
     }
 }
 
 void pure_merge_sort_test() {
-    Container cnt{12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container cnt     {12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container expected{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
     pure_merge_sort(cnt);
-    if (cnt != Container{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}) {
-        throw utException("[pure merge sort test]") << "Wrong answer: ";
+    if (cnt != expected) {
+        throw utException("[pure merge sort test]")
+            << "Wrong answer: " << cnt
+            << "Expected: " << expected;
     }
 }
 
@@ -69,18 +90,64 @@ void bin_search_place_test() {
 }
 
 void insertion_sort_test() {
-    Container cnt{12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container cnt     {1, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
     insertion_sort(cnt);
-    if (cnt != Container{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}) {
-        throw utException("[insertion sort test]") << "Wrong answer: ";
+    if (cnt != expected) {
+        throw utException("[insertion sort test]")
+            << "Wrong answer: " << cnt
+            << "Expected: " << expected;
     }
 }
 
 void merge_sort_test() {
-    Container cnt{12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container cnt     {12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
     merge_sort(cnt);
-    if (cnt != Container{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}) {
-        throw utException("[merge sort test]") << "Wrong answer: ";
+    if (cnt != expected) {
+        throw utException("[merge sort test]")
+            << "Wrong answer: " << cnt
+            << "Expected: " << expected;
+    }
+}
+
+void template_insertion_sort_test() {
+    Container cnt     {12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
+    try {
+        insertion_sort(cnt.begin(), cnt.end(), std::less<int>());
+    } catch (const std::exception& except) {
+        throw utException("[template insertion sort test]")
+            << " Exception from sort function: \""
+            << except.what()
+            << '\"';
+    }
+    if (cnt != expected) {
+        throw utException("[template insertion sort test]")
+            << "Wrong answer: " << cnt
+            << "Expected: " << expected;
+    }
+}
+
+void template_merge_sort_test() {
+    Container cnt     {12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
+    try {
+        merge_sort(cnt.begin(), cnt.end(), std::less<int>());
+    } catch (const std::exception& except) {
+        throw utException("[template insertion sort test]")
+            << " Exception from sort function: \""
+            << except.what()
+            << '\"';
+    }
+    if (cnt != expected) {
+        throw utException("[template insertion sort test]")
+            << "Wrong answer: " << cnt
+            << "Expected: " << expected;
     }
 }
 
@@ -91,6 +158,9 @@ int main(int argn, char** args) {
         bin_search_place_test();
         insertion_sort_test();
         merge_sort_test();
+        template_insertion_sort_test();
+        template_merge_sort_test();
+
     } catch(const utException& ex) {
         std::cerr << ex.what() << '\n';
         return 1;
