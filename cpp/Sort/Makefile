@@ -17,9 +17,12 @@ insertion_sort.cpp \
 selection_sort.cpp \
 input_test.cpp
 
-debug:
-	FLAGS=${FLAGS} -g
-	cc
+ext_sort_app:
+	@${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/ext_sort_app \
+external_sort_app.cpp \
+external_sort.cpp \
+merge_sort.cpp \
+insertion_sort.cpp
 
 clean:
 	@rm -r -f ${PRODUCT}

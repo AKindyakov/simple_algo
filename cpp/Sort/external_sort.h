@@ -19,11 +19,11 @@ public:
     TExternalSorter (
         TComparator keyComparator,
         std::size_t bufferSizeLimit = 1 << 29, // 512 MB
-        std::size_t chunksLimit = 2 << 10, // 2048
-        const char* tempDirectory = "/var/tmp"
+        std::size_t openedFilesLimit = 2 << 10, // 2048
+        const char* tempDirectory = "/tmp"
     ) noexcept
         : comparator(keyComparator)
-        , chunks(chunksLimit)
+        , filesLimit(openedFilesLimit)
         , tempDir(tempDirectory)
     {}
 
@@ -44,7 +44,7 @@ public:
 
 private:
     TComparator comparator;
-    std::size_t chunks;
+    std::size_t filesLimit;
     const char* tempDir;
     std::size_t bufferSize;
     void* buffer;
@@ -54,8 +54,7 @@ private:
 
 template<
     typename TObj,
-    typename TComparator
->
+    typename TComparator >
 std::vector<TObj>
 TExternalSorter<TObj, TComparator>::readChunk(
     std::istream& is,
@@ -88,26 +87,26 @@ TExternalSorter<TObj, TComparator>::sort(
 
     size_t chunkNum = 0;
     while (!inFile.eof()) {
-        auto chunk(readChunk(inFile, chunkSize));
+        auto chunk = readChunk(inFile, chunkSize);
         std::sort(chunk.begin(), chunk.end(), comparator);
 
         std::ostringstream tmpPath(tempDir);
-        tmpPath << "/external_sort_tmp_" << chunkNum++ << '_' << std::time(0);
-        std::fstream fptr(tmpPath.str(), std::fstream::in | std::fstream::out);
-
-        for (auto&& val : chunk) {
-            fptr << val;
-        }
-        fptr.seekg(0);
-        tmpFiles.push_back(std::move(fptr));
+//      tmpPath << "/external_sort_tmp_" << chunkNum++ << '_' << std::time(0);
+//      std::fstream fptr(tmpPath.str().c_str(), std::fstream::in | std::fstream::out);
+//
+//      for (auto&& val : chunk) {
+//          fptr << val;
+//      }
+//      fptr.seekg(0);
+//      tmpFiles.push_back(std::move(fptr));
     }
-    inFile.close();
-
-    std::priority_queue<TObj, std::vector<TObj>, std::greater<TObj>> minHeap;
-    for (auto&& pt : tmpFiles) {
-        TObj m;
-        pt >> m;
-        minHeap.push(std::move(m));
-    }
+//   inFile.close();
+//
+//   std::priority_queue<TObj, std::vector<TObj>, std::greater<TObj>> minHeap;
+//   for (auto&& pt : tmpFiles) {
+//       TObj m;
+//       pt >> m;
+//       minHeap.push(std::move(m));
+//   }
 }
 
