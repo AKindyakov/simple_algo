@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <ios>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <memory>
@@ -20,7 +21,7 @@ public:
         TComparator keyComparator,
         std::size_t bufferSizeLimit = 1 << 29, // 512 MB
         std::size_t openedFilesLimit = 2 << 10, // 2048
-        const char* tempDirectory = "/tmp"
+        std::string tempDirectory = "/tmp"
     ) noexcept
         : comparator(keyComparator)
         , filesLimit(openedFilesLimit)
@@ -45,7 +46,7 @@ public:
 private:
     TComparator comparator;
     std::size_t filesLimit;
-    const char* tempDir;
+    std::string tempDir;
     std::size_t bufferSize;
     void* buffer;
 
@@ -66,6 +67,7 @@ TExternalSorter<TObj, TComparator>::readChunk(
         !is.eof()
         && fullChunkSize < chunkSize
     ) {
+        ++fullChunkSize;
         chunk.resize(chunk.size() + 1);
         is >> chunk.back();
     }
@@ -81,32 +83,38 @@ TExternalSorter<TObj, TComparator>::sort(
       const char* inFileName
     , const char* outFileName
 ) {
-    std::size_t chunkSize = bufferSize * 2 / 3;
+    std::size_t chunkSize = bufferSize / 2;
     std::ifstream inFile(inFileName, std::fstream::in);
-    std::vector<std::fstream> tmpFiles;
+    std::string s;
+    inFile >> s;
+    std::vector<std::string> tmpFiles;
 
-    size_t chunkNum = 0;
     while (!inFile.eof()) {
-        auto chunk = readChunk(inFile, chunkSize);
+        auto chunk = readChunk(inFile, 4);
         std::sort(chunk.begin(), chunk.end(), comparator);
 
-        std::ostringstream tmpPath(tempDir);
-//      tmpPath << "/external_sort_tmp_" << chunkNum++ << '_' << std::time(0);
-//      std::fstream fptr(tmpPath.str().c_str(), std::fstream::in | std::fstream::out);
-//
-//      for (auto&& val : chunk) {
-//          fptr << val;
-//      }
-//      fptr.seekg(0);
-//      tmpFiles.push_back(std::move(fptr));
+        std::ostringstream tmpPath;
+        tmpPath << tempDir
+                << "/external_sort_tmp_"
+                << inFileName
+                << tmpFiles.size()
+                << std::time(0);
+        std::string name = tmpPath.str();
+        std::fstream fptr(name.c_str(), std::fstream::out);
+
+        for (const auto& val : chunk) {
+            fptr << val;
+        }
+        fptr << std::endl;
+        tmpFiles.push_back(std::move(name));
     }
-//   inFile.close();
-//
-//   std::priority_queue<TObj, std::vector<TObj>, std::greater<TObj>> minHeap;
-//   for (auto&& pt : tmpFiles) {
-//       TObj m;
-//       pt >> m;
-//       minHeap.push(std::move(m));
-//   }
+    inFile.close();
+
+    std::priority_queue<TObj, std::vector<TObj>, std::greater<TObj>> minHeap;
+    for (const auto& pt : tmpFiles) {
+        TObj m;
+        pt >> m;
+        minHeap.push(std::move(m));
+    }
 }
 

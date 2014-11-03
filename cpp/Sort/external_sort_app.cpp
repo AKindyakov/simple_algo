@@ -28,14 +28,14 @@ private:
     std::string whatHappen = "[argument parser exception] ";
 };
 
-int extSort(int argn, char** args) {
+void extSort(int argn, char** args) {
     static struct option long_options[] = {
         {"input",       required_argument,  0,  'i' },
         {"output",      required_argument,  0,  'o' },
         {"temp-dir",    required_argument,  0,  't' },
         {"files-limit", required_argument,  0,  'f' },
         {"memory-limit",required_argument,  0,  'm' },
-        {"help",        required_argument,  0,  'h' },
+        {"help",        no_argument,        0,  'h' },
         {0,             0,                  0,   0 }
     };
 
@@ -77,7 +77,14 @@ int extSort(int argn, char** args) {
             }
             memoryLimit = std::stoul(optarg);
         } else if (c == 'h') {
-            std::cerr << "Usage will be here" << std::endl;
+            std::cerr << "Usage:\n"
+                << " -i, --input : Input file\n"
+                << " -o, --output : Output file\n"
+                << " -t, --temp-dir : Direcory for temporary files\n"
+                << " -f, --files-limit : The maximum number of open files / File Descriptor\n"
+                << " -m, --memory-limit : memory limit in bytes\n"
+                << " -h, --help : print this help" << std::endl;
+            return;
         } else {
             if (0 != opterr) {
                 throw ArgparseException();
@@ -90,11 +97,10 @@ int extSort(int argn, char** args) {
         std::less<std::string>(),
         memoryLimit,
         filesLimit,
-        tempDirectory.c_str()
+        tempDirectory
     );
 
     sorter.sort(input.c_str(), output.c_str());
-    return 0;
 }
 
 int main(int argn, char** args) {
