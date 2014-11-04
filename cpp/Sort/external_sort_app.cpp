@@ -28,6 +28,25 @@ private:
     std::string whatHappen = "[argument parser exception] ";
 };
 
+class StringSerializer {
+public:
+    std::string fromStream(std::istream& is, std::size_t& size) {
+        std::string to;
+        char ch = is.get();
+        while (!is.eof() && ch != '\n') {
+            to.push_back(ch);
+            ch = is.get();
+        }
+        to.shrink_to_fit();
+        size = to.size();
+        return to;
+    }
+
+    void toStream(const std::string& from, std::ostream& os) {
+        os << from << '\n';
+    }
+};
+
 void extSort(int argn, char** args) {
     static struct option long_options[] = {
         {"input",       required_argument,  0,  'i' },
@@ -42,8 +61,8 @@ void extSort(int argn, char** args) {
     std::string input;
     std::string output;
     std::string tempDirectory("/tmp");
-    std::size_t filesLimit  = 1024;
-    std::size_t memoryLimit = 1 << 29;  // 512B
+    std::size_t filesLimit  = 50;    // 1 << 14;
+    std::size_t memoryLimit = 1024;  // 1 << 29;  // 512B
 
     int option_index = 0;
     while (int c =
@@ -92,15 +111,34 @@ void extSort(int argn, char** args) {
         }
     };
 
-
-    TExternalSorter<std::string, std::less<std::string>> sorter(
+    TExternalSorter<
+        std::string,
+        StringSerializer,
+        std::less<std::string>
+    > sorter(
         std::less<std::string>(),
+        StringSerializer(),
         memoryLimit,
         filesLimit,
         tempDirectory
     );
 
-    sorter.sort(input.c_str(), output.c_str());
+    if (!input.empty()) {
+        std::ifstream in(input.c_str(), std::fstream::in);
+        if (!output.empty()) {
+            std::ofstream out(output.c_str(), std::fstream::out);
+            sorter.sort(in, out);
+        } else {
+            sorter.sort(in, std::cout);
+        }
+    } else {
+        if (!output.empty()) {
+            std::ofstream out(output.c_str(), std::fstream::out);
+            sorter.sort(std::cin, out);
+        } else {
+            sorter.sort(std::cin, std::cout);
+        }
+    }
 }
 
 int main(int argn, char** args) {

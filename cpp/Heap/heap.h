@@ -45,12 +45,12 @@ public:
         siftDown();
     }
 
-    void push(const TKey& key) const {
+    void push(const TKey& key) {
         storage.push_back(key);
         siftUp();
     }
 
-    void push(TKey&& key) const {
+    void push(TKey&& key) {
         storage.push_back(key);
         siftUp();
     }

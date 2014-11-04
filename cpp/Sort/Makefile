@@ -1,6 +1,7 @@
 LIB=
 FLAGS=-std=c++0x -Wall
-CC=g++-4.8
+#CC=g++-4.8
+CC=clang++
 PRODUCT=product
 
 ut:
@@ -9,6 +10,8 @@ merge_sort.cpp \
 insertion_sort.cpp \
 selection_sort.cpp \
 ut_test.cpp
+
+	@${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/heap_ut heap_ut.cpp
 
 in:
 	@${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/in \

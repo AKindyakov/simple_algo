@@ -139,7 +139,7 @@ merge_sort(
 
         TIterator localLeftBegin  = start;
         TIterator localRightBegin = start;
-        TIterator localEnd         = start;
+        TIterator localEnd        = start;
 
         while (localRightBegin != end) {
             rewindIterator(localRightBegin, end, partSize);
@@ -156,7 +156,7 @@ merge_sort(
 
             localLeftBegin  = localEnd;
             localRightBegin = localEnd;
-            localEnd         = localEnd;
+            localEnd        = localEnd;
         }
         partSize = step;
     }
