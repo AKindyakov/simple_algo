@@ -1,7 +1,5 @@
 #include "insertion_sort.h"
 
-#include <iostream>
-
 std::size_t
 get_place_for(
     const Container& cnt,
@@ -24,18 +22,18 @@ bin_search_place_for(
     std::size_t end,
     std::size_t inserted
 ) {
-    auto delta = (end - start)/2;
-    auto ind = start + delta;
-    while (!!ind) {
-        delta = delta > 1 ? delta>>1 : 1;
-        if (cnt[start + ind] < cnt[inserted]) {
-            ind += delta;
-        } else if (cnt[inserted] < cnt[start + ind]) {
-            if (ind < 1 || !(cnt[inserted] < cnt[start + ind - 1])) {
-                break;
-            }
-            ind -= delta;
+
+    std::size_t ind = 0;
+    while (1) {
+        ind = start + (end - start)/2;
+        if (end <= start) {
+            break;
+        } else if (cnt[ind] < cnt[inserted]) {
+            start = ind + 1;
+        } else if (cnt[inserted] < cnt[ind]) {
+            end = ind;
         } else {
+            ++ind;
             break;
         }
     }
