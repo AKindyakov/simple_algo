@@ -1,45 +1,39 @@
-#include <iostream>
-#include <ctime>
+#include "insertion_sort.h"
+
 #include <cstdlib>
-#include "quicksort.h"
+#include <ctime>
+#include <iostream>
 
 int main( int argN, char** argS ) {
     int sz = 10;
-    int* arr = NULL;
+    std::vector<int> arr;
     if( argN == 2 ) {
         sz = atoi(argS[1]);
+        for (size_t i = 0; i < sz; ++i) {
+            srand(static_cast<int>(clock()));
+            arr.push_back(rand());
+        }
     }
     else {
-        if( argN > 2 ) {
+        if (argN > 2) {
             sz = argN-1;
-            if( arr == NULL ) {
-                arr = new int[sz];
-            }
-            for( int i = 0; i < sz; ++i ) {
-                arr[i] = atoi(argS[i+1]);
+            for (size_t i = 0; i < sz; ++i) {
+                arr.push_back(atoi(argS[i+1]));
             }
         }
     }
 
-    if( arr == NULL ) {
-        arr = new int[sz];
-        for( int i = 0; i < sz; ++i ) {
-            srand( static_cast<int>( clock() ) );
-            std::cout << static_cast<int>( clock() ) << '\n';
-            arr[i] = rand();
-        }
-    }
     std::cout << "Before:\n";
-    for( int i = 0; i < sz; ++i ) {
-        std::cout << arr[i] << ' ';
+    for( const auto& a : arr) {
+        std::cout << a << ' ';
     }
     std::cout << std::endl;
 
-    quicksort(arr, 0, sz-1);
+    insertion_sort(arr, 0, sz);
 
     std::cout << "After:\n";
-    for( int i = 0; i < sz; ++i ) {
-        std::cout << arr[i] << ' ';
+    for( const auto& a : arr) {
+        std::cout << a << ' ';
     }
     std::cout << std::endl;
 }

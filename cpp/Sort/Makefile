@@ -15,7 +15,6 @@ in:
 	@${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/in \
 merge_sort.cpp \
 insertion_sort.cpp \
-selection_sort.cpp \
 input_test.cpp
 
 ext_sort_app:
