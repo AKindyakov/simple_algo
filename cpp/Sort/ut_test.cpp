@@ -33,7 +33,7 @@ utException& utException::operator<< <Container>(const Container& cnt) {
     for (const auto& t : cnt) {
         ostr << t << ", ";
     }
-    ostr << "}\n";
+    ostr << "}";
     whatHappen.append(ostr.str());
     return *this;
 }
@@ -96,58 +96,58 @@ void insertion_sort_test() {
     insertion_sort(cnt);
     if (cnt != expected) {
         throw utException("[insertion sort test]")
-            << "Wrong answer: " << cnt
-            << "Expected: " << expected;
+            << "\nWrong answer: " << cnt
+            << "\nExpected: " << expected;
     }
 }
 
 void merge_sort_test() {
-    Container cnt     {12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container cnt     {1, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
     Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
     merge_sort(cnt);
     if (cnt != expected) {
         throw utException("[merge sort test]")
-            << "Wrong answer: " << cnt
-            << "Expected: " << expected;
+            << "\nWrong answer: " << cnt
+            << "\nExpected: " << expected;
     }
 }
 
 void template_insertion_sort_test() {
-    Container cnt     {12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container cnt     {1, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
     Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
     try {
         insertion_sort(cnt.begin(), cnt.end(), std::less<int>());
     } catch (const std::exception& except) {
-        throw utException("[template insertion sort test]")
-            << " Exception from sort function: \""
+        throw utException("[template insertion sort test] ")
+            << "Exception from sort function:\n\""
             << except.what()
             << '\"';
     }
     if (cnt != expected) {
         throw utException("[template insertion sort test]")
-            << "Wrong answer: " << cnt
-            << "Expected: " << expected;
+            << "\nWrong answer: " << cnt
+            << "\nExpected: " << expected;
     }
 }
 
 void template_merge_sort_test() {
-    Container cnt     {12, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
+    Container cnt     {1, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10};
     Container expected{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
     try {
         merge_sort(cnt.begin(), cnt.end(), std::less<int>());
     } catch (const std::exception& except) {
-        throw utException("[template insertion sort test]")
-            << " Exception from sort function: \""
+        throw utException("[template merge sort test]")
+            << " Exception from sort function:\n\""
             << except.what()
             << '\"';
     }
     if (cnt != expected) {
-        throw utException("[template insertion sort test]")
-            << "Wrong answer: " << cnt
-            << "Expected: " << expected;
+        throw utException("[template merge sort test]")
+            << "\nWrong answer: " << cnt
+            << "\nExpected: " << expected;
     }
 }
 
