@@ -11,8 +11,6 @@ insertion_sort.cpp \
 selection_sort.cpp \
 ut_test.cpp
 
-	@${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/heap_ut heap_ut.cpp
-
 in:
 	@${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/in \
 merge_sort.cpp \
