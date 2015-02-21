@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+% Включение переносов для русского и английского языков
+\usepackage[english,russian]{babel}
+
+% Начинать первый параграф раздела следует с красной строки
+\usepackage{indentfirst}
+
+% Выбор внутренней TEX−кодировки
+\usepackage [T2A]{fontenc}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{cmap}
+
+\usepackage{geometry} % Меняем поля страницы
+\geometry{left=2cm}% левое поле
+\geometry{right=1.5cm}% правое поле
+\geometry{top=2cm}% верхнее поле
+\geometry{bottom=2cm}% нижнее поле
+
+\usepackage{listings}
+
+\begin{document}
+\subsection{Knuth-Morris-Pratt algo}
+Pattern matching algorithm
+
+\paragraph{Border}
+\textit{Border}~---
+    border of $P$ is
+    $ |\alpha| $ where
+    $\alpha \sqsupset P$ and $\alpha \sqsubset P$
+
+\paragraph{Prefix function}
+$$
+    L(P, j) =
+        \max{0 \leq k \leq j - 1}
+        | P[1:k] \sqsupset P[1:j]
+$$
+
+Prefix function in code:
+\begin{lstlisting}
+std::vector<size_t>
+ComputeStringPrefixFunction(
+    const std::string& str
+);
+\end{lstlisting}
+
+\paragraph{Knuth-Morris-Pratt algo}
+C++ realisation:
+\begin{lstlisting}
+std::vector<size_t>
+KnuthMorrisPrattFind(
+    const std::string& pattern
+    , const std::string& where
+);
+\end{lstlisting}
+
+\end{document}
