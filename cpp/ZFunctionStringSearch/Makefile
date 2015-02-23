@@ -6,13 +6,13 @@ PRODUCT=product
 
 ut:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/ut \
-	knuth_moris_pratt.cpp \
+	zfunction.cpp \
 	ut_test.cpp
 
 
 in:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/in \
-	knuth_moris_pratt.cpp \
+	zfunction.cpp \
 	in_test.cpp
 
 
