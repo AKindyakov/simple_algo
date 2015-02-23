@@ -20,7 +20,7 @@ testZFunction(
     for (auto& iz : z) {
         std::cerr << iz << ", ";
     }
-    std::cerr << "]\n\n\n";
+    std::cerr << "]\n\n";
 }
 
 int main() {
