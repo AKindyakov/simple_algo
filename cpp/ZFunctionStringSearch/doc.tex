@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+% Включение переносов для русского и английского языков
+\usepackage[english,russian]{babel}
+
+% Начинать первый параграф раздела следует с красной строки
+\usepackage{indentfirst}
+
+% Выбор внутренней TEX−кодировки
+\usepackage [T2A]{fontenc}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{cmap}
+
+\usepackage{geometry} % Меняем поля страницы
+\geometry{left=2cm}% левое поле
+\geometry{right=1.5cm}% правое поле
+\geometry{top=2cm}% верхнее поле
+\geometry{bottom=2cm}% нижнее поле
+
+\usepackage{listings}
+
+\begin{document}
+\subsection{Longest common prefix (lcp)}
+$$
+    lcp(S_1, S_2, S_3, \ldots S_N) = longest(\alpha) | \alpha \sqsupset S_i, i = 1:N
+$$
+
+\subsection{Z--Function}
+$$
+    Z(S) = array z[|S|], where z[i] = |lcp(S, S[i:])|
+$$
+
+\subsubsection{Native algo}
+$$
+    O(N^2)
+$$
+
+\subsubsection{Few optimization -- linear}
+$$
+    O(N)
+$$
+Для ускорения, можно достаточно просто получить на каждом шаге некоторую оценку
+снизу для значения. Для этого помимо бегущего итератора $f$ по строке будем
+поддерживать еще один итератор идущий следом $s$, так чтобы префикс второго
+итератора $s$ ``накрывал'', тем самым можно получить позицию $f' = s - f$.
+Значение функции в которой даст оценку для $f$. Если $z[f'] + f' \leq z[s]$, то
+$z[f] = z[f']$ иначе $z[f] > z[f']$, точное значение получаем перебором. После
+обновляем $s = f$.
+
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\subsection{Pattern matching algo based on Z--Function}
+$$
+    rezult = Z(P + S)[i] \geq |P|, i = (|P| + 1) : |P + S|
+$$
+\textit{Sentinel symbol}~---
+
+
+
+\end{document}
