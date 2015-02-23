@@ -21,8 +21,8 @@ inline size_t findFirstMissmatch(const std::string str, size_t s, size_t f) {
         ++f;
         ++s;
     }
-    std::cerr << s << " ";
-    return s;
+    std::cerr << f << " ";
+    return f;
 }
 
 std::vector<size_t> zFunction(const std::string& str) {
@@ -37,7 +37,7 @@ std::vector<size_t> zFunction(const std::string& str) {
         return rezult;
     }
 
-    rezult[1] = findFirstMissmatch(str, 0, 1);
+    rezult[1] = findFirstMissmatch(str, 0, 1) - 1;
     std::cerr << std::endl;
 
     for (size_t s = 1, f = 2; f < len; ++f) {
@@ -46,17 +46,15 @@ std::vector<size_t> zFunction(const std::string& str) {
             << "s ["  << s  << "]: '" << str[s] << "' "
             << "f ["  << f  << "]: '" << str[f] << "' "
         ;
-
         std::cerr << " ff:" << ff << " + z[ff]: " << rezult[ff] << " > " << rezult[s];
         size_t zf = 0;
-        if (ff + rezult[ff] > rezult[s]) {
-            if (s + rezult[s] <= f) {
-                std::cerr << " {1.1} ";
-                zf = findFirstMissmatch(str, 0, f); // f + rezult[ff]);
-            } else {
-                std::cerr << " {1.2} ";
-                zf = findFirstMissmatch(str, rezult[s], s + rezult[s]) - 1;
-            }
+        if (s + rezult[s] <= f) { // bad base point - full scan
+            std::cerr << " {1.1} ";
+            zf = findFirstMissmatch(str, 0, f) - f;
+            s = f;
+        } else if (ff + rezult[ff] > rezult[s]) {
+            std::cerr << " {1.2} ";
+            zf = findFirstMissmatch(str, rezult[ff], s + rezult[s]) - f;
             s = f;
         } else {
             std::cerr << " {2} ";

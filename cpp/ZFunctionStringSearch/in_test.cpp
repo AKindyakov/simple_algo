@@ -30,5 +30,6 @@ int main() {
     testZFunction("a");
     testZFunction("");
     testZFunction("abababb");
+    testZFunction("abcabcabcc");
     return 0;
 }
