@@ -3,7 +3,7 @@
 #include "tree.h"
 #include <vector>
 
-#include "../SimpleAlgoException/simpleException.h"
+#include "../SimpleAlgoUtil/simple_exception.h"
 
 int main( int argN, char** argS ) {
     try {
@@ -13,7 +13,7 @@ int main( int argN, char** argS ) {
         if( samples < 1 || samples > 10) {
             throw SimpleException("Unexpected algo list", __LINE__);
         }
-        
+
         //std::vector<SuffTree> tree(--samples);
         SuffTree tree[9];
         for( int i=0; i < samples-1; ++i ) {
@@ -28,7 +28,7 @@ int main( int argN, char** argS ) {
             //**/ tree[i].showMe(std::cout);
         }
         //**/ std::cout << "Generate compleete\n";
-        
+
         std::string lastStr;
         char ch = std::cin.get();
         while( ch != '\n' ) {
@@ -72,6 +72,6 @@ int main( int argN, char** argS ) {
     catch(...) {
         std::cerr << "Samething wrong\n";
     }
-   
+
     return 0;
 }

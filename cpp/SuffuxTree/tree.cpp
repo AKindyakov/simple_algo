@@ -6,7 +6,7 @@
 
 #include "tree.h"
 
-#include "../SimpleAlgoException/simpleException.h"
+#include "../SimpleAlgoUtil/simple_exception.h"
 
 SuffTreeNode::SuffTreeNode() {
     for( int eg = 0; eg < ABC_SIZE; ++eg ) {
