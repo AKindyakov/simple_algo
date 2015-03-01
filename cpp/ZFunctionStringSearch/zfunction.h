@@ -9,3 +9,9 @@ zFunction(
     const std::string& str
 );
 
+std::vector<size_t>
+zFunctionPatternMatch(
+    const std::string& pattern
+    , const std::string& where
+);
+

@@ -59,3 +59,23 @@ zFunction(
     return z;
 }
 
+std::vector<size_t>
+zFunctionPatternMatch(
+    const std::string& pattern
+    , const std::string& where
+) {
+    std::vector<size_t> ret(0);
+    // sentinel separated strings
+    std::string sss = pattern + '\0' + where;
+
+    size_t patternSize = pattern.size();
+    size_t sssSize = sss.size();
+    auto z = zFunction(sss);
+    for (size_t i = patternSize; i < sssSize; ++i) {
+        if (z[i] == patternSize) {
+            ret.push_back(i - patternSize - 1);
+        }
+    }
+    return ret;
+}
+
