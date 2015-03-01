@@ -15,8 +15,8 @@ TestSomeFunction(
 ) {
     auto answer = func(args...);
     if (rightAnswer != answer) {
-        throw utException("[testSmth]")
-            << " function" << utException::argsToString(args...)
+        throw TSimpleException("[testSmth]")
+            << " function" << TSimpleException::argsToString(args...)
             << " Wrong answer: " << answer
             << " Expected: " << rightAnswer;
     }

@@ -11,7 +11,7 @@ int main( int argN, char** argS ) {
         std::cin >> samples;
         std::cin.ignore();
         if( samples < 1 || samples > 10) {
-            throw SimpleException("Unexpected algo list", __LINE__);
+            throw TSimpleException("Unexpected algo list");
         }
 
         //std::vector<SuffTree> tree(--samples);
