@@ -14,7 +14,8 @@ ComputeStringPrefixFunction(
     size_t k = 0;
     for (size_t i = 1; i < len; ++i) {
         while (k > 0 && str[k] != str[i]) {
-            --k; // same as $k = L[k-1];$
+            std::cerr << "L[ " << k-1 << " ]\n";
+            k = L[k-1];
         }
         if (str[k] == str[i]) {
             ++k;
