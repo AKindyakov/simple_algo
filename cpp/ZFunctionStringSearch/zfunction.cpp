@@ -31,6 +31,7 @@ zFunction(
     if (str.empty()) {
         return std::vector<size_t>(0);
     }
+    std::cerr << len << "|" << str << "|" << str.at(0) << "|" << str.at(len-1) << "|\n";
     std::vector<size_t> z(len);
     z[0] = len;
 

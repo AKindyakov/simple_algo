@@ -20,6 +20,11 @@ testsZFunction() {
         "abcdefghij"
     );
     TestSomeFunction(
+        std::vector<size_t>{3, 2, 1, },
+        zFunction,
+        "aaa"
+    );
+    TestSomeFunction(
         std::vector<size_t>{9, 8, 7, 6, 5, 4, 3, 2, 1, },
         zFunction,
         "aaaaaaaaa"
@@ -43,6 +48,41 @@ testsZFunction() {
         std::vector<size_t>{10, 0, 0, 6, 0, 0, 3, 0, 0, 0, },
         zFunction,
         "abcabcabcc"
+    );
+    TestSomeFunction(
+        std::vector<size_t>{11, 0, 0, 1, 0, 1, 0, 4, 0, 0, 1,},
+        zFunction,
+        "abracadabra"
+    );
+    TestSomeFunction(
+        std::vector<size_t>{16, 0, 0, 0, 2, 0, 0, 0, 6, 0, 0, 0, 2, 0, 0, 1},
+        zFunction,
+        "abcdabscabcdabia"
+    );
+    TestSomeFunction(
+        std::vector<size_t>{7, 2, 1, 0, 2, 1, 0},
+        zFunction,
+        "aaabaab"
+    );
+    TestSomeFunction(
+        std::vector<size_t>{7, 0, 1, 0, 3, 0, 1},
+        zFunction,
+        "abacaba"
+    );
+    TestSomeFunction(
+        std::vector<size_t>{4, 0, 0, 0,},
+        zFunction,
+        "abcd"
+    );
+    TestSomeFunction(
+        std::vector<size_t>{8, 0, 2, 0, 0, 3, 0, 1},
+        zFunction,
+        "ababcaba"
+    );
+    TestSomeFunction(
+        std::vector<size_t>{17, 0, 0, 1, 0, 2, 0, 4, 0, 0, 4, 0, 0, 1, 0, 2, 0},
+        zFunction,
+        "abca$ababcabсacab"
     );
 }
 

@@ -15,6 +15,9 @@ in:
 	zfunction.cpp \
 	in_test.cpp
 
+hw:
+	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/hw \
+	hw.cpp
 
 doc:
 	latex -output-directory=${PRODUCT} -output-format=pdf doc.tex
