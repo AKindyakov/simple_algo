@@ -19,6 +19,10 @@ hw:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/hw \
 	hw.cpp
 
+hw2:
+	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/hw2 \
+	hw2.cpp
+
 doc:
 	latex -output-directory=${PRODUCT} -output-format=pdf doc.tex
 

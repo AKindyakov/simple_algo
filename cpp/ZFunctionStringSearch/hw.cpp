@@ -60,18 +60,13 @@ int main() {
     std::string str;
     while (std::cin) {
         char ch = std::cin.get();
-        if (isgraph(ch)) {
+        if (isprint(ch)) {
             str.push_back(ch);
         }
     }
-    for (const auto& si : str) {
-        std::cout << si << ' ';
-    }
-    std::cout << std::endl;
     for (const auto& zi : zFunction(str)) {
         std::cout << zi << ' ';
     }
-    std::cout << std::endl;
     return 0;
 }
 
