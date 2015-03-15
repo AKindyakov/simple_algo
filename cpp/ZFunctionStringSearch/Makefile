@@ -23,6 +23,14 @@ hw2:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/hw2 \
 	hw2.cpp
 
+hw3:
+	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/hw3 \
+	hw3.cpp
+
+hw4:
+	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/hw4 \
+	hw4.cpp
+
 doc:
 	latex -output-directory=${PRODUCT} -output-format=pdf doc.tex
 

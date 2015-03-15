@@ -23,6 +23,23 @@ std::vector<size_t> z_function(const std::string& str) {
     return z_ret;
 }
 
+size_t min_period(const std::vector<size_t>& zfun) {
+    size_t len = zfun.size();
+    for (size_t i = 1; i < len; ++i) {
+        if (zfun[i] == zfun[0] - i) {
+            // std::cout
+            //     << len << " % "
+            //     << zfun[0] - zfun[i] << " = "
+            //     << len % (zfun[0] - zfun[i])
+            //     << std::endl;
+            if (len % (zfun[0] - zfun[i]) == 0) {
+                return len/(zfun[0] - zfun[i]);
+            }
+        }
+    }
+    return 1;
+}
+
 int main() {
     std::string str;
     while (std::cin) {
@@ -31,9 +48,7 @@ int main() {
             str.push_back(ch);
         }
     }
-    for (const auto& zi : z_function(str)) {
-        std::cout << zi << ' ';
-    }
-    std::cout << std::endl;
+    std::cout << min_period(z_function(str)) << std::endl;
     return 0;
 }
+
