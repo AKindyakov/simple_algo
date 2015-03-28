@@ -123,7 +123,7 @@ void SuffTreeNode::finish( const string& str ) {
 }
 
 SuffTree::~SuffTree() {
-    // dont forget to destroing }=/  @>-`-,-
+    // don't forget to destroying }=/  @>-`-,-
 }
 
 SuffTree::SuffTree()

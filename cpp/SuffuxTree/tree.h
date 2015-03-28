@@ -1,103 +1,92 @@
 #include <iostream>
 #include <string>
-//#include <map>
-#include <list>
 
-using std::string;
-using std::list;
+namespace NSufixTree {
 
-const int ABC_SIZE = 26;
-const int FIRST_ABC_CHAR = 'a';
+const size_t ABC_SIZE = 26;
+const char FIRST_ABC_CHAR = 'a';
 
-class SuffTreeNode;
+class TNode;
 
-struct SubString {
-    int startPos;
-    int endPos;
+struct TSubstring {
+    TSubstring(const std::string& base, size_t s = 0, size_t e = std::string::npos)
+        : start(s), end(e)
+    {
+    }
+    size_t start;
+    size_t end;
+    const std::string* str;
 };
 
-class SuffTreeEdge {
+class TEdge {
 public:
-    SuffTreeEdge()
+    TEdge()
         :   from(NULL), to(NULL),
             prevGuest(0) {
-        sub.startPos = -1;
-        sub.endPos = -1;
+        sub.start = -1;
+        sub.end = -1;
     }
 
-    SuffTreeEdge( SuffTreeNode* _from, SuffTreeNode* _to, int start, int end, int count=0 )
+    TEdge( TNode* _from, TNode* _to, int start, int end, int count=0 )
         :   from(_from), to(_to),
             prevGuest(count) {
-        sub.startPos = start;
-        sub.endPos = end;
+        sub.start = start;
+        sub.end = end;
     }
 
-    void showMe(const string& str, int lvl, std::ostream& os)const;
-    int findSub( const string& modelStr, const string& str, int start, int end )const;
+    char head() const;
+    void showMe(size_t lvl, std::ostream& os) const;
+    size_t match(const string& modelStr, size_t start, size_t end) const;
 
     void finish(const string& str);
 
-    SuffTreeNode* from;
-    SuffTreeNode* to;
-
-    SubString sub;
-    int prevGuest;
+private:
+    TNode* parentNode;
+    std::unique_ptr<TNode> endNode;
+    TSubstring sub;
 };
 
-class SuffTreeNode {
+class TNode {
 public:
-    SuffTreeNode();
+    TNode();
 
-    void addEdge( char ch, SuffTreeNode* to, int start, int end, int strCount );
+    void addEdge( char ch, TNode* to, int start, int end, int strCount );
 
-    SuffTreeEdge* findEdge( char ch );
+    TEdge* findEdge( char ch );
 
-    SuffTreeEdge* firstEdgePt() {
+    TEdge* firstEdgePt() {
         return *edges;
     }
 
-    int  greatestSubstring( int lvl, list<SubString>* outSub );
+    int  greatestSubstring( int lvl, list<TSubstring>* outSub );
     int findSub( const string& modelStr, const string& str, int start, int end )const;
     void finish(const string& str);
-    void showMe(const string& str, int lvl, std::ostream& os)const;
+    void showMe(const string& str, int lvl, std::ostream& os) const;
 
-    SuffTreeEdge* edges[ ABC_SIZE ];
-    SuffTreeEdge* parrent;
+    TEdge* edges[ABC_SIZE];
+    TEdge* parrent;
 };
 
 struct SuffTreeCursor {
-    SuffTreeCursor ( SuffTreeEdge* _edge, int _cursor )
+    SuffTreeCursor ( TEdge* _edge, int _cursor )
         :   edge(_edge), cursor(_cursor) {}
 
-    SuffTreeEdge* edge;
+    TEdge* edge;
     int cursor;
 };
 
-class SuffTree {
+class TSuffixTree {
 public:
-    SuffTree();
-    virtual ~SuffTree();
+    TSuffixTree(const std::string& str);
+    virtual ~TSuffixTree();
 
-    void add(char ch);
-    void finishTree();
-
-    void check(char ch);
-    void endString();
-
-    int findSub(const string& lastStr, int start, int end)const;
-    std::string getGreatSubstring()const;
-    void showMe( std::ostream& os )const;
+    std::vector<size_t> match(const std::string& pattern) const;
+    void show(std::ostream& os) const;
 
 private:
-    SuffTreeNode*  blank;
-    SuffTreeNode*  root;
-    string         str;
-
-    int strCount;
-
-    list<SuffTreeCursor> cursors;
-
-    bool trackTheCursor(char ch, SuffTreeCursor* cursor );
-    bool checkTrackTheCursor(char ch, SuffTreeCursor* cursor );
+    TNode root;
+    std::string text;
 };
+
+}
 
