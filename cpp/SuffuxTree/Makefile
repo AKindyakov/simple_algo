@@ -6,12 +6,12 @@ PRODUCT=product
 
 ut:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/ut \
-	knuth_moris_pratt.cpp \
+	tree.cpp \
 	ut_test.cpp
 
-in: print_header
+in:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/in \
-	knuth_moris_pratt.cpp \
+	tree.cpp \
 	in_test.cpp
 
 doc:
@@ -20,12 +20,6 @@ doc:
 clear:
 	rm product -r
 
-create_dir:
-	mkdir product 
+prepare:
+	mkdir product
 
-print_header:
-	@echo "/********************************************************************/"
-	@echo " -------------------------------------------------------------------- "
-	@echo " -------------------------------------------------------------------- "
-	@echo " -------------------------------------------------------------------- "
-	@echo "/********************************************************************/"
