@@ -1,7 +1,8 @@
 #pragma once
 
-#include <string>
 #include <sstream>
+#include <string>
+#include <vector>
 
 class TSimpleException: public std::exception {
 private:
@@ -18,6 +19,18 @@ public:
         std::ostringstream ostr(whatHappen, std::ios_base::ate);
         ostr << val;
         whatHappen = ostr.str();
+        return *this;
+    }
+
+    template<typename T>
+    TSimpleException& operator<< (const std::vector<T>& cnt) {
+        std::ostringstream ostr;
+        ostr << "[";
+        for (const auto& t : cnt) {
+            ostr << t << ", ";
+        }
+        ostr << "]";
+        whatHappen.append(ostr.str());
         return *this;
     }
 
@@ -55,19 +68,4 @@ private:
     }
 
 };
-
-template<>
-TSimpleException&
-TSimpleException::operator<< < std::vector<size_t> >(
-    const std::vector<size_t>& cnt
-) {
-    std::ostringstream ostr;
-    ostr << "[";
-    for (const auto& t : cnt) {
-        ostr << t << ", ";
-    }
-    ostr << "]";
-    whatHappen.append(ostr.str());
-    return *this;
-}
 
