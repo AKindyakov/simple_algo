@@ -1,8 +1,12 @@
 #pragma once
+
+#include <deque>
 #include <iostream>
-#include <string>
 #include <memory>
+#include <string>
 #include <vector>
+
+#include "../SimpleAlgoUtil/simple_exception.h"
 
 namespace NSufixTree {
 
@@ -11,7 +15,7 @@ const char FIRST_ABC_CHAR = 'a';
 
 struct TSubstring {
     TSubstring(
-        const std::string* _str,
+        const std::string& _str,
         size_t _start = 0,
         size_t _end = std::string::npos
     )
@@ -21,7 +25,23 @@ struct TSubstring {
     {
     }
 
-    const std::string* str;
+    bool positionIsValid(size_t pos) const {
+        return pos < end && pos < str.size();
+    }
+
+    char head() const {
+        return str[start];
+    }
+
+    std::string copy() const {
+        return std::string(
+            str,
+            start,
+            end - start
+        );
+    }
+
+    const std::string& str;
     size_t start;
     size_t end;
 };
@@ -40,11 +60,12 @@ public:
     }
 
     char head() const {
-        return subString.str->at(subString.start);
+        return subString.head();
     }
 
-    void showMe(size_t lvl, std::ostream& os) const;
-    size_t match(const TSubstring& sub) const;
+    TEdge* split(size_t position);
+
+    void show(size_t lvl, std::ostream& os) const;
 
     TNode* parentNode = nullptr;
     std::unique_ptr<TNode> endNode;
@@ -53,27 +74,82 @@ public:
 
 class TNode {
 public:
-    void showMe(size_t lvl, std::ostream& os) const;
+    TNode(TEdge* _parrent)
+        : parrent(_parrent)
+    {
+    }
+
+    void show(size_t lvl, std::ostream& os) const;
+
+    bool has(char ch) {
+        return nullptr != edges[ch - FIRST_ABC_CHAR];
+    }
+
+    TEdge* get(char ch) {
+        return edges[ch - FIRST_ABC_CHAR].get();
+    }
+
+    void addEdge(const TSubstring& sub) {
+        edges[sub.head() - FIRST_ABC_CHAR].reset(
+            new TEdge(sub, this)
+        );
+    }
+
+    void addLink(TNode* node) {
+        if (suffixLink == nullptr) {
+            suffixLink = node;
+        } else {
+            throw TSimpleException()
+                << "Wrong attempt to redefine the suffix link"
+            ;
+        }
+    }
 
     std::array<std::unique_ptr<TEdge>, ABC_SIZE> edges;
     TEdge* parrent = nullptr;
+
+    /*
+    * Определение:
+    * Пусть x\alpha обозначает произвольную строку, где x - ее первый символ, а \alpha
+    * - оставшаяся подстрока(возможно пустая). Если для внутренней вершины v с путевой
+    * меткой x\alpha существует другая вершина s(v) с путевой меткой \alpha, то ссылка
+    * из v в s(v) называется суффиксной ссылкой.
+
+    * Лемма (Существование суффиксных ссылок):
+    * Для любой внутренней вершины v суффиксного дерева существует суффиксная ссылка,
+    * ведущая в некоторую внутреннюю вершину u.
+    */
     TNode* suffixLink = nullptr;
 };
 
-struct SuffTreeCursor {
-    SuffTreeCursor ( TEdge* _edge, int _cursor )
-        :   edge(_edge), cursor(_cursor) {}
+class TTreeCursor {
+public:
+    TTreeCursor(
+        TEdge* _edge,
+        size_t _cursor = 0
+    )
+        : edge(_edge)
+        , cursor(_cursor)
+    {
+    }
+
+    bool step(size_t position);
 
     TEdge* edge;
-    int cursor;
+    size_t cursor;
 };
 
 class TTreeBase {
 public:
     TTreeBase(const std::string& str)
         : text(str)
+        , rootEdge(
+            TSubstring(text, 0, 0),
+            nullptr
+        )
     {
         ukkonenRebuildTree();
+        std::cerr << "build finish\n";
     }
 
     virtual ~TTreeBase() {}
@@ -82,9 +158,13 @@ public:
 
 private:
     void ukkonenRebuildTree();
+    void ukkonenPush(size_t position);
 
-    TNode root;
     std::string text;
+    TEdge rootEdge;
+
+    //! building vars
+    std::deque<TTreeCursor> cursors;
 };
 
 }

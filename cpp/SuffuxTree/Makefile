@@ -4,6 +4,10 @@ CC=g++
 #CC=clang++
 PRODUCT=product
 
+t:
+	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/test \
+	test.cpp
+
 ut:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/ut \
 	tree.cpp \

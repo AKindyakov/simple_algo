@@ -9,8 +9,11 @@
 
 int main(int /*argn*/, const char** /*args*/) {
     try {
-        std::string str = "text";
+        std::string str = "mississippi";
+        std::cerr << "start\n";
         TSuffixTree stree(str);
+        std::cerr << "show\n";
+        stree.show(std::cout);
     }
     catch(const TSimpleException& e) {
         std::cerr
