@@ -30,37 +30,40 @@ void TTreeBase::ukkonenPush(size_t position) {
     TNode* nodeForLink = nullptr;
 
     for (auto& cursor : cursors) {
-        bool isThirdType = cursor.step(position);
+        int stepType = cursor.step(position);
+        std::cerr << "step: " << stepType << '\n';
 
-        std::cerr << "link\n";
-        TNode* currentNode = cursor.edge->parentNode;
-        if (nodeForLink != nullptr && nodeForLink->suffixLink == nullptr) {
-            nodeForLink->suffixLink = currentNode;
+        if (stepType > 1) {
+            std::cerr << "link\n";
+            TNode* currentNode = cursor.edge->parentNode;
+            if (nodeForLink != nullptr && nodeForLink->suffixLink == nullptr) {
+                nodeForLink->suffixLink = currentNode;
+            }
+            nodeForLink = currentNode;
         }
-        nodeForLink = currentNode;
-        if (isThirdType) {
-            return;
-        }
-        std::cerr << "pop\n";
-        cursors.pop_front();
+        // if (isThirdType) {
+        //     return;
+        // }
+        // std::cerr << "pop\n";
+        // cursors.pop_front();
     }
 }
 
-bool TTreeCursor::step(size_t position) {
-    std::cerr << "step: " << position << std::endl;
+int TTreeCursor::step(size_t position) {
+    std::cerr << "  pos: " << position << std::endl;
     char ch = edge->subString.str[position];
     std::cerr << "  ch: " << ch << std::endl;
 
-    if (edge->subString.positionIsValid(position)) {
+    if (edge->subString.positionIsValid(cursor)) {
         std::cerr << "position is valid" << std::endl;
-        if (edge->subString.str[position] == ch) {
+        if (edge->subString.str[cursor] == ch) {
             //! just follow
             std::cerr << "just follow" << std::endl;
             ++cursor;
-            return false;
+            return 1;
         } else {
-            edge = edge->split(position);
-            return false;
+            edge = edge->split(cursor);
+            return 2;
         }
     } else {
         if (edge->endNode == nullptr) {
@@ -75,20 +78,24 @@ bool TTreeCursor::step(size_t position) {
         if (edge->endNode->has(ch)) {
             edge = edge->endNode->get(ch);
             std::cerr << "Yes! Third type" << std::endl;
-            return true; // Yes! Third type of step
+            return 3; // Yes! Third type of step
         } else {
             edge->endNode->addEdge(
                 TSubstring(edge->subString.str, position)
             );
             edge = edge->endNode->get(ch);
-            return false;
+            return 2;
         }
     }
-    return false;
+    return 0;
 }
 
 void TEdge::show(size_t lvl, std::ostream& os) const {
-    os << subString.copy() << std::endl;
+    size_t end = subString.end;
+    if (end > subString.str.size()) {
+        end = subString.str.size();
+    }
+    os << "[" << subString.start << " : " << end << "]" << subString.copy() << std::endl;
     //*dbg*/ std::cerr << "edge show\n";
     if (endNode != nullptr) {
         endNode->show(lvl + 1, os);
@@ -102,9 +109,9 @@ void TNode::show(size_t lvl, std::ostream& os) const {
     for (size_t i = 0; i < edges.size(); ++i) {
         if (nullptr != edges[i]) {
             os  << std::string(lvl, ' ')
-                << "-["
+                << "-("
                 << static_cast<char>(FIRST_ABC_CHAR + i)
-                << "]: "
+                << "): "
             ;
             edges[i]->show(lvl, os);
             // os << '\n';

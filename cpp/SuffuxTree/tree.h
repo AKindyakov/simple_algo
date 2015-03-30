@@ -133,7 +133,7 @@ public:
     {
     }
 
-    bool step(size_t position);
+    int step(size_t position);
 
     TEdge* edge;
     size_t cursor;
