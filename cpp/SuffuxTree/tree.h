@@ -23,10 +23,37 @@ struct TSubstring {
         , start(_start)
         , end(_end)
     {
+        if (end < start) {
+            throw TSimpleException()
+                << "End of substring greater start"
+                << ".   start: " << start
+                << ".   end: " << end
+                ;
+        }
+        std::cerr
+            << "start: " << start
+            << "; end: " << end
+            << '\n'
+        ;
     }
 
     bool positionIsValid(size_t pos) const {
-        return pos < end && pos < str.size();
+        std::cerr << "positionIsValid() "
+            << "; start: " << start
+            << "; pos: " << pos
+            << "; end: " << end
+            << "; sz: " << str.size()
+            << '\n'
+        ;
+        return pos < end - start && pos < str.size() - start;
+        // return start <= pos && pos < end && pos < str.size();
+    }
+
+    char at(size_t pos) const {
+        if (start + pos >= end) {
+            throw TSimpleException("at() error");
+        }
+        return str[start + pos];
     }
 
     char head() const {
@@ -89,10 +116,11 @@ public:
         return edges[ch - FIRST_ABC_CHAR].get();
     }
 
-    void addEdge(const TSubstring& sub) {
+    TEdge* addEdge(const TSubstring& sub) {
         edges[sub.head() - FIRST_ABC_CHAR].reset(
             new TEdge(sub, this)
         );
+        return edges[sub.head() - FIRST_ABC_CHAR].get();
     }
 
     void addLink(TNode* node) {

@@ -4,11 +4,18 @@
 namespace NSufixTree {
 
 TEdge* TEdge::split(size_t position) {
-    //TSubstring upPart(subString);
+    if (!subString.positionIsValid(position)) {
+        throw TSimpleException()
+            << "invalid position for split"
+            << "; start: " << subString.start
+            << "; pos: " << position
+            << "; end: " << subString.end
+        ;
+    }
+
     TSubstring downPart(subString);
-    //upPart.end = position;
-    downPart.start = position;
-    subString.end = position;
+    downPart.start = downPart.start + position;
+    subString.end = subString.start + position;
 
     std::unique_ptr<TNode> newNode(new TNode(this));
     newNode->addEdge(downPart);
@@ -21,6 +28,8 @@ void TTreeBase::ukkonenRebuildTree() {
     for (size_t i = 0; i < text.size(); ++i) {
         std::cerr << "ukkonenPush i: " << i << " ch: " << text[i] << "\n";
         ukkonenPush(i);
+        std::cerr << "\n";
+        show(std::cerr);
         std::cerr << "\n\n";
     }
 }
@@ -51,19 +60,22 @@ void TTreeBase::ukkonenPush(size_t position) {
 
 int TTreeCursor::step(size_t position) {
     std::cerr << "  pos: " << position << std::endl;
+    std::cerr << "  cur: " << cursor << std::endl;
     char ch = edge->subString.str[position];
-    std::cerr << "  ch: " << ch << std::endl;
 
+    int stepType = 0;
     if (edge->subString.positionIsValid(cursor)) {
         std::cerr << "position is valid" << std::endl;
-        if (edge->subString.str[cursor] == ch) {
+        if (edge->subString.at(cursor) == ch) {
             //! just follow
             std::cerr << "just follow" << std::endl;
+            stepType = 1;
             ++cursor;
-            return 1;
         } else {
-            edge = edge->split(cursor);
-            return 2;
+            edge->split(cursor);
+            edge = edge->endNode->addEdge(TSubstring(edge->subString.str, position));
+            stepType = 2;
+            cursor = 0;
         }
     } else {
         if (edge->endNode == nullptr) {
@@ -78,16 +90,18 @@ int TTreeCursor::step(size_t position) {
         if (edge->endNode->has(ch)) {
             edge = edge->endNode->get(ch);
             std::cerr << "Yes! Third type" << std::endl;
-            return 3; // Yes! Third type of step
+            stepType = 3; // Yes! Third type of step
+            cursor = 0;
         } else {
             edge->endNode->addEdge(
                 TSubstring(edge->subString.str, position)
             );
             edge = edge->endNode->get(ch);
-            return 2;
+            stepType = 2;
+            cursor = 0;
         }
     }
-    return 0;
+    return stepType;
 }
 
 void TEdge::show(size_t lvl, std::ostream& os) const {
@@ -95,7 +109,7 @@ void TEdge::show(size_t lvl, std::ostream& os) const {
     if (end > subString.str.size()) {
         end = subString.str.size();
     }
-    os << "[" << subString.start << " : " << end << "]" << subString.copy() << std::endl;
+    os << '[' << subString.start << ':' << end << "] " << subString.copy() << std::endl;
     //*dbg*/ std::cerr << "edge show\n";
     if (endNode != nullptr) {
         endNode->show(lvl + 1, os);
