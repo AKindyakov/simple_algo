@@ -3,19 +3,31 @@
 
 namespace NSufixTree {
 
-TEdge* TEdge::split(size_t position) {
-    if (!subString.positionIsValid(position)) {
+TEdge* TEdge::split(size_t cursor) {
+    if (!subString.positionIsValid(cursor)) {
         throw TSimpleException()
             << "invalid position for split"
             << "; start: " << subString.start
-            << "; pos: " << position
+            << "; cur: " << cursor
             << "; end: " << subString.end
         ;
     }
 
     TSubstring downPart(subString);
-    downPart.start = downPart.start + position;
-    subString.end = subString.start + position;
+    downPart.start = downPart.start + cursor;
+    subString.end = subString.start + cursor;
+
+    std::cerr << "cur: " << cursor << std::endl;
+    std::cerr << "up: "
+        << "; start: " << subString.start
+        << "; end: " << subString.end
+        << std::endl
+    ;
+    std::cerr << "down: "
+        << "; start: " << downPart.start
+        << "; end: " << downPart.end
+        << std::endl
+    ;
 
     std::unique_ptr<TNode> newNode(new TNode(this));
     newNode->addEdge(downPart);
@@ -30,7 +42,7 @@ void TTreeBase::ukkonenRebuildTree() {
         ukkonenPush(i);
         std::cerr << "\n";
         show(std::cerr);
-        std::cerr << "\n\n";
+        std::cerr << "----------------------------------------------\n\n";
     }
 }
 
@@ -40,7 +52,7 @@ void TTreeBase::ukkonenPush(size_t position) {
 
     for (auto& cursor : cursors) {
         int stepType = cursor.step(position);
-        std::cerr << "step: " << stepType << '\n';
+        std::cerr << "step: " << stepType << "\n\n";
 
         if (stepType > 1) {
             std::cerr << "link\n";
@@ -59,9 +71,10 @@ void TTreeBase::ukkonenPush(size_t position) {
 }
 
 int TTreeCursor::step(size_t position) {
-    std::cerr << "  pos: " << position << std::endl;
-    std::cerr << "  cur: " << cursor << std::endl;
     char ch = edge->subString.str[position];
+    std::cerr << "  pos: " << position << "; '" << ch << "'" << std::endl;
+    std::cerr << "  cur: " << cursor   << "; '" << edge->subString.str[edge->subString.start + cursor] << "'"<< std::endl;
+    std::cerr << "  sub: " << edge->subString.copy() << std::endl;
 
     int stepType = 0;
     if (edge->subString.positionIsValid(cursor)) {
@@ -72,15 +85,15 @@ int TTreeCursor::step(size_t position) {
             stepType = 1;
             ++cursor;
         } else {
+            std::cerr << "split" << std::endl;
             edge->split(cursor);
             edge = edge->endNode->addEdge(TSubstring(edge->subString.str, position));
             stepType = 2;
-            cursor = 0;
+            cursor = 1;
         }
     } else {
         if (edge->endNode == nullptr) {
             //! create node at the end
-            // throw TSimpleException() << "WTF!?";
             std::cerr << "create end node" << std::endl;
             edge->endNode.reset(
                 new TNode(edge)
@@ -91,14 +104,15 @@ int TTreeCursor::step(size_t position) {
             edge = edge->endNode->get(ch);
             std::cerr << "Yes! Third type" << std::endl;
             stepType = 3; // Yes! Third type of step
-            cursor = 0;
+            cursor = 1;
         } else {
+            std::cerr << "Add edge to node" << std::endl;
             edge->endNode->addEdge(
                 TSubstring(edge->subString.str, position)
             );
             edge = edge->endNode->get(ch);
             stepType = 2;
-            cursor = 0;
+            cursor = 1;
         }
     }
     return stepType;

@@ -36,6 +36,13 @@ struct TSubstring {
             << '\n'
         ;
     }
+    ~TSubstring() {
+        std::cerr
+            << "~TSubstring()" << start
+            << copy()
+            << '\n'
+        ;
+    }
 
     bool positionIsValid(size_t pos) const {
         std::cerr << "positionIsValid() "
@@ -51,7 +58,7 @@ struct TSubstring {
 
     char at(size_t pos) const {
         if (start + pos >= end) {
-            throw TSimpleException("at() error");
+            throw TSimpleException("TSubstring::at() error");
         }
         return str[start + pos];
     }
@@ -61,6 +68,7 @@ struct TSubstring {
     }
 
     std::string copy() const {
+        // std::cerr << "copy: " << start << " : " << end << std::endl;
         return std::string(
             str,
             start,
@@ -117,6 +125,7 @@ public:
     }
 
     TEdge* addEdge(const TSubstring& sub) {
+        std::cerr << "add: \'" << sub.head() << '\'' << std::endl;
         edges[sub.head() - FIRST_ABC_CHAR].reset(
             new TEdge(sub, this)
         );
