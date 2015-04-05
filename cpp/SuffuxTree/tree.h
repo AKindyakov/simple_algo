@@ -174,6 +174,7 @@ public:
 
     TEdge* edge;
     size_t cursor;
+    bool deleted = false;
 };
 
 class TTreeBase {

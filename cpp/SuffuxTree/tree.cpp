@@ -50,7 +50,11 @@ void TTreeBase::ukkonenPush(size_t position) {
     cursors.emplace_back(TTreeCursor(&rootEdge));
     TNode* nodeForLink = nullptr;
 
+    // size_t typeOneCount = 0;
     for (auto& cursor : cursors) {
+        if (cursor.deleted) {
+            continue;
+        }
         int stepType = cursor.step(position);
         std::cerr << "step: " << stepType << "\n\n";
 
@@ -62,12 +66,24 @@ void TTreeBase::ukkonenPush(size_t position) {
             }
             nodeForLink = currentNode;
         }
+       // else {
+       //     ++typeOneCount;
+       // }
+        if (stepType == 2) {
+            cursor.deleted = true;
+        }
+        if (stepType == 3) {
+            break;
+        }
         // if (isThirdType) {
         //     return;
         // }
         // std::cerr << "pop\n";
         // cursors.pop_front();
     }
+   // for (size_t i = 0; i < cursors.size() - typeOneCount; ++i) {
+   //     cursors.pop_front();
+   // }
 }
 
 int TTreeCursor::step(size_t position) {
