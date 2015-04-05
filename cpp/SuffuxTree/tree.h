@@ -10,8 +10,8 @@
 
 namespace NSufixTree {
 
-const size_t ABC_SIZE = 26;
-const char FIRST_ABC_CHAR = 'a';
+const size_t ABC_SIZE = 27;
+const char FIRST_ABC_CHAR = '`';
 
 struct TSubstring {
     TSubstring(
@@ -30,29 +30,30 @@ struct TSubstring {
                 << ".   end: " << end
                 ;
         }
-        std::cerr
-            << "start: " << start
-            << "; end: " << end
-            << '\n'
+        std::cerr << "Create TSubstring("
+            << "\n  start: " << start
+            << "\n  end: " << end
+            << "\n)"
         ;
     }
     ~TSubstring() {
         std::cerr
-            << "~TSubstring()" << start
+            << "~TSubstring("
             << copy()
-            << '\n'
+            << ")\n"
         ;
     }
 
     bool positionIsValid(size_t pos) const {
-        std::cerr << "positionIsValid() "
-            << "; start: " << start
-            << "; pos: " << pos
-            << "; end: " << end
-            << "; sz: " << str.size()
-            << '\n'
+        bool ret = pos < end - start && pos < str.size() - start;
+        std::cerr << "positionIsValid("
+            << "\n  start: " << start
+            << "\n  pos: " << pos
+            << "\n  end: " << end
+            << "\n  sz: " << str.size()
+            << "\n)  ->  " << ret << '\n'
         ;
-        return pos < end - start && pos < str.size() - start;
+        return ret;
         // return start <= pos && pos < end && pos < str.size();
     }
 
@@ -72,8 +73,12 @@ struct TSubstring {
         return std::string(
             str,
             start,
-            end - start
+            size()
         );
+    }
+
+    size_t size() const {
+        return end - start;
     }
 
     const std::string& str;
@@ -110,7 +115,7 @@ public:
 class TNode {
 public:
     TNode(TEdge* _parrent)
-        : parrent(_parrent)
+        : parent(_parrent)
     {
     }
 
@@ -143,7 +148,7 @@ public:
     }
 
     std::array<std::unique_ptr<TEdge>, ABC_SIZE> edges;
-    TEdge* parrent = nullptr;
+    TEdge* parent = nullptr;
 
     /*
     * Определение:

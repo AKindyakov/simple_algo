@@ -17,13 +17,13 @@ TEdge* TEdge::split(size_t cursor) {
     downPart.start = downPart.start + cursor;
     subString.end = subString.start + cursor;
 
-    std::cerr << "cur: " << cursor << std::endl;
-    std::cerr << "up: "
+    std::cerr << "split through cur: " << cursor << std::endl;
+    std::cerr << "up interval: "
         << "; start: " << subString.start
         << "; end: " << subString.end
         << std::endl
     ;
-    std::cerr << "down: "
+    std::cerr << "down interval: "
         << "; start: " << downPart.start
         << "; end: " << downPart.end
         << std::endl
@@ -50,10 +50,13 @@ void TTreeBase::ukkonenPush(size_t position) {
     cursors.emplace_back(TTreeCursor(&rootEdge));
     TNode* nodeForLink = nullptr;
 
-    // size_t typeOneCount = 0;
+    size_t counter = 0;
     for (auto& cursor : cursors) {
         if (cursor.deleted) {
+            std::cerr << counter++ << ": skip deleted cursor\n";
             continue;
+        } else {
+            std::cerr << counter++ << ": cursor: \n";
         }
         int stepType = cursor.step(position);
         std::cerr << "step: " << stepType << "\n\n";
@@ -66,46 +69,48 @@ void TTreeBase::ukkonenPush(size_t position) {
             }
             nodeForLink = currentNode;
         }
-       // else {
-       //     ++typeOneCount;
-       // }
         if (stepType == 2) {
             cursor.deleted = true;
         }
         if (stepType == 3) {
             break;
         }
-        // if (isThirdType) {
-        //     return;
-        // }
-        // std::cerr << "pop\n";
-        // cursors.pop_front();
     }
-   // for (size_t i = 0; i < cursors.size() - typeOneCount; ++i) {
-   //     cursors.pop_front();
-   // }
 }
 
 int TTreeCursor::step(size_t position) {
-    char ch = edge->subString.str[position];
-    std::cerr << "  pos: " << position << "; '" << ch << "'" << std::endl;
-    std::cerr << "  cur: " << cursor   << "; '" << edge->subString.str[edge->subString.start + cursor] << "'"<< std::endl;
-    std::cerr << "  sub: " << edge->subString.copy() << std::endl;
+    std::cerr << "step(\n"
+        << "  pos: " << position << " -> '" << edge->subString.str.at(position) << "'\n"
+        << "  cur: " << cursor   << "'\n"
+        << "  sub: " << edge->subString.copy() << "\n"
+        << ")" << std::endl
+    ;
+
+    if (cursor > edge->subString.size()) {
+        std::cerr << "respawn ("
+            << "\n  cursor: " << cursor
+            << "\n  size: " << edge->subString.size()
+            << "\n  sub: " << edge->subString.copy()
+            << "\n)" << std::endl
+        ;
+        cursor = cursor - edge->subString.size();
+        char prevEndChar = edge->subString.str[edge->subString.end];
+        edge = edge->endNode->get(prevEndChar);
+    }
 
     int stepType = 0;
     if (edge->subString.positionIsValid(cursor)) {
         std::cerr << "position is valid" << std::endl;
-        if (edge->subString.at(cursor) == ch) {
+        if (edge->subString.at(cursor) == edge->subString.str[position]) {
             //! just follow
             std::cerr << "just follow" << std::endl;
             stepType = 1;
-            ++cursor;
         } else {
             std::cerr << "split" << std::endl;
             edge->split(cursor);
             edge = edge->endNode->addEdge(TSubstring(edge->subString.str, position));
             stepType = 2;
-            cursor = 1;
+            cursor = 0;
         }
     } else {
         if (edge->endNode == nullptr) {
@@ -115,22 +120,23 @@ int TTreeCursor::step(size_t position) {
                 new TNode(edge)
             );
         }
-
+        char ch = edge->subString.str[position];
         if (edge->endNode->has(ch)) {
             edge = edge->endNode->get(ch);
             std::cerr << "Yes! Third type" << std::endl;
             stepType = 3; // Yes! Third type of step
-            cursor = 1;
+            cursor = 0;
         } else {
-            std::cerr << "Add edge to node" << std::endl;
+            std::cerr << "Add edge to node (" << edge->subString.copy() << ")\n";
             edge->endNode->addEdge(
                 TSubstring(edge->subString.str, position)
             );
             edge = edge->endNode->get(ch);
             stepType = 2;
-            cursor = 1;
+            cursor = 0;
         }
     }
+    ++cursor;
     return stepType;
 }
 
