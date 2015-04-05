@@ -11,7 +11,8 @@
 namespace NSufixTree {
 
 const size_t ABC_SIZE = 27;
-const char FIRST_ABC_CHAR = '`';
+const char SENTINEL_CHAR = '`';
+const char FIRST_ABC_CHAR = SENTINEL_CHAR;
 
 struct TSubstring {
     TSubstring(
@@ -37,11 +38,11 @@ struct TSubstring {
         ;
     }
     ~TSubstring() {
-        std::cerr
-            << "~TSubstring("
-            << copy()
-            << ")\n"
-        ;
+        // std::cerr
+        //     << "~TSubstring("
+        //     << copy()
+        //     << ")\n"
+        // ;
     }
 
     bool positionIsValid(size_t pos) const {

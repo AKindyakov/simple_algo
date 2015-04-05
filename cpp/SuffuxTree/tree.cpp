@@ -41,9 +41,10 @@ void TTreeBase::ukkonenRebuildTree() {
         std::cerr << "ukkonenPush i: " << i << " ch: " << text[i] << "\n";
         ukkonenPush(i);
         std::cerr << "\n";
-        show(std::cerr);
+        // show(std::cerr);
         std::cerr << "----------------------------------------------\n\n";
     }
+    rootEdge.endNode->suffixLink = rootEdge.endNode.get();
 }
 
 void TTreeBase::ukkonenPush(size_t position) {
@@ -62,18 +63,15 @@ void TTreeBase::ukkonenPush(size_t position) {
         std::cerr << "step: " << stepType << "\n\n";
 
         if (stepType > 1) {
-            std::cerr << "link\n";
             TNode* currentNode = cursor.edge->parentNode;
             if (nodeForLink != nullptr && nodeForLink->suffixLink == nullptr) {
+                std::cerr << "link\n";
                 nodeForLink->suffixLink = currentNode;
             }
             nodeForLink = currentNode;
         }
         if (stepType == 2) {
             cursor.deleted = true;
-        }
-        if (stepType == 3) {
-            break;
         }
     }
 }
@@ -156,6 +154,9 @@ void TEdge::show(size_t lvl, std::ostream& os) const {
 void TNode::show(size_t lvl, std::ostream& os) const {
     //*dbg*/ std::cerr << "node show\n";
     ++lvl;
+
+    // os << " ----> " << (suffixLink == nullptr) << "\n";
+    os << std::string(lvl, ' ') << "---> " << suffixLink->parent->subString.copy() << "\n";
     for (size_t i = 0; i < edges.size(); ++i) {
         if (nullptr != edges[i]) {
             os  << std::string(lvl, ' ')
