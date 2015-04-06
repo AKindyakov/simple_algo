@@ -10,9 +10,10 @@
 
 namespace NSufixTree {
 
-const size_t ABC_SIZE = 27;
 const char SENTINEL_CHAR = '`';
 const char FIRST_ABC_CHAR = SENTINEL_CHAR;
+const char LAST_ABC_CHAR = 'z';
+const size_t ABC_SIZE = LAST_ABC_CHAR - SENTINEL_CHAR;
 
 struct TSubstring {
     TSubstring(
@@ -31,31 +32,23 @@ struct TSubstring {
                 << ".   end: " << end
                 ;
         }
-        std::cerr << "Create TSubstring("
-            << "\n  start: " << start
-            << "\n  end: " << end
-            << "\n)"
-        ;
-    }
-    ~TSubstring() {
-        // std::cerr
-        //     << "~TSubstring("
-        //     << copy()
-        //     << ")\n"
-        // ;
+        //*dbg*/ std::cerr << "Create TSubstring("
+        //*dbg*/     << "\n  start: " << start
+        //*dbg*/     << "\n  end: " << end
+        //*dbg*/     << "\n)"
+        //*dbg*/ ;
     }
 
     bool positionIsValid(size_t pos) const {
         bool ret = pos < end - start && pos < str.size() - start;
-        std::cerr << "positionIsValid("
-            << "\n  start: " << start
-            << "\n  pos: " << pos
-            << "\n  end: " << end
-            << "\n  sz: " << str.size()
-            << "\n)  ->  " << ret << '\n'
-        ;
+        //*dbg*/ std::cerr << "positionIsValid("
+        //*dbg*/     << "\n  start: " << start
+        //*dbg*/     << "\n  pos: " << pos
+        //*dbg*/     << "\n  end: " << end
+        //*dbg*/     << "\n  sz: " << str.size()
+        //*dbg*/     << "\n)  ->  " << ret << '\n'
+        //*dbg*/ ;
         return ret;
-        // return start <= pos && pos < end && pos < str.size();
     }
 
     char at(size_t pos) const {
@@ -70,12 +63,7 @@ struct TSubstring {
     }
 
     std::string copy() const {
-        // std::cerr << "copy: " << start << " : " << end << std::endl;
-        return std::string(
-            str,
-            start,
-            size()
-        );
+        return std::string(str, start, size());
     }
 
     size_t size() const {
@@ -131,7 +119,7 @@ public:
     }
 
     TEdge* addEdge(const TSubstring& sub) {
-        std::cerr << "add: \'" << sub.head() << '\'' << std::endl;
+        //*dbg*/ std::cerr << "add: \'" << sub.head() << '\'' << std::endl;
         edges[sub.head() - FIRST_ABC_CHAR].reset(
             new TEdge(sub, this)
         );
@@ -193,7 +181,7 @@ public:
         )
     {
         ukkonenRebuildTree();
-        std::cerr << "build finish\n";
+        //*dbg*/ std::cerr << "build finish\n";
     }
 
     virtual ~TTreeBase() {}
