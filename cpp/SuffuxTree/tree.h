@@ -92,6 +92,14 @@ public:
         return subString.head();
     }
 
+    char at(size_t pos) const {
+        return subString.at(pos);
+    }
+
+    size_t size() const {
+        return subString.size();
+    }
+
     TEdge* split(size_t position);
 
     void show(size_t lvl, std::ostream& os) const;
@@ -180,6 +188,7 @@ public:
             nullptr
         )
     {
+        text.push_back(SENTINEL_CHAR);
         ukkonenRebuildTree();
         //*dbg*/ std::cerr << "build finish\n";
     }

@@ -144,7 +144,7 @@ void TEdge::show(size_t lvl, std::ostream& os) const {
     if (end > subString.str.size()) {
         end = subString.str.size();
     }
-    os << '[' << subString.start << ':' << end << "] " << subString.copy() << std::endl;
+    os << '[' << subString.start << ':' << end << "] " << subString.copy() << "\n";
     //*dbg*/ std::cerr << "edge show\n";
     if (endNode != nullptr) {
         endNode->show(lvl + 1, os);
@@ -166,10 +166,6 @@ void TNode::show(size_t lvl, std::ostream& os) const {
                 << "): "
             ;
             edges[i]->show(lvl, os);
-            // os << '\n';
-        } else {
-            // os << "-";
-            // os << '\n';
         }
     }
 }
