@@ -1,5 +1,5 @@
 LIB=
-FLAGS=-std=c++11 -Wall
+FLAGS=-std=c++11 -Wall -g
 CC=g++
 #CC=clang++
 PRODUCT=product
@@ -11,6 +11,7 @@ t:
 ut:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/ut \
 	tree.cpp \
+	fuzzy_search.cpp \
 	ut_test.cpp
 
 in:
