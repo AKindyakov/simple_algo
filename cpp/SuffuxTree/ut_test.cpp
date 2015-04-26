@@ -1,3 +1,4 @@
+#include "fuzzy_search.h"
 #include "tree.h"
 
 #include "../SimpleAlgoUtil/simple_exception.h"
@@ -44,7 +45,7 @@ mississippiTest() {
         "      -(p): [8:12] ppi`\n"
         "      -(s): [5:12] ssippi`\n"
     ;
-    TSuffixTree stree(str);
+    TSuffixTreeBase stree(str);
     std::stringstream out;
     stree.show(out);
     std::string answer = out.str();
@@ -57,6 +58,8 @@ mississippiTest() {
 
 void
 fuzzySearchTest() {
+    TFuzzySearch searcher("mississippi", '?');
+    searcher.search("i??");
 //    std::vector<size_t>{0, 0, 0, 1, 0, 1, 0, 1, 2, 3, 4,},
 //    TestSomeFunction(
 //        std::vector<size_t>{0, 0, 0, 1, 0, 1, 0, 1, 2, 3, 4,},
@@ -68,6 +71,7 @@ fuzzySearchTest() {
 int main(int /*argn*/, const char** /*args*/) {
     try {
         mississippiTest();
+        fuzzySearchTest();
     }
     catch(const TSimpleException& e) {
         std::cerr
