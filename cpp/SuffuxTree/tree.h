@@ -38,23 +38,17 @@ struct TSubstring {
                 << ".   end: " << end
                 ;
         }
-        //*dbg*/ std::cerr << "Create TSubstring("
-        //*dbg*/     << "\n  start: " << start
-        //*dbg*/     << "\n  end: " << end
-        //*dbg*/     << "\n)"
-        //*dbg*/ ;
+    }
+
+    TSubstring& operator=(const TSubstring& model) {
+        str = model.str;
+        start = model.start;
+        end = model.end;
+        return *this;
     }
 
     bool positionIsValid(size_t pos) const {
-        bool ret = pos < end - start && pos < str->size() - start;
-        //*dbg*/ std::cerr << "positionIsValid("
-        //*dbg*/     << "\n  start: " << start
-        //*dbg*/     << "\n  pos: " << pos
-        //*dbg*/     << "\n  end: " << end
-        //*dbg*/     << "\n  sz: " << str->size()
-        //*dbg*/     << "\n)  ->  " << ret << '\n'
-        //*dbg*/ ;
-        return ret;
+        return pos < end - start && pos < str->size() - start;
     }
 
     char at(size_t pos) const {
@@ -167,10 +161,11 @@ public:
     TNode* suffixLink = nullptr;
 };
 
+template<typename TTEdge = TEdge>
 class TTreeCursor {
 public:
     TTreeCursor(
-        TEdge* _edge,
+        TTEdge* _edge,
         size_t _cursor = 0
     )
         : edge(_edge)
@@ -180,16 +175,28 @@ public:
 
     ~TTreeCursor() {}
 
-    TEdge* edge;
-    size_t cursor;
+    bool end() const {
+        return !edge->subString.positionIsValid(cursor);
+    }
+
+    size_t operator++() {
+        return ++cursor;
+    }
 
     char ch() const {
         return edge->subString.at(cursor);
     }
+
+public:
+    TTEdge* edge;
+    size_t cursor;
+
 };
 
+using TConstTreeCusor = TTreeCursor<const TEdge>;
+
 class TUkkonenBuildCursor
-    : public TTreeCursor
+    : public TTreeCursor<TEdge>
 {
 public:
     TUkkonenBuildCursor(
