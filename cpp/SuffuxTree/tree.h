@@ -16,12 +16,18 @@ const char LAST_ABC_CHAR = 'z';
 const size_t ABC_SIZE = LAST_ABC_CHAR - SENTINEL_CHAR;
 
 struct TSubstring {
+    /**
+    * in TSubstring abacabac:
+    *    full string: <--abacabac-->
+    *                    ^       ^
+    *                   start   end
+    */
     TSubstring(
         const std::string& _str,
         size_t _start = 0,
         size_t _end = std::string::npos
     )
-        : str(_str)
+        : str(&_str)
         , start(_start)
         , end(_end)
     {
@@ -40,12 +46,12 @@ struct TSubstring {
     }
 
     bool positionIsValid(size_t pos) const {
-        bool ret = pos < end - start && pos < str.size() - start;
+        bool ret = pos < end - start && pos < str->size() - start;
         //*dbg*/ std::cerr << "positionIsValid("
         //*dbg*/     << "\n  start: " << start
         //*dbg*/     << "\n  pos: " << pos
         //*dbg*/     << "\n  end: " << end
-        //*dbg*/     << "\n  sz: " << str.size()
+        //*dbg*/     << "\n  sz: " << str->size()
         //*dbg*/     << "\n)  ->  " << ret << '\n'
         //*dbg*/ ;
         return ret;
@@ -55,22 +61,22 @@ struct TSubstring {
         if (start + pos >= end) {
             throw TSimpleException("TSubstring::at() error");
         }
-        return str[start + pos];
+        return str->at(start + pos);
     }
 
     char head() const {
-        return str[start];
+        return str->at(start);
     }
 
     std::string copy() const {
-        return std::string(str, start, size());
+        return std::string(*str, start, size());
     }
 
     size_t size() const {
         return end - start;
     }
 
-    const std::string& str;
+    const std::string* str;
     size_t start;
     size_t end;
 };
@@ -172,10 +178,29 @@ public:
     {
     }
 
-    int step(size_t position);
+    ~TTreeCursor() {}
 
     TEdge* edge;
     size_t cursor;
+
+    char ch() const {
+        return edge->subString.at(cursor);
+    }
+};
+
+class TUkkonenBuildCursor
+    : public TTreeCursor
+{
+public:
+    TUkkonenBuildCursor(
+        TEdge* _edge,
+        size_t _cursor = 0
+    )
+        : TTreeCursor(_edge, _cursor)
+    {
+    }
+
+    int step(size_t position);
     bool deleted = false;
 };
 
@@ -190,25 +215,21 @@ public:
     {
         text.push_back(SENTINEL_CHAR);
         ukkonenRebuildTree();
-        //*dbg*/ std::cerr << "build finish\n";
     }
 
     virtual ~TTreeBase() {}
-
     void show(std::ostream& os) const;
 
 private:
     void ukkonenRebuildTree();
-    void ukkonenPush(size_t position);
+    void ukkonenPush(std::deque<TUkkonenBuildCursor>&, size_t);
 
+protected:
     std::string text;
     TEdge rootEdge;
-
-    //! building vars
-    std::deque<TTreeCursor> cursors;
 };
 
 }
 
-using TSuffixTree = NSufixTree::TTreeBase;
+using TSuffixTreeBase = NSufixTree::TTreeBase;
 
