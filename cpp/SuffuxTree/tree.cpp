@@ -56,10 +56,14 @@ TTreeBase::ukkonenPush(
     cursors.emplace_back(TUkkonenBuildCursor(&rootEdge));
     TNode* nodeForLink = nullptr;
 
+    while (cursors.front().deleted) {
+        cursors.pop_front();
+    }
     //*dbg*/ size_t counter = 0;
     for (auto& cursor : cursors) {
         if (cursor.deleted) {
             //*dbg*/ std::cerr << counter++ << ": skip deleted cursor\n";
+            /*dbg*/ throw TSimpleException("impossible situation");
             continue;
         }
         //*dbg*/ else {
