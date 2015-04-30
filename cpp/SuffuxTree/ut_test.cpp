@@ -7,15 +7,10 @@
 #include <exception>
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 
 void
 mississippiTest() {
-//    TestSomeFunction(
-//        std::vector<size_t>{0, 0, 0, 1, 0, 1, 0, 1, 2, 3, 4,},
-//        ComputeStringPrefixFunction,
-//        "abracadabra"
-//    );
-
     std::string str = "mississippi";
     std::string rightAnswer =
         "[0:0] \n"
@@ -58,14 +53,24 @@ mississippiTest() {
 
 void
 fuzzySearchTest() {
-    TFuzzySearch searcher("mississippi", '?');
-    searcher.search("i??");
-//    std::vector<size_t>{0, 0, 0, 1, 0, 1, 0, 1, 2, 3, 4,},
-//    TestSomeFunction(
-//        std::vector<size_t>{0, 0, 0, 1, 0, 1, 0, 1, 2, 3, 4,},
-//        ComputeStringPrefixFunction,
-//        "abracadabra"
-//    );
+    //                     0
+    TFuzzySearch searcher("thisitemletsyoutestyourstandardalgorithmskills", '?');
+    std::vector<TFuzzySearch::TSubstring> rez = searcher.search("l?");
+    std::unordered_set<size_t> rightAnswerStarts = {10, 39, 51, 52};
+    std::unordered_set<std::string> rightAnswerStrs = {"le", "lg", "ll", "ls"};
+
+    std::unordered_set<size_t> starts;
+    std::unordered_set<std::string> strs;
+    for (const auto& r : rez) {
+        starts.insert(r.start);
+        strs.insert(r.copy());
+    }
+    if (strs != rightAnswerStrs) {
+        throw TSimpleException("wrong string answer");
+    }
+    if (starts != rightAnswerStarts) {
+        throw TSimpleException("wrong position answer");
+    }
 }
 
 int main(int /*argn*/, const char** /*args*/) {

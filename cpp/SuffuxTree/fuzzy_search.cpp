@@ -1,45 +1,5 @@
 #include "fuzzy_search.h"
 
-//  std::vector<SearchAnswer>
-//  TFuzzySearch::search(
-//      const std::string& pattern
-//  ) const
-//  {
-//      std::vector<size_t> answer;
-//      std::vector<size_t> patternQueue;
-//      std::vector<TEdge*> edgeQueue;
-//
-//      TEdge* edge = rootEdge;
-//      size_t patternCursor = 0;
-//
-//          for (size_t i = 0; i < edge->subString.size(); ++i) {
-//              char pCh = pattern[patternCursor];
-//              if (pCh == '?' || pCh == edge->subString.at(i)) {
-//                  ++patterncursor;
-//              } else {
-//                  // answer receiving
-//                  std::vector<size_t> ends;
-//                  traverseSubTree(edge, 0, ends);
-//                  for (auto& e : ends) {
-//                      answer.push_back(text.size() - e);
-//                  }
-//              }
-//          }
-//  }
-//
-//  void TFuzzySearch::traverseSubTree(const TEdge* edge, size_t depth, std::vector<size_t>& ends) {
-//      depth += edge->size();
-//      if (edge->endNode == nullptr) {
-//          ends.push_back(depth);
-//      } else {
-//          for (auto& e : edge->endNode->edges) {
-//              if (e != nullptr) {
-//                  traverseSubTree(e.get(), depth, ends);
-//              }
-//          }
-//      }
-//  }
-
 std::vector<TFuzzySearch::TConstTreeCursor>
 TFuzzySearch::onlyMatch(
     const std::string& pattern,
@@ -96,8 +56,51 @@ TFuzzySearch::onlyMatch(
 
 std::vector<TFuzzySearch::TSubstring>
 TFuzzySearch::findAllEnds(
-    const std::vector<TConstTreeCursor>& endPoints
+    const std::vector<TConstTreeCursor>& endPoints,
+    size_t patternSize
 ) const {
     std::vector<TSubstring> rezult;
+
+    for (const auto& point : endPoints) {
+        std::deque<TConstTreeCursor> nodeQueue = {point};
+        std::deque<size_t> deepQueue = {0};
+
+        while (!nodeQueue.empty()) {
+            size_t deep = deepQueue.back();
+            TConstTreeCursor cursor = nodeQueue.back();
+            deepQueue.pop_back();
+            nodeQueue.pop_back();
+            while (true) {
+                if (cursor.end()) {
+                    if (cursor.edge->endNode) {
+                        size_t t = 0;
+                        for (const auto& edge : cursor.edge->endNode->edges) {
+                            if (edge) {
+                                ++t;
+                                deepQueue.push_front(deep);
+                                nodeQueue.push_front(TConstTreeCursor(edge.get()));
+                            }
+                        }
+                        if (t == 0) {
+                            throw TSimpleException("realy?");
+                        }
+                    } else {
+                        rezult.push_back(
+                            TSubstring(
+                                text,
+                                text.size() - deep - patternSize,
+                                text.size() - deep
+                            )
+                        );
+                    }
+                    break;
+                }
+                ++cursor;
+                ++deep;
+            }
+        }
+
+    }
     return rezult;
 }
+

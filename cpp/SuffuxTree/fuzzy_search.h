@@ -13,7 +13,7 @@ public:
 
     std::vector<TSubstring> search(const std::string& pattern) const {
         bool onlyFirst = false;
-        return findAllEnds(onlyMatch(pattern, onlyFirst));
+        return findAllEnds(onlyMatch(pattern, onlyFirst), pattern.size());
     }
 
     bool search(const std::string& pattern, TSubstring& answer) const {
@@ -37,7 +37,8 @@ private:
 
     std::vector<TSubstring>
     findAllEnds(
-        const std::vector<TConstTreeCursor>& endPoints
+        const std::vector<TConstTreeCursor>& endPoints,
+        size_t patternSize
     ) const;
 
 private:
