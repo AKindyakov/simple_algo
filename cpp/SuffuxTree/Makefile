@@ -14,6 +14,10 @@ ut:
 	fuzzy_search.cpp \
 	ut_test.cpp
 
+hw:
+	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/hw \
+	hw.cpp
+
 in:
 	${CC} ${FLAGS} ${LIB} -o ${PRODUCT}/in \
 	tree.cpp \
