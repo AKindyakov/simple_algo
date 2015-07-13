@@ -52,12 +52,33 @@ mississippiTest() {
 }
 
 void
-fuzzySearchTest() {
-    //                     0
-    TFuzzySearch searcher("thisitemletsyoutestyourstandardalgorithmskills", '?');
-    std::vector<TFuzzySearch::TSubstring> rez = searcher.search("l?");
-    std::unordered_set<size_t> rightAnswerStarts = {10, 39, 51, 52};
-    std::unordered_set<std::string> rightAnswerStrs = {"le", "lg", "ll", "ls"};
+aazzTest() {
+    std::string str = "aazz";
+    std::string rightAnswer =
+        "[0:0] \n"
+        "  ---> \n"
+        "      -(s): [5:12] ssippi`\n"
+    ;
+    TSuffixTreeBase stree(str);
+    std::stringstream out;
+    stree.show(out);
+    std::string answer = out.str();
+    if (rightAnswer != answer) {
+        throw TSimpleException("[tree test]")
+            << " Wrong answer: " << answer
+            << " Expected: " << rightAnswer;
+    }
+}
+
+void
+fuzzySearch(
+    std::string text,
+    std::string pattern,
+    std::unordered_set<size_t> rightStarts,
+    std::unordered_set<std::string> rightStrings
+) {
+    TFuzzySearch searcher(text, '?');
+    std::vector<TFuzzySearch::TSubstring> rez = searcher.search(pattern);
 
     std::unordered_set<size_t> starts;
     std::unordered_set<std::string> strs;
@@ -65,18 +86,36 @@ fuzzySearchTest() {
         starts.insert(r.start);
         strs.insert(r.copy());
     }
-    if (strs != rightAnswerStrs) {
-        throw TSimpleException("wrong string answer");
+    if (strs != rightStrings) {
+        throw TSimpleException("wrong string answer")
+            << " Wrong answer: " << strs
+            << " Expected: " << rightStrings;
     }
-    if (starts != rightAnswerStarts) {
-        throw TSimpleException("wrong position answer");
+    if (starts != rightStarts) {
+        throw TSimpleException("wrong position answer")
+            << " Wrong answer: " << starts
+            << " Expected: " << rightStarts;
     }
 }
 
 int main(int /*argn*/, const char** /*args*/) {
     try {
-        mississippiTest();
-        fuzzySearchTest();
+        std::cout << "digraph G {\n";
+        aazzTest();
+//      mississippiTest();
+//      fuzzySearch(
+//          "thisitemletsyoutestyourstandardalgorithmskills",
+//          "l?",
+//          {8, 32, 43, 44},
+//          {"le", "lg", "ll", "ls"}
+//      );
+       //fuzzySearch(
+       //    "aaaazzzz",
+       //    "a??",
+       //    {0, 1, 2, 3},
+       //    {"aaa", "aaz", "azz"}
+       //);
+        std::cout << "}\n";
     }
     catch(const TSimpleException& e) {
         std::cerr
