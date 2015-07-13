@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <unordered_set>
+#include <set>
 
 class TSimpleException: public std::exception {
 private:
@@ -32,6 +34,29 @@ public:
         ostr << "]";
         whatHappen.append(ostr.str());
         return *this;
+    }
+
+    template<typename T>
+    TSimpleException& operator<< (const std::unordered_set<T> hashSet) {
+        writeSet(hashSet);
+        return *this;
+    }
+
+    template<typename T>
+    TSimpleException& operator<< (const std::set<T> set) {
+        writeSet(set);
+        return *this;
+    }
+
+    template<typename TSet>
+    void writeSet(const TSet set) {
+        std::ostringstream ostr;
+        ostr << "{";
+        for (const auto& i : set) {
+            ostr << i << ", ";
+        }
+        ostr << "}";
+        whatHappen.append(ostr.str());
     }
 
     const char* what() const throw() override {
