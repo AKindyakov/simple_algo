@@ -16,18 +16,6 @@ public:
         return findAllEnds(onlyMatch(pattern, onlyFirst), pattern.size());
     }
 
-    bool search(const std::string& pattern, TSubstring& answer) const {
-        bool onlyFirst = true;
-        std::vector<TConstTreeCursor> ends = onlyMatch(pattern, onlyFirst);
-        if (ends.empty()) {
-            return false;
-        }
-        answer = ends.front().edge->subString;
-        answer.end = answer.start + ends.front().cursor;
-        answer.start = answer.end - pattern.size();
-        return true;
-    }
-
 private:
     std::vector<TConstTreeCursor>
     onlyMatch(
