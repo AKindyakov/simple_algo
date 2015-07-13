@@ -14,6 +14,7 @@ const char SENTINEL_CHAR = '`';
 const char FIRST_ABC_CHAR = SENTINEL_CHAR;
 const char LAST_ABC_CHAR = 'z';
 const size_t ABC_SIZE = LAST_ABC_CHAR - SENTINEL_CHAR;
+// const size_t ABC_SIZE = LAST_ABC_CHAR - FIRST_ABC_CHAR;
 
 struct TSubstring {
     /**
@@ -27,10 +28,16 @@ struct TSubstring {
         size_t _start = 0,
         size_t _end = std::string::npos
     )
-        : str(&_str)
+        : str(_str)
         , start(_start)
         , end(_end)
     {
+        /*dbg*/ std::cerr << "new TSubstring"
+        /*dbg*/     << " str: " << str
+        /*dbg*/     << " start: " << start
+        /*dbg*/     << " end: " << end
+        /*dbg*/     << std::endl;
+
         if (end < start) {
             throw TSimpleException()
                 << "End of substring greater start"
@@ -40,37 +47,44 @@ struct TSubstring {
         }
     }
 
-    TSubstring& operator=(const TSubstring& model) {
-        str = model.str;
-        start = model.start;
-        end = model.end;
-        return *this;
-    }
+//    TSubstring& operator=(const TSubstring& model) {
+//        str = model.str;
+//        start = model.start;
+//        end = model.end;
+//        return *this;
+//    }
 
     bool positionIsValid(size_t pos) const {
-        return pos < end - start && pos < str->size() - start;
+        return pos < end - start && pos < str.size() - start;
     }
 
     char at(size_t pos) const {
         if (start + pos >= end) {
             throw TSimpleException("TSubstring::at() error");
         }
-        return str->at(start + pos);
+        return str.at(start + pos);
     }
 
     char head() const {
-        return str->at(start);
+        return str.at(start);
+    }
+
+    char tail() const {
+        if (size() > 0) {
+            return str.at(size() - 1);
+        }
+        return 'E';
     }
 
     std::string copy() const {
-        return std::string(*str, start, size());
+        return std::string(str, start, size());
     }
 
     size_t size() const {
         return end - start;
     }
 
-    const std::string* str;
+    const std::string& str;
     size_t start;
     size_t end;
 };
@@ -88,8 +102,16 @@ public:
     {
     }
 
+    ~TEdge() {
+        std::cerr << "~TEdge" << std::endl;
+    }
+
     char head() const {
         return subString.head();
+    }
+
+    char tail() const {
+        return subString.tail();
     }
 
     char at(size_t pos) const {
@@ -116,6 +138,10 @@ public:
     {
     }
 
+    ~TNode() {
+        std::cerr << "~TNode" << std::endl;
+    }
+
     void show(size_t lvl, std::ostream& os) const;
 
     bool has(char ch) {
@@ -123,6 +149,9 @@ public:
     }
 
     TEdge* get(char ch) {
+        if (!edges[ch - FIRST_ABC_CHAR]) {
+            throw TSimpleException("get null edge");
+        }
         return edges[ch - FIRST_ABC_CHAR].get();
     }
 
@@ -173,7 +202,9 @@ public:
     {
     }
 
-    ~TTreeCursor() {}
+    ~TTreeCursor() {
+        std::cerr << "~TTreeCursor " << std::endl;
+    }
 
     bool end() const {
         return !edge->subString.positionIsValid(cursor);
@@ -220,11 +251,14 @@ public:
             nullptr
         )
     {
+        std::cerr << "text ptr: " << &text << std::endl;
         text.push_back(SENTINEL_CHAR);
         ukkonenRebuildTree();
     }
 
-    virtual ~TTreeBase() {}
+    virtual ~TTreeBase() {
+        std::cerr << "~TTreeBase" << std::endl;
+    }
     void show(std::ostream& os) const;
 
 private:
