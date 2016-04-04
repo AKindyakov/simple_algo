@@ -11,7 +11,7 @@ void
 TestSomeFunction(
     AnswerType rightAnswer
     , TestedFunc func
-    , Args&... args
+    , const Args&... args
 ) {
     auto answer = func(args...);
     if (rightAnswer != answer) {
