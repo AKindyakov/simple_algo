@@ -2,19 +2,36 @@
 
 #include <cstdlib>
 #include <vector>
+
 namespace NFenwickTree {
+
+template<typename Type>
+class TAdd {
+public:
+    const Type operator()(Type one, Type two) const {
+        return one + two;
+    }
+};
+
+template<typename Type>
+class TSub {
+public:
+    const Type operator()(Type from, Type what) const {
+        return from - what;
+    }
+};
+
 template<
     typename Type
-    , typename Add
-    , typename Sub
-    , Type Initial = 0
+    , typename _Add=TAdd<Type>
+    , typename _Sub=TSub<Type>
 >
 class TFenwickTree {
 public:
     /**
     *
     */
-    TFenwickTree();
+    explicit TFenwickTree();
 
     /**
     *
@@ -24,13 +41,13 @@ public:
     /**
     *
     */
-    explicit TFenwickTree(size_t length);
+    explicit TFenwickTree(size_t length, Type value);
 
     /**
     *
     */
     template<typename InputIt>
-    TFenwickTree(InputIt first, InputIt last);
+    explicit TFenwickTree(InputIt first, InputIt last);
 
     /**
     *
@@ -45,7 +62,7 @@ public:
     /**
     *
     */
-    void Pop(Type value);
+    Type Pop();
 
     /**
     * O(logN)
@@ -60,49 +77,110 @@ private:
     void Recount();
     void UpdateOne(size_t pIndex);
 private:
+    _Add Add;
+    _Sub Sub;
     std::vector<Type> Array;
     std::vector<Type> Partial;
 };
 
-template<typename Type>
-Type Add(Type one, Type two) {
-    return one + two;
-}
-
-template<typename Type>
-Type Sub(Type from, Type what) {
-    return from - what;
+template<
+    typename Type
+    , typename _Add
+    , typename _Sub
+>
+TFenwickTree<Type, _Add, _Sub>::TFenwickTree()
+{
 }
 
 template<
     typename Type
-    , typename A
-    , typename S
+    , typename _Add
+    , typename _Sub
 >
-TFenwickTree<Type, A, S>
-Create(std::vector<Type>&& arr, A add, S sub) {
-    return TFenwickTree<Type, A, S>(std::move(arr));
-}
-
-template<
-    typename Type
-    , typename Add
-    , typename Sub
-    , Type Initial
->
-TFenwickTree<Type, Add, Sub, Initial>::TFenwickTree(std::vector<Type>&& arr)
+TFenwickTree<Type, _Add, _Sub>::TFenwickTree(
+    std::vector<Type>&& arr
+)
     : Array(std::move(arr))
+    , Partial(Array)
 {
     Recount();
 }
 
 template<
     typename Type
-    , typename Add
-    , typename Sub
-    , Type Initial
+    , typename _Add
+    , typename _Sub
 >
-void TFenwickTree<Type, Add, Sub, Initial>::Recount() {
+TFenwickTree<Type, _Add, _Sub>::TFenwickTree(
+    size_t length
+    , Type value
+)
+    : Array(length, value)
+    , Partial(Array)
+{
+}
+
+template<
+    typename Type
+    , typename _Add
+    , typename _Sub
+>
+template<typename InputIt>
+TFenwickTree<Type, _Add, _Sub>::TFenwickTree(
+    InputIt first
+    , InputIt last
+)
+    : TFenwickTree(std::vector<Type>(first, last))
+{
+}
+
+template<
+    typename Type
+    , typename _Add
+    , typename _Sub
+>
+void TFenwickTree<Type, _Add, _Sub>::Swap(
+    size_t index
+    , Type newValue
+) {
+    Type oldValue = Array[index];
+    Array[index] = newValue;
+    for (size_t i = index; i < Array.size(); i = i | (i + 1)) {
+        Type& p = Partial[i];
+        p = Sub(p, oldValue);
+        p = Add(p, newValue);
+    }
+}
+
+template<
+    typename Type
+    , typename _Add
+    , typename _Sub
+>
+void TFenwickTree<Type, _Add, _Sub>::Push(Type value) {
+    Array.push_back(value);
+    Partial.push_back(value);
+    UpdateOne(Array.size() - 1);
+}
+
+template<
+    typename Type
+    , typename _Add
+    , typename _Sub
+>
+Type TFenwickTree<Type, _Add, _Sub>::Pop() {
+    Type value = Array.back();
+    Array.pop_back();
+    Partial.pop_back();
+    return value;
+}
+
+template<
+    typename Type
+    , typename _Add
+    , typename _Sub
+>
+void TFenwickTree<Type, _Add, _Sub>::Recount() {
     for (size_t pi = 0; pi < Partial.size(); ++pi) {
         UpdateOne(pi);
     }
@@ -110,49 +188,44 @@ void TFenwickTree<Type, Add, Sub, Initial>::Recount() {
 
 template<
     typename Type
-    , typename Add
-    , typename Sub
-    , Type Initial
+    , typename _Add
+    , typename _Sub
 >
-void TFenwickTree<Type, Add, Sub, Initial>::UpdateOne(size_t pIndex) {
-    size_t g = BitG(pIndex);
-    //Type& p = Partial[pIndex];
-    for (size_t gi = g; g <= pIndex; ++gi) {
-         Partial[pIndex] = Add(Partial[pIndex], Array[gi]);
-         //Partial[pIndex] = Partial[pIndex] + Array[gi];
+void TFenwickTree<Type, _Add, _Sub>::UpdateOne(size_t pIndex) {
+    Type& p = Partial[pIndex];
+    for (size_t gi = BitG(pIndex); gi < pIndex; ++gi) {
+        p = Add(p, Array[gi]);
     }
 }
 
 template<
     typename Type
-    , typename Add
-    , typename Sub
-    , Type Initial
+    , typename _Add
+    , typename _Sub
 >
-Type TFenwickTree<Type, Add, Sub, Initial>::Get(size_t start, size_t end) const {
+Type TFenwickTree<Type, _Add, _Sub>::Get(size_t start, size_t end) const {
     if (end == 0 || start == end) {
         return 0;
     }
-    if (start < end) {
+    if (start > end) {
         throw TSimpleException("Wrong interval, start less then end")
-            << "(" << start << " < " << end << ")";
+            << "(" << start << " > " << end << ")";
     }
-    Type ret = Initial;
+    if (end > Array.size()) {
+        end = Array.size();
+    }
+    Type ret = Partial[--end];
     while (true) {
-        ret = Add(ret, Partial[end]);
         end = BitG(end);
         if (end == 0) {
             break;
         }
-        --end;
+        ret = Add(ret, Partial[--end]);
     }
-    while (true) {
+
+    while (start--) {
         ret = Sub(ret, Partial[start]);
         start = BitG(start);
-        if (start == 0) {
-            break;
-        }
-        --start;
     }
     return ret;
 }
