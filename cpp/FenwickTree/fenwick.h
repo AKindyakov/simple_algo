@@ -29,43 +29,50 @@ template<
 class TFenwickTree {
 public:
     /**
-    *
+    * Empty the struct
     */
     explicit TFenwickTree();
 
     /**
-    *
+    * Create the tree from std::vector
+    * O(N)
     */
     explicit TFenwickTree(std::vector<Type>&& src);
 
     /**
-    *
+    * Create the tree with count copies of value
+    * O(N)
     */
     explicit TFenwickTree(size_t length, Type value);
 
     /**
-    *
+    * Create the tree with the contents of the range * [first, last).
+    * O(N)
     */
     template<typename InputIt>
     explicit TFenwickTree(InputIt first, InputIt last);
 
     /**
-    *
+    * Swap value in [index] posiotion and update tree
+    * O(log(N))
     */
     void Swap(size_t index, Type newValue);
 
     /**
-    *
+    * Push value to the end of rage
+    * O(log(N))
     */
     void Push(Type value);
 
     /**
-    *
+    * Drop the last element and return one
+    * O(1)
     */
     Type Pop();
 
     /**
-    * O(logN)
+    * Calculate sum of elements in range [start, element)
+    * O(log(N))
     */
     Type Get(size_t start, size_t end) const;
 
@@ -76,6 +83,7 @@ private:
 
     void Recount();
     void UpdateOne(size_t pIndex);
+
 private:
     _Add Add;
     _Sub Sub;
