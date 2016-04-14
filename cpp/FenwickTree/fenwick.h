@@ -145,10 +145,11 @@ void TFenwickTree<Type, _Add, _Sub>::Swap(
 ) {
     Type oldValue = Array[index];
     Array[index] = newValue;
-    for (size_t i = index; i < Array.size(); i = i | (i + 1)) {
-        Type& p = Partial[i];
+    while (index < Array.size()) {
+        Type& p = Partial[index];
         p = Sub(p, oldValue);
         p = Add(p, newValue);
+        index |= index + 1;
     }
 }
 
