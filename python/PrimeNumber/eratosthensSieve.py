@@ -1,24 +1,34 @@
-#!/bin/env python
-#-*- utf-8 -*-
+#!/usr/bin/env python2.7
+# -*- utf-8 -*-
 
-#---------------------------------------
-import sys
-#---------------------------------------
+import argparse
 
-def getPrime(maxN):
-    blank = [ True for n in range(0, maxN)]
-    for n in range(2,maxN+1):
-        for d in range(2, maxN+1):
-            if n != d and n%d == 0:
-                blank[n-1]=False
-    
-    ret = []
-    for n in range(len(blank)):
-        if blank[n] :
-            ret.append(n+1)
-    return ret
 
-for arg in sys.argv:
-    if str.isdigit(arg):
-        print getPrime(int(arg))
+def get_all_prime(max_n):
+    blanks = [True] * max_n
+    for num in xrange(2, max_n + 1):
+        for div in xrange(2, max_n + 1):
+            if num != div and num % div == 0:
+                blanks[num - 1] = False
 
+    for number, is_prime in enumerate(blanks, 1):
+        if is_prime:
+            yield number
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Print prime number')
+    parser.add_argument(
+        '-m', '--max-number',
+        type=int,
+        metavar="NUM",
+        required=True,
+        help='Max number of output sequense',
+    )
+    args = parser.parse_args()
+    for num in get_all_prime(args.max_number):
+        print num
+
+
+if __name__ == "__main__":
+    main()
