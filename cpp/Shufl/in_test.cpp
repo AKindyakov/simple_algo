@@ -1,7 +1,9 @@
-#include "next.h"
+#include "permutations.h"
 
 #include <iostream>
 #include <vector>
+
+namespace NP = NPermutations;
 
 int main() {
     std::vector<int> arr{1, 2, 3, 4, 5};
@@ -12,6 +14,6 @@ int main() {
             std::cout << it << ", ";
         }
         std::cout << "]\n";
-    } while (Next(arr));
+    } while (NP::NextInOrder(arr));
     return 0;
 }
