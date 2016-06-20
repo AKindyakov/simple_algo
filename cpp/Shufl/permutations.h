@@ -1,11 +1,21 @@
 #pragma once
 
-template<typename TContainer>
-class Gen {
-public:
-    TContainer next();
-};
+namespace NPermutations {
+/*
+* Next permutation in sequence
+* For instance:
+* 1234 -> 1243
+* 1243 -> 1324
+* 4321 -> false
+* return false if cont is the last one
+*/
+template<typename TCont>
+bool NextInOrder(TCont& cont);
 
+/*
+* Find minimal element from range [begin, end)
+* greater then pivot
+*/
 template<typename TCont>
 typename TCont::iterator
 FindMinGreaterThen(
@@ -14,7 +24,6 @@ FindMinGreaterThen(
     , const typename TCont::value_type& pivot
 );
 
-template<typename TCont>
-bool Next(TCont& cont);
+}
 
-#include "next_impl.h"
+#include "permutations_impl.h"
