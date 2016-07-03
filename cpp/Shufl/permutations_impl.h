@@ -45,9 +45,7 @@ NextInOrder(
                 throw TSimpleException("It's imposible! Just fail.");
             }
             std::swap(*leftReverseIt, *pMin);
-            // here other rearrange algo can be used, more effective.
-            // O(N) instead of O(NlogN) with sort
-            std::sort(leftReverseIt.base(), cont.end());
+            std::reverse(leftReverseIt.base(), cont.end());
             return true;
         }
     }
