@@ -7,6 +7,7 @@ The simple standart algorithms and data structures implementation.
 - Sieve of Eratosthenes - finding prime numbers algo
 - Knuth Morris Pratt
 - All available permutations in ordered sequence
+- Partition on single linked list
 
 ### Sort
 - Selection sort
@@ -16,8 +17,16 @@ The simple standart algorithms and data structures implementation.
 - Merge Sort (template)
 - External merge sort (template)
 
-## ADT
+## Data structures
 - Simple template Heap ADT
 - String (not good realisation, require corrections)
 - Fenwick tree
 - Linked list
+
+## To do
+- Partition
+  - 2--way partiion
+  - 3--way partiion
+- K-th order statistic
+  - partition based randomized algo
+  - Median of medians
