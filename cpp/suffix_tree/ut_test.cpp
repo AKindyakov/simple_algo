@@ -1,8 +1,8 @@
 #include "fuzzy_search.h"
 #include "tree.h"
 
-#include "../SimpleAlgoUtil/simple_exception.h"
-#include "../SimpleAlgoUtil/unit_test.h"
+#include "../simple_algo_util/simple_exception.h"
+#include "../simple_algo_util/unit_test.h"
 
 #include <exception>
 #include <iostream>

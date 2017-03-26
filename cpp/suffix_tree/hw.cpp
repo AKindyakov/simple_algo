@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "../SimpleAlgoUtil/simple_exception.h"
+#include "../simple_algo_util/simple_exception.h"
 
 namespace NSufixTree {
 

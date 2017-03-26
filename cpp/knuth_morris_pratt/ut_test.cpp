@@ -1,7 +1,7 @@
 #include "knuth_moris_pratt.h"
 
-#include "../SimpleAlgoUtil/simple_exception.h"
-#include "../SimpleAlgoUtil/unit_test.h"
+#include "../simple_algo_util/simple_exception.h"
+#include "../simple_algo_util/unit_test.h"
 
 #include <iostream>
 #include <sstream>

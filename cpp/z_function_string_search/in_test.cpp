@@ -4,8 +4,8 @@
 #include <sstream>
 #include <string>
 
-#include "../SimpleAlgoUtil/simple_exception.h"
-#include "../SimpleAlgoUtil/unit_test.h"
+#include "../simple_algo_util/simple_exception.h"
+#include "../simple_algo_util/unit_test.h"
 
 std::vector<unsigned> z_function (std::string s) {
     unsigned n = s.length();

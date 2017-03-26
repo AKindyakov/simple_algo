@@ -1,4 +1,4 @@
-#include "../SimpleAlgoUtil/unit_test.h"
+#include "../simple_algo_util/unit_test.h"
 
 int EmptyFunction(int a, int b) {
     return a + b + 1;
