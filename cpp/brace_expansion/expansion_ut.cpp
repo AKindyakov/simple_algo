@@ -9,7 +9,7 @@ void Test0() {
         "abc2",
         "abc3",
     };
-    auto answ = BraceExpansion("abc{1,3}");
+    auto answ = BraceExpansion("abc{1..3}");
     if (rightAnswer != answ) {
         throw TSimpleException()
             << "Wrong answer: " << answ
@@ -24,7 +24,7 @@ void Test1() {
         "1abc1",
         "1abc2",
     };
-    auto answ = BraceExpansion("{0,1}abc{1,2}");
+    auto answ = BraceExpansion("{0..1}abc{1..2}");
     if (rightAnswer != answ) {
         throw TSimpleException()
             << "Wrong answer: " << answ
@@ -41,7 +41,7 @@ void Test2() {
         "a1abc1c",
         "a1abc2c",
     };
-    auto answ = BraceExpansion("a{-1,1}abc{1,2}c");
+    auto answ = BraceExpansion("a{-1..1}abc{1..2}c");
     if (rightAnswer != answ) {
         throw TSimpleException()
             << "Wrong answer: " << answ
@@ -55,7 +55,7 @@ void Test3() {
         "-1abc",
         "0abc",
     };
-    auto answ = BraceExpansion("{-2,0}abc");
+    auto answ = BraceExpansion("{-2..0}abc");
     if (rightAnswer != answ) {
         throw TSimpleException()
             << "Wrong answer: " << answ
@@ -64,7 +64,7 @@ void Test3() {
 }
 
 void Test4() {
-    auto answ = BraceExpansion("{0,999}abcdef");
+    auto answ = BraceExpansion("{0..999}abcdef");
     if (1000 != answ.size()) {
         throw TSimpleException()
             << "Wrong answer: " << answ.size()
@@ -73,11 +73,19 @@ void Test4() {
 }
 
 void Test5() {
-    auto answ = BraceExpansion("{0,999}abcdef{0,99}");
+    auto answ = BraceExpansion("{0..999}abcdef{0..99}");
     if (100000 != answ.size()) {
         throw TSimpleException()
             << "Wrong answer: " << answ.size()
             << ", expected: " << 100000;
+    }
+}
+void Test6() {
+    auto answ = BraceExpansion("");
+    if (answ.size() != 1 || !answ[0].empty()) {
+        throw TSimpleException()
+            << "Wrong answer: " << answ
+            << ", expected: \"\"";
     }
 }
 
@@ -88,6 +96,7 @@ int main() {
     Test3();
     Test4();
     Test5();
+    Test6();
     return 0;
 }
 

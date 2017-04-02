@@ -43,15 +43,16 @@ void Range::push(std::string prefix) {
     }
 }
 
+static const auto SeqDelimiter = std::string("..");
+static const auto LeftBrace = std::string("{");
+static const auto RightBrace = std::string("}");
+
 std::vector<std::string> BraceExpansion(std::string exp) {
     auto expanded = std::vector<std::string>{};
     std::unique_ptr<IElement> head = std::make_unique<Save>(expanded);
-    if (exp.empty()) {
-        return expanded;
-    }
     size_t pos = exp.size();
     while (pos != std::string::npos) {
-        auto right = exp.rfind('}', pos);
+        auto right = exp.rfind(RightBrace, pos);
         if (right == std::string::npos) {
             head = std::make_unique<Echo>(
                 std::move(head),
@@ -59,22 +60,31 @@ std::vector<std::string> BraceExpansion(std::string exp) {
             );
             break;
         }
-        if (pos > right) {
+        if (right < pos) {
             head = std::make_unique<Echo>(
                 std::move(head),
-                exp.substr(right + 1, pos - right - 1)
+                exp.substr(
+                    right + RightBrace.size(),
+                    pos - right - RightBrace.size()
+                )
             );
         }
-        auto coma = exp.rfind(',', right);
-        if (coma == std::string::npos) {
-            throw TSimpleException();
+        auto delim = exp.rfind(SeqDelimiter, right);
+        if (delim == std::string::npos) {
+            throw TSimpleException() << "Wrong sequence";
         }
-        auto left = exp.rfind('{', coma);
+        auto left = exp.rfind(LeftBrace, delim);
         if (left == std::string::npos) {
-            throw TSimpleException();
+            throw TSimpleException() << "Wrong sequence";
         }
-        auto from = exp.substr(left + 1, coma - left - 1);
-        auto to = exp.substr(coma + 1, right - coma - 1);
+        auto from = exp.substr(
+            left + LeftBrace.size(),
+            delim - left - LeftBrace.size()
+        );
+        auto to = exp.substr(
+            delim + SeqDelimiter.size(),
+            right - delim - SeqDelimiter.size()
+        );
         head = std::make_unique<Range>(
             std::move(head),
             std::stoi(from),
@@ -82,6 +92,6 @@ std::vector<std::string> BraceExpansion(std::string exp) {
         );
         pos = left;
     }
-    head->push("");
+    head->push(std::string{});
     return expanded;
 }
